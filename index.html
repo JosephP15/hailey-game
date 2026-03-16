@@ -174,12 +174,12 @@ html,body{width:100%;height:100%;overflow:hidden;font-family:'Comic Sans MS','Se
 .page-dot{width:10px;height:10px;border-radius:50%;background:#ccc;cursor:pointer}
 .page-dot.active{background:#7EA87E}
 
-/* THEME TABS */
-.theme-tabs{display:flex;gap:5px;justify-content:center;flex-wrap:wrap;padding:4px 0}
-.theme-tab{padding:4px 10px;border-radius:12px;border:1.5px solid #E8E4E0;background:#fff;
-  font-family:inherit;font-size:11px;font-weight:600;color:#8A8078;cursor:pointer;transition:all 0.15s;white-space:nowrap}
-.theme-tab.active{background:#7EA87E;color:#fff;border-color:#7EA87E}
-.theme-tab:active{transform:scale(0.95)}
+/* COLOR MODE TOGGLE */
+.color-mode-toggle{display:flex;gap:4px;justify-content:center;padding:2px 0}
+.mode-btn{padding:4px 12px;border-radius:12px;border:1.5px solid #E8E4E0;background:#fff;
+  font-family:inherit;font-size:13px;font-weight:600;color:#8A8078;cursor:pointer;transition:all 0.15s}
+.mode-btn.active{background:#7EA87E;color:#fff;border-color:#7EA87E}
+.mode-btn:active{transform:scale(0.95)}
 </style>
 </head>
 <body>
@@ -270,15 +270,19 @@ html,body{width:100%;height:100%;overflow:hidden;font-family:'Comic Sans MS','Se
   <div id="coloring-screen" class="screen kid-screen">
     <div class="draw-header">
       <button class="icon-btn" id="color-back">&larr; Back</button>
-      <span id="color-page-name">Heart</span>
+      <span id="color-page-name">Page</span>
       <button class="icon-btn" id="color-prev">&#9664;</button>
       <button class="icon-btn" id="color-next">&#9654;</button>
+      <button class="icon-btn" id="color-undo">&#8617;</button>
       <button class="icon-btn" id="color-clear">&#128465;</button>
     </div>
     <div class="canvas-wrap"><canvas id="color-canvas"></canvas></div>
     <div class="draw-tools">
+      <div class="color-mode-toggle">
+        <button class="mode-btn active" id="mode-fill">&#x1FAA3; Fill</button>
+        <button class="mode-btn" id="mode-draw">&#9999;&#65039; Draw</button>
+      </div>
       <div class="palette" id="color-palette"></div>
-      <div class="theme-tabs" id="theme-tabs"></div>
       <div class="page-dots" id="page-dots"></div>
     </div>
   </div>
@@ -465,338 +469,18 @@ const CREATIVE_MODES=[
 
 // ===== COLORING PAGES =====
 const CPAGES=[
-  // Fun
-  {name:'Heart \u2764\uFE0F',theme:'fun',build(w,h){const cx=w/2,cy=h*.45,s=Math.min(w,h)*.35,p=new Path2D();
-    p.moveTo(cx,cy+s);p.bezierCurveTo(cx-s*1.5,cy+s*.1,cx-s*1.2,cy-s*1.1,cx,cy-s*.2);
-    p.bezierCurveTo(cx+s*1.2,cy-s*1.1,cx+s*1.5,cy+s*.1,cx,cy+s);return[{n:'h',path:p}];}},
-  {name:'Star \u2B50',theme:'fun',build(w,h){const cx=w/2,cy=h*.45,s=Math.min(w,h)*.38,p=new Path2D();
-    for(let i=0;i<5;i++){const oa=(i*72-90)*Math.PI/180,ia=((i*72+36)-90)*Math.PI/180;
-      if(!i)p.moveTo(cx+s*Math.cos(oa),cy+s*Math.sin(oa));else p.lineTo(cx+s*Math.cos(oa),cy+s*Math.sin(oa));
-      p.lineTo(cx+s*.4*Math.cos(ia),cy+s*.4*Math.sin(ia));}p.closePath();return[{n:'s',path:p}];}},
-  {name:'House \u{1F3E0}',theme:'fun',build(w,h){const wl=new Path2D();wl.rect(w*.2,h*.42,w*.6,h*.42);
-    const rf=new Path2D();rf.moveTo(w*.13,h*.42);rf.lineTo(w*.5,h*.12);rf.lineTo(w*.87,h*.42);rf.closePath();
-    const dr=new Path2D();dr.rect(w*.42,h*.58,w*.16,h*.26);
-    const w1=new Path2D();w1.rect(w*.26,h*.5,w*.11,h*.1);
-    const w2=new Path2D();w2.rect(w*.63,h*.5,w*.11,h*.1);
-    return[{n:'wl',path:wl},{n:'rf',path:rf},{n:'dr',path:dr},{n:'w1',path:w1},{n:'w2',path:w2}];}},
-  // Animals
-  {name:'Butterfly \u{1F98B}',theme:'animals',build(w,h){const cx=w/2,cy=h*.45,s=Math.min(w,h)*.28;
-    const bd=new Path2D();bd.ellipse(cx,cy,s*.12,s*.7,0,0,Math.PI*2);
-    const wl=new Path2D();wl.ellipse(cx-s*.8,cy-s*.15,s*.65,s*.5,-.2,0,Math.PI*2);
-    const wr=new Path2D();wr.ellipse(cx+s*.8,cy-s*.15,s*.65,s*.5,.2,0,Math.PI*2);
-    const bl=new Path2D();bl.ellipse(cx-s*.6,cy+s*.55,s*.45,s*.35,-.15,0,Math.PI*2);
-    const br=new Path2D();br.ellipse(cx+s*.6,cy+s*.55,s*.45,s*.35,.15,0,Math.PI*2);
-    return[{n:'wl',path:wl},{n:'wr',path:wr},{n:'bl',path:bl},{n:'br',path:br},{n:'bd',path:bd}];}},
-  // Nature
-  {name:'Flower \u{1F338}',theme:'nature',build(w,h){const cx=w/2,cy=h*.38,s=Math.min(w,h)*.14,r=[];
-    for(let i=0;i<5;i++){const a=(i*72-90)*Math.PI/180,px=cx+s*2*Math.cos(a),py=cy+s*2*Math.sin(a),p=new Path2D();
-      p.ellipse(px,py,s,s*.65,a+Math.PI/2,0,Math.PI*2);r.push({n:'p'+i,path:p});}
-    const c=new Path2D();c.arc(cx,cy,s*.8,0,Math.PI*2);r.push({n:'c',path:c});
-    const st=new Path2D();st.rect(cx-s*.2,cy+s*1.8,s*.4,h*.3);r.push({n:'st',path:st});return r;}},
-  // Animals
-  {name:'Fish \u{1F41F}',theme:'animals',build(w,h){const cx=w*.42,cy=h*.45,s=Math.min(w,h)*.28;
-    const bd=new Path2D();bd.ellipse(cx,cy,s*1.1,s*.7,0,0,Math.PI*2);
-    const tl=new Path2D();tl.moveTo(cx+s*.9,cy);tl.lineTo(cx+s*1.7,cy-s*.6);tl.lineTo(cx+s*1.7,cy+s*.6);tl.closePath();
-    const ey=new Path2D();ey.arc(cx-s*.4,cy-s*.15,s*.15,0,Math.PI*2);
-    return[{n:'bd',path:bd},{n:'tl',path:tl},{n:'ey',path:ey}];}},
-
-  // ===== NEW PAGES =====
-
-  // Nature: Tree
-  {name:'Tree \u{1F333}',theme:'nature',build(w,h){
-    const cx=w/2,s=Math.min(w,h);
-    const trunk=new Path2D();trunk.rect(cx-s*.06,h*.5,s*.12,h*.34);
-    const c1=new Path2D();c1.arc(cx,h*.35,s*.2,0,Math.PI*2);
-    const c2=new Path2D();c2.arc(cx-s*.15,h*.42,s*.15,0,Math.PI*2);
-    const c3=new Path2D();c3.arc(cx+s*.15,h*.42,s*.15,0,Math.PI*2);
-    return[{n:'tr',path:trunk},{n:'c1',path:c1},{n:'c2',path:c2},{n:'c3',path:c3}];}},
-
-  // Nature: Sun
-  {name:'Sun \u2600\uFE0F',theme:'nature',build(w,h){
-    const cx=w/2,cy=h*.42,s=Math.min(w,h)*.18;
-    const center=new Path2D();center.arc(cx,cy,s,0,Math.PI*2);
-    const rays=new Path2D();
-    for(let i=0;i<8;i++){
-      const a=i*Math.PI/4,x1=cx+s*1.3*Math.cos(a),y1=cy+s*1.3*Math.sin(a);
-      const x2=cx+s*2*Math.cos(a),y2=cy+s*2*Math.sin(a);
-      const px=s*.3*Math.cos(a+Math.PI/2),py=s*.3*Math.sin(a+Math.PI/2);
-      rays.moveTo(x1-px,y1-py);rays.lineTo(x2,y2);rays.lineTo(x1+px,y1+py);rays.closePath();
-    }
-    return[{n:'ctr',path:center},{n:'rays',path:rays}];}},
-
-  // Nature: Cloud
-  {name:'Cloud \u2601\uFE0F',theme:'nature',build(w,h){
-    const cx=w/2,cy=h*.45,s=Math.min(w,h)*.15;
-    const c1=new Path2D();c1.arc(cx-s*1.2,cy,s,0,Math.PI*2);
-    const c2=new Path2D();c2.arc(cx,cy-s*.4,s*1.2,0,Math.PI*2);
-    const c3=new Path2D();c3.arc(cx+s*1.2,cy,s,0,Math.PI*2);
-    const c4=new Path2D();c4.arc(cx,cy+s*.3,s*1.1,0,Math.PI*2);
-    return[{n:'c1',path:c1},{n:'c2',path:c2},{n:'c3',path:c3},{n:'c4',path:c4}];}},
-
-  // Nature: Moon
-  {name:'Moon \u{1F319}',theme:'nature',build(w,h){
-    const cx=w/2,cy=h*.42,s=Math.min(w,h)*.28;
-    const moon=new Path2D();
-    moon.arc(cx,cy,s,0,Math.PI*2);
-    const inner=new Path2D();
-    inner.arc(cx+s*.4,cy-s*.2,s*.8,0,Math.PI*2);
-    return[{n:'moon',path:moon},{n:'inner',path:inner}];}},
-
-  // Nature: Rainbow
-  {name:'Rainbow \u{1F308}',theme:'nature',build(w,h){
-    const cx=w/2,by=h*.7,s=Math.min(w,h)*.32,r=[];
-    const colors=['r1','r2','r3','r4','r5'];
-    for(let i=0;i<5;i++){
-      const radius=s-i*s*.15;
-      const p=new Path2D();p.arc(cx,by,radius,Math.PI,0);p.arc(cx,by,radius-s*.1,0,Math.PI,true);p.closePath();
-      r.push({n:colors[i],path:p});
-    }
-    const cl=new Path2D();cl.arc(cx-s*.8,by,s*.18,0,Math.PI*2);
-    const cr2=new Path2D();cr2.arc(cx+s*.8,by,s*.18,0,Math.PI*2);
-    r.push({n:'cl',path:cl},{n:'cr',path:cr2});
-    return r;}},
-
-  // Animals: Cat Face
-  {name:'Cat Face \u{1F431}',theme:'animals',build(w,h){
-    const cx=w/2,cy=h*.5,s=Math.min(w,h)*.25;
-    const head=new Path2D();head.arc(cx,cy,s,0,Math.PI*2);
-    const el=new Path2D();el.moveTo(cx-s*.8,cy-s*.2);el.lineTo(cx-s*.55,cy-s*1.3);el.lineTo(cx-s*.15,cy-s*.5);el.closePath();
-    const er=new Path2D();er.moveTo(cx+s*.8,cy-s*.2);er.lineTo(cx+s*.55,cy-s*1.3);er.lineTo(cx+s*.15,cy-s*.5);er.closePath();
-    const ey1=new Path2D();ey1.arc(cx-s*.35,cy-s*.1,s*.12,0,Math.PI*2);
-    const ey2=new Path2D();ey2.arc(cx+s*.35,cy-s*.1,s*.12,0,Math.PI*2);
-    const nose=new Path2D();nose.moveTo(cx,cy+s*.15);nose.lineTo(cx-s*.1,cy+s*.3);nose.lineTo(cx+s*.1,cy+s*.3);nose.closePath();
-    return[{n:'hd',path:head},{n:'el',path:el},{n:'er',path:er},{n:'ey1',path:ey1},{n:'ey2',path:ey2},{n:'ns',path:nose}];}},
-
-  // Animals: Dog Face
-  {name:'Dog Face \u{1F436}',theme:'animals',build(w,h){
-    const cx=w/2,cy=h*.48,s=Math.min(w,h)*.24;
-    const head=new Path2D();head.arc(cx,cy,s,0,Math.PI*2);
-    const el=new Path2D();el.ellipse(cx-s*.85,cy+s*.1,s*.35,s*.6,-.2,0,Math.PI*2);
-    const er=new Path2D();er.ellipse(cx+s*.85,cy+s*.1,s*.35,s*.6,.2,0,Math.PI*2);
-    const ey1=new Path2D();ey1.arc(cx-s*.3,cy-s*.15,s*.1,0,Math.PI*2);
-    const ey2=new Path2D();ey2.arc(cx+s*.3,cy-s*.15,s*.1,0,Math.PI*2);
-    const nose=new Path2D();nose.arc(cx,cy+s*.15,s*.14,0,Math.PI*2);
-    const tongue=new Path2D();tongue.ellipse(cx,cy+s*.55,s*.15,s*.25,0,0,Math.PI*2);
-    return[{n:'hd',path:head},{n:'el',path:el},{n:'er',path:er},{n:'ey1',path:ey1},{n:'ey2',path:ey2},{n:'ns',path:nose},{n:'tg',path:tongue}];}},
-
-  // Animals: Dinosaur
-  {name:'Dinosaur \u{1F995}',theme:'animals',build(w,h){
-    const cx=w/2,cy=h*.5,s=Math.min(w,h)*.2;
-    const body=new Path2D();body.ellipse(cx,cy,s*1.3,s*.9,0,0,Math.PI*2);
-    const head=new Path2D();head.arc(cx-s*1.4,cy-s*.6,s*.55,0,Math.PI*2);
-    const tail=new Path2D();tail.moveTo(cx+s*1.1,cy-s*.3);tail.lineTo(cx+s*2.2,cy-s*.8);tail.lineTo(cx+s*1.1,cy+s*.3);tail.closePath();
-    const l1=new Path2D();l1.rect(cx-s*.5,cy+s*.7,s*.3,s*.6);
-    const l2=new Path2D();l2.rect(cx+s*.3,cy+s*.7,s*.3,s*.6);
-    const spines=new Path2D();
-    for(let i=0;i<4;i++){const x=cx-s*.4+i*s*.5,yt=cy-s*.85;
-      spines.moveTo(x-s*.12,cy-s*.6);spines.lineTo(x,yt);spines.lineTo(x+s*.12,cy-s*.6);spines.closePath();}
-    return[{n:'bd',path:body},{n:'hd',path:head},{n:'tl',path:tail},{n:'l1',path:l1},{n:'l2',path:l2},{n:'sp',path:spines}];}},
-
-  // Food: Cupcake
-  {name:'Cupcake \u{1F9C1}',theme:'food',build(w,h){
-    const cx=w/2,s=Math.min(w,h)*.2;
-    const wrapper=new Path2D();wrapper.moveTo(cx-s*1.1,h*.48);wrapper.lineTo(cx-s*.8,h*.78);wrapper.lineTo(cx+s*.8,h*.78);wrapper.lineTo(cx+s*1.1,h*.48);wrapper.closePath();
-    const frost=new Path2D();
-    frost.moveTo(cx-s*1.2,h*.48);
-    frost.bezierCurveTo(cx-s*.8,h*.3,cx-s*.3,h*.38,cx,h*.28);
-    frost.bezierCurveTo(cx+s*.3,h*.38,cx+s*.8,h*.3,cx+s*1.2,h*.48);
-    frost.closePath();
-    const cherry=new Path2D();cherry.arc(cx,h*.24,s*.25,0,Math.PI*2);
-    return[{n:'wr',path:wrapper},{n:'fr',path:frost},{n:'ch',path:cherry}];}},
-
-  // Food: Ice Cream Cone
-  {name:'Ice Cream \u{1F366}',theme:'food',build(w,h){
-    const cx=w/2,s=Math.min(w,h)*.18;
-    const cone=new Path2D();cone.moveTo(cx-s*1,h*.45);cone.lineTo(cx,h*.88);cone.lineTo(cx+s*1,h*.45);cone.closePath();
-    const s1=new Path2D();s1.arc(cx,h*.35,s*.9,0,Math.PI*2);
-    const s2=new Path2D();s2.arc(cx-s*.5,h*.25,s*.7,0,Math.PI*2);
-    const s3=new Path2D();s3.arc(cx+s*.5,h*.25,s*.7,0,Math.PI*2);
-    return[{n:'cn',path:cone},{n:'s1',path:s1},{n:'s2',path:s2},{n:'s3',path:s3}];}},
-
-  // Fun: Car
-  {name:'Car \u{1F697}',theme:'fun',build(w,h){
-    const cx=w/2,cy=h*.5,s=Math.min(w,h)*.18;
-    const body=new Path2D();body.rect(cx-s*1.8,cy-s*.3,s*3.6,s*1.2);
-    const roof=new Path2D();roof.moveTo(cx-s*.8,cy-s*.3);roof.lineTo(cx-s*.4,cy-s*1.2);roof.lineTo(cx+s*.6,cy-s*1.2);roof.lineTo(cx+s*1,cy-s*.3);roof.closePath();
-    const w1=new Path2D();w1.arc(cx-s*1.1,cy+s*.9,s*.45,0,Math.PI*2);
-    const w2=new Path2D();w2.arc(cx+s*1.1,cy+s*.9,s*.45,0,Math.PI*2);
-    const win1=new Path2D();win1.rect(cx-s*.7,cy-s*1.05,s*.55,s*.65);
-    const win2=new Path2D();win2.rect(cx+s*.05,cy-s*1.05,s*.55,s*.65);
-    return[{n:'bd',path:body},{n:'rf',path:roof},{n:'w1',path:w1},{n:'w2',path:w2},{n:'wn1',path:win1},{n:'wn2',path:win2}];}},
-
-  // Fun: Balloon
-  {name:'Balloon \u{1F388}',theme:'fun',build(w,h){
-    const cx=w/2,s=Math.min(w,h)*.25;
-    const bal=new Path2D();bal.ellipse(cx,h*.35,s*.8,s*1.1,0,0,Math.PI*2);
-    const knot=new Path2D();knot.moveTo(cx-s*.15,h*.35+s*1.1);knot.lineTo(cx,h*.35+s*1.3);knot.lineTo(cx+s*.15,h*.35+s*1.1);knot.closePath();
-    return[{n:'bal',path:bal},{n:'kn',path:knot}];}},
-
-  // Fun: Crown
-  {name:'Crown \u{1F451}',theme:'fun',build(w,h){
-    const cx=w/2,cy=h*.45,s=Math.min(w,h)*.25;
-    const crown=new Path2D();
-    crown.moveTo(cx-s*1.3,cy+s*.6);crown.lineTo(cx-s*1.3,cy-s*.3);crown.lineTo(cx-s*.65,cy+s*.1);
-    crown.lineTo(cx,cy-s*.8);crown.lineTo(cx+s*.65,cy+s*.1);crown.lineTo(cx+s*1.3,cy-s*.3);
-    crown.lineTo(cx+s*1.3,cy+s*.6);crown.closePath();
-    const j1=new Path2D();j1.arc(cx-s*.65,cy+s*.15,s*.15,0,Math.PI*2);
-    const j2=new Path2D();j2.arc(cx,cy-s*.35,s*.15,0,Math.PI*2);
-    const j3=new Path2D();j3.arc(cx+s*.65,cy+s*.15,s*.15,0,Math.PI*2);
-    return[{n:'cr',path:crown},{n:'j1',path:j1},{n:'j2',path:j2},{n:'j3',path:j3}];}},
-
-  // Fun: Rocket
-  {name:'Rocket \u{1F680}',theme:'fun',build(w,h){
-    const cx=w/2,cy=h*.42,s=Math.min(w,h)*.15;
-    const body=new Path2D();body.ellipse(cx,cy,s*.7,s*2,0,0,Math.PI*2);
-    const fl=new Path2D();fl.moveTo(cx-s*.7,cy+s*1.2);fl.lineTo(cx-s*1.5,cy+s*2.2);fl.lineTo(cx-s*.2,cy+s*1.8);fl.closePath();
-    const fr=new Path2D();fr.moveTo(cx+s*.7,cy+s*1.2);fr.lineTo(cx+s*1.5,cy+s*2.2);fr.lineTo(cx+s*.2,cy+s*1.8);fr.closePath();
-    const win=new Path2D();win.arc(cx,cy-s*.3,s*.3,0,Math.PI*2);
-    const flame=new Path2D();flame.moveTo(cx-s*.4,cy+s*2);flame.lineTo(cx,cy+s*3);flame.lineTo(cx+s*.4,cy+s*2);flame.closePath();
-    return[{n:'bd',path:body},{n:'fl',path:fl},{n:'fr',path:fr},{n:'wn',path:win},{n:'fm',path:flame}];}},
-
-  // Fun: Snowman
-  {name:'Snowman \u26C4',theme:'fun',build(w,h){
-    const cx=w/2,s=Math.min(w,h)*.12;
-    const bot=new Path2D();bot.arc(cx,h*.68,s*1.5,0,Math.PI*2);
-    const mid=new Path2D();mid.arc(cx,h*.47,s*1.1,0,Math.PI*2);
-    const top=new Path2D();top.arc(cx,h*.3,s*.8,0,Math.PI*2);
-    const hat=new Path2D();hat.rect(cx-s*.9,h*.15,s*1.8,s*.6);hat.rect(cx-s*.5,h*.15-s*1,s*1,s*1);
-    const nose=new Path2D();nose.moveTo(cx,h*.3);nose.lineTo(cx+s*.9,h*.32);nose.lineTo(cx,h*.34);nose.closePath();
-    const b1=new Path2D();b1.arc(cx,h*.44,s*.15,0,Math.PI*2);
-    const b2=new Path2D();b2.arc(cx,h*.52,s*.15,0,Math.PI*2);
-    return[{n:'bt',path:bot},{n:'md',path:mid},{n:'tp',path:top},{n:'ht',path:hat},{n:'ns',path:nose},{n:'b1',path:b1},{n:'b2',path:b2}];}},
-
-  // Mice: Mouse with Cheese
-  {name:'Mouse & Cheese \u{1F42D}\u{1F9C0}',theme:'mice',build(w,h){
-    const cx=w*0.35, cy=h*0.52, bodyW=w*0.28, bodyH=h*0.38;
-    // Pear/teardrop mouse body
-    const body=new Path2D();
-    body.moveTo(cx, cy - bodyH*0.5);
-    body.bezierCurveTo(cx + bodyW*0.6, cy - bodyH*0.3, cx + bodyW*0.5, cy + bodyH*0.4, cx, cy + bodyH*0.5);
-    body.bezierCurveTo(cx - bodyW*0.5, cy + bodyH*0.4, cx - bodyW*0.6, cy - bodyH*0.3, cx, cy - bodyH*0.5);
-    body.closePath();
-    // Round ears
-    const leftEar=new Path2D(); leftEar.arc(cx - bodyW*0.32, cy - bodyH*0.48, bodyW*0.28, 0, Math.PI*2);
-    const rightEar=new Path2D(); rightEar.arc(cx + bodyW*0.32, cy - bodyH*0.48, bodyW*0.28, 0, Math.PI*2);
-    // Curved thick tail
-    const tail=new Path2D();
-    tail.moveTo(cx - bodyW*0.1, cy + bodyH*0.45);
-    tail.bezierCurveTo(cx - bodyW*0.7, cy + bodyH*0.7, cx - bodyW*1.0, cy + bodyH*0.15, cx - bodyW*0.85, cy - bodyH*0.1);
-    tail.lineTo(cx - bodyW*0.75, cy - bodyH*0.05);
-    tail.bezierCurveTo(cx - bodyW*0.88, cy + bodyH*0.2, cx - bodyW*0.55, cy + bodyH*0.6, cx + bodyW*0.0, cy + bodyH*0.48);
-    tail.closePath();
-    // Cheese wedge to the right
-    const cheese=new Path2D();
-    cheese.moveTo(w*0.6, h*0.7); cheese.lineTo(w*0.73, h*0.3); cheese.lineTo(w*0.92, h*0.7); cheese.closePath();
-    // Cheese holes
-    const hole1=new Path2D(); hole1.arc(w*0.72, h*0.52, w*0.03, 0, Math.PI*2);
-    const hole2=new Path2D(); hole2.arc(w*0.78, h*0.6, w*0.025, 0, Math.PI*2);
-    return[{n:'body',path:body},{n:'leftEar',path:leftEar},{n:'rightEar',path:rightEar},{n:'tail',path:tail},{n:'cheese',path:cheese},{n:'hole1',path:hole1},{n:'hole2',path:hole2}];}},
-
-  // Mice: Sleepy Mouse
-  {name:'Sleepy Mouse \u{1F634}\u{1F42D}',theme:'mice',build(w,h){
-    const cx=w*0.5, cy=h*0.58, bodyW=w*0.32, bodyH=h*0.22;
-    // Curled-up C-shape body
-    const body=new Path2D();
-    body.moveTo(cx + bodyW*0.5, cy - bodyH*0.2);
-    body.bezierCurveTo(cx + bodyW*0.7, cy - bodyH*0.8, cx - bodyW*0.2, cy - bodyH*1.1, cx - bodyW*0.6, cy - bodyH*0.3);
-    body.bezierCurveTo(cx - bodyW*0.8, cy + bodyH*0.2, cx - bodyW*0.7, cy + bodyH*0.8, cx, cy + bodyH*0.7);
-    body.bezierCurveTo(cx + bodyW*0.5, cy + bodyH*0.6, cx + bodyW*0.7, cy + bodyH*0.1, cx + bodyW*0.5, cy - bodyH*0.2);
-    body.closePath();
-    // Round ears on top
-    const leftEar=new Path2D(); leftEar.arc(cx - bodyW*0.25, cy - bodyH*0.9, bodyW*0.22, 0, Math.PI*2);
-    const rightEar=new Path2D(); rightEar.arc(cx + bodyW*0.15, cy - bodyH*0.95, bodyW*0.22, 0, Math.PI*2);
-    // Tail curving around the body
-    const tail=new Path2D();
-    tail.moveTo(cx + bodyW*0.45, cy + bodyH*0.3);
-    tail.bezierCurveTo(cx + bodyW*0.9, cy + bodyH*0.7, cx + bodyW*0.8, cy + bodyH*1.1, cx + bodyW*0.2, cy + bodyH*0.95);
-    tail.lineTo(cx + bodyW*0.25, cy + bodyH*0.85);
-    tail.bezierCurveTo(cx + bodyW*0.7, cy + bodyH*0.95, cx + bodyW*0.75, cy + bodyH*0.6, cx + bodyW*0.4, cy + bodyH*0.35);
-    tail.closePath();
-    // Blanket/pillow underneath
-    const blanket=new Path2D();
-    blanket.moveTo(cx - bodyW*0.9, cy + bodyH*0.5);
-    blanket.bezierCurveTo(cx - bodyW*0.8, cy + bodyH*1.2, cx + bodyW*0.8, cy + bodyH*1.2, cx + bodyW*0.9, cy + bodyH*0.5);
-    blanket.bezierCurveTo(cx + bodyW*0.6, cy + bodyH*0.9, cx - bodyW*0.6, cy + bodyH*0.9, cx - bodyW*0.9, cy + bodyH*0.5);
-    blanket.closePath();
-    // Crescent moon above
-    const moon=new Path2D();
-    const mx=cx + bodyW*0.6, my=cy - bodyH*1.6, mr=bodyW*0.25;
-    moon.arc(mx, my, mr, 0, Math.PI*2);
-    // Cut-out for crescent shape (draw outer then inner as separate fillable region)
-    // Just use a crescent as a single closed shape
-    const moonCut=new Path2D();
-    moonCut.arc(mx, my, mr, -0.5, Math.PI*2 - 0.5);
-    moonCut.arc(mx + mr*0.4, my - mr*0.2, mr*0.75, Math.PI*2 - 0.5, -0.5, true);
-    moonCut.closePath();
-    // Face area (small oval for the closed-eyes face region)
-    const face=new Path2D();
-    face.ellipse(cx + bodyW*0.1, cy - bodyH*0.35, bodyW*0.2, bodyH*0.28, 0.15, 0, Math.PI*2);
-    return[{n:'body',path:body},{n:'leftEar',path:leftEar},{n:'rightEar',path:rightEar},{n:'tail',path:tail},{n:'blanket',path:blanket},{n:'moon',path:moonCut},{n:'face',path:face}];}},
-
-  // Mice: Mouse in a Hat
-  {name:'Mouse in Hat \u{1F3A9}\u{1F42D}',theme:'mice',build(w,h){
-    const cx=w*0.5, cy=h*0.62, bodyW=w*0.24, bodyH=h*0.32;
-    // Upright pear/teardrop body
-    const body=new Path2D();
-    body.moveTo(cx, cy - bodyH*0.5);
-    body.bezierCurveTo(cx + bodyW*0.6, cy - bodyH*0.3, cx + bodyW*0.55, cy + bodyH*0.4, cx, cy + bodyH*0.5);
-    body.bezierCurveTo(cx - bodyW*0.55, cy + bodyH*0.4, cx - bodyW*0.6, cy - bodyH*0.3, cx, cy - bodyH*0.5);
-    body.closePath();
-    // Ears peeking from under hat
-    const leftEar=new Path2D(); leftEar.arc(cx - bodyW*0.48, cy - bodyH*0.42, bodyW*0.24, 0, Math.PI*2);
-    const rightEar=new Path2D(); rightEar.arc(cx + bodyW*0.48, cy - bodyH*0.42, bodyW*0.24, 0, Math.PI*2);
-    // Tail
-    const tail=new Path2D();
-    tail.moveTo(cx + bodyW*0.45, cy + bodyH*0.35);
-    tail.bezierCurveTo(cx + bodyW*1.0, cy + bodyH*0.55, cx + bodyW*1.2, cy + bodyH*0.2, cx + bodyW*0.9, cy + bodyH*0.0);
-    tail.lineTo(cx + bodyW*0.85, cy + bodyH*0.08);
-    tail.bezierCurveTo(cx + bodyW*1.05, cy + bodyH*0.25, cx + bodyW*0.85, cy + bodyH*0.48, cx + bodyW*0.4, cy + bodyH*0.4);
-    tail.closePath();
-    // Oversized top hat - tall rectangle top
-    const hatW=bodyW*0.8, hatH=bodyH*0.65;
-    const hatTop=new Path2D();
-    hatTop.moveTo(cx - hatW*0.55, cy - bodyH*0.45);
-    hatTop.lineTo(cx - hatW*0.55, cy - bodyH*0.45 - hatH);
-    hatTop.bezierCurveTo(cx - hatW*0.55, cy - bodyH*0.45 - hatH - hatH*0.15, cx + hatW*0.55, cy - bodyH*0.45 - hatH - hatH*0.15, cx + hatW*0.55, cy - bodyH*0.45 - hatH);
-    hatTop.lineTo(cx + hatW*0.55, cy - bodyH*0.45);
-    hatTop.closePath();
-    // Hat brim
-    const hatBrim=new Path2D();
-    hatBrim.ellipse(cx, cy - bodyH*0.45, hatW*0.9, hatH*0.15, 0, 0, Math.PI*2);
-    return[{n:'body',path:body},{n:'leftEar',path:leftEar},{n:'rightEar',path:rightEar},{n:'tail',path:tail},{n:'hatTop',path:hatTop},{n:'hatBrim',path:hatBrim}];}},
-
-  // Mice: Mouse with Balloon
-  {name:'Mouse & Balloon \u{1F42D}\u{1F388}',theme:'mice',build(w,h){
-    const cx=w*0.4, cy=h*0.6, bodyW=w*0.22, bodyH=h*0.32;
-    // Standing pear/teardrop body
-    const body=new Path2D();
-    body.moveTo(cx, cy - bodyH*0.5);
-    body.bezierCurveTo(cx + bodyW*0.6, cy - bodyH*0.3, cx + bodyW*0.55, cy + bodyH*0.4, cx, cy + bodyH*0.5);
-    body.bezierCurveTo(cx - bodyW*0.55, cy + bodyH*0.4, cx - bodyW*0.6, cy - bodyH*0.3, cx, cy - bodyH*0.5);
-    body.closePath();
-    // Round ears
-    const leftEar=new Path2D(); leftEar.arc(cx - bodyW*0.35, cy - bodyH*0.48, bodyW*0.26, 0, Math.PI*2);
-    const rightEar=new Path2D(); rightEar.arc(cx + bodyW*0.35, cy - bodyH*0.48, bodyW*0.26, 0, Math.PI*2);
-    // Tail
-    const tail=new Path2D();
-    tail.moveTo(cx - bodyW*0.3, cy + bodyH*0.4);
-    tail.bezierCurveTo(cx - bodyW*0.9, cy + bodyH*0.6, cx - bodyW*1.1, cy + bodyH*0.2, cx - bodyW*0.8, cy + bodyH*0.0);
-    tail.lineTo(cx - bodyW*0.72, cy + bodyH*0.08);
-    tail.bezierCurveTo(cx - bodyW*0.95, cy + bodyH*0.25, cx - bodyW*0.75, cy + bodyH*0.5, cx - bodyW*0.22, cy + bodyH*0.44);
-    tail.closePath();
-    // Round balloon floating above
-    const bx=w*0.68, by=h*0.2, br=Math.min(w,h)*0.15;
-    const balloon=new Path2D(); balloon.arc(bx, by, br, 0, Math.PI*2);
-    return[{n:'body',path:body},{n:'leftEar',path:leftEar},{n:'rightEar',path:rightEar},{n:'tail',path:tail},{n:'balloon',path:balloon}];}},
-];
-
-const THEME_LIST=[
-  {id:'all',label:'All'},
-  {id:'animals',label:'Animals'},
-  {id:'nature',label:'Nature'},
-  {id:'food',label:'Food'},
-  {id:'fun',label:'Fun'},
-  {id:'mice',label:'Mice'},
+  {name:'Mouse & Cheese',file:'mouse-cheese-1.jpg'},
+  {name:'Kitties',file:'cats-window.jpg'},
+  {name:'Three Cats',file:'cats-blanket.jpg'},
+  {name:'Little Bird',file:'bird.jpg'},
+  {name:'Butterfly',file:'butterfly.jpg'},
+  {name:'Cute Kitty',file:'cat-cute.jpg'},
+  {name:'Flowers',file:'flowers.webp'},
+  {name:'House',file:'house.jpg'},
+  {name:'Elephant & Mouse',file:'elephant-mouse.png'},
+  {name:'Remy & Linguini',file:'ratatouille.jpg'},
+  {name:'Mouse & Cheese 2',file:'mouse-cheese-2.webp'},
+  {name:'Rainbow',file:'rainbow.jpg'},
 ];
 
 // ===== STATE =====
@@ -805,13 +489,8 @@ let S={screen:'parent',mode:null,target:null,choices:[],score:0,streak:0,
   timerMin:15,timerEnd:null,timerInt:null,timerRunning:false,
   dadAnimal:null,dadIdx:0,
   drawColor:'#FF0000',brushSize:10,drawing:false,drawHistory:[],
-  colorColor:'#FF0000',colorPageIdx:0,regionFills:{},
-  colorTheme:'all'};
-
-function filteredPages(){
-  if(S.colorTheme==='all')return CPAGES;
-  return CPAGES.filter(p=>p.theme===S.colorTheme);
-}
+  colorColor:'#FF0000',colorPageIdx:0,colorMode:'fill',
+  colorHistory:[],colorDrawing:false};
 
 // Parent preferences
 let parentPrefs = {
@@ -878,7 +557,7 @@ function showScreen(n){
   document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
   document.getElementById(n+'-screen').classList.add('active');S.screen=n;
   if(n==='draw')requestAnimationFrame(()=>resizeDrawCanvas());
-  if(n==='coloring')requestAnimationFrame(()=>{resizeColorCanvas();renderColorPage();});
+  if(n==='coloring')requestAnimationFrame(()=>{resizeColorCanvas();loadColorPage();});
   const border = document.getElementById('timer-border');
   const timeDisp = document.getElementById('timer-time-display');
   const isKid = (n === 'home' || n === 'game' || n === 'draw' || n === 'coloring');
@@ -1106,7 +785,7 @@ function startMode(id){S.mode=id;S.score=0;S.streak=0;S.lastTarget=null;showScre
   if(id==='dad')nextDadAnimal();else nextRound();}
 
 function startCreative(id){if(id==='freedraw')showScreen('draw');
-  else if(id==='coloring'){S.colorPageIdx=0;S.regionFills={};showScreen('coloring');}}
+  else if(id==='coloring'){S.colorPageIdx=0;S.colorHistory=[];showScreen('coloring');}}
 
 function nextRound(){
   S.animating=false;nextBg();const nd=numDist(),M=S.mode;
@@ -1219,68 +898,172 @@ function initDraw(){
   document.getElementById('draw-back').addEventListener('pointerdown',e=>{e.preventDefault();showScreen('home');});
 }
 
-// ===== COLORING =====
-let cCv,cCx;
-function resizeColorCanvas(){cCv=document.getElementById('color-canvas');cCx=cCv.getContext('2d');
-  const r=cCv.parentElement.getBoundingClientRect();cCv.width=r.width;cCv.height=r.height;}
+// ===== COLORING (image-based flood fill + free draw) =====
+let cCv,cCx,cImg=null,cImgCache={};
 
-function renderColorPage(){
+function resizeColorCanvas(){
+  cCv=document.getElementById('color-canvas');cCx=cCv.getContext('2d',{willReadFrequently:true});
+  const r=cCv.parentElement.getBoundingClientRect();cCv.width=r.width;cCv.height=r.height;
+}
+
+function loadColorPage(){
   if(!cCv)return;
-  const fp=filteredPages();
-  if(fp.length===0)return;
-  if(S.colorPageIdx>=fp.length)S.colorPageIdx=0;
-  const pg=fp[S.colorPageIdx];
+  if(S.colorPageIdx>=CPAGES.length)S.colorPageIdx=0;
+  const pg=CPAGES[S.colorPageIdx];
   document.getElementById('color-page-name').textContent=pg.name;
-  const w=cCv.width,h=cCv.height;cCx.fillStyle='#FFF';cCx.fillRect(0,0,w,h);
-  const rg=pg.build(w,h);
-  // Use global CPAGES index for fill storage
-  const globalIdx=CPAGES.indexOf(pg);
-  rg.forEach(r=>{const k=globalIdx+'-'+r.n;if(S.regionFills[k]){cCx.fillStyle=S.regionFills[k];cCx.fill(r.path);}});
-  rg.forEach(r=>{cCx.strokeStyle='#333';cCx.lineWidth=3;cCx.stroke(r.path);});
+  S.colorHistory=[];
+  // Check cache
+  if(cImgCache[pg.file]){
+    cImg=cImgCache[pg.file];
+    drawColorImage();
+  } else {
+    const img=new Image();
+    img.onload=()=>{cImgCache[pg.file]=img;cImg=img;drawColorImage();};
+    img.onerror=()=>{cCx.fillStyle='#FFF';cCx.fillRect(0,0,cCv.width,cCv.height);
+      cCx.fillStyle='#999';cCx.font='16px system-ui';cCx.textAlign='center';
+      cCx.fillText('Image not found: '+pg.file,cCv.width/2,cCv.height/2);};
+    img.src='images/coloring/'+pg.file;
+  }
   renderColorDots();
-  renderThemeTabs();
+}
+
+function drawColorImage(){
+  if(!cImg||!cCv)return;
+  const w=cCv.width,h=cCv.height;
+  cCx.fillStyle='#FFF';cCx.fillRect(0,0,w,h);
+  // Fit image maintaining aspect ratio
+  const scale=Math.min(w/cImg.width,h/cImg.height);
+  const iw=cImg.width*scale,ih=cImg.height*scale;
+  const ix=(w-iw)/2,iy=(h-ih)/2;
+  cCx.drawImage(cImg,ix,iy,iw,ih);
+}
+
+function hexToRgb(hex){
+  const r=parseInt(hex.slice(1,3),16),g=parseInt(hex.slice(3,5),16),b=parseInt(hex.slice(5,7),16);
+  return{r,g,b};
+}
+
+function floodFill(ctx,startX,startY,fillHex,tolerance){
+  tolerance=tolerance||30;
+  const fc=hexToRgb(fillHex);
+  const w=ctx.canvas.width,h=ctx.canvas.height;
+  const sx=Math.round(startX),sy=Math.round(startY);
+  if(sx<0||sx>=w||sy<0||sy>=h)return;
+  const imageData=ctx.getImageData(0,0,w,h);
+  const data=imageData.data;
+  const idx=(sy*w+sx)*4;
+  const tR=data[idx],tG=data[idx+1],tB=data[idx+2];
+  // Don't fill dark pixels (outlines)
+  if(tR<50&&tG<50&&tB<50)return;
+  // Don't fill if already the fill color
+  if(Math.abs(tR-fc.r)<tolerance&&Math.abs(tG-fc.g)<tolerance&&Math.abs(tB-fc.b)<tolerance)return;
+  function matches(i){
+    return Math.abs(data[i]-tR)<tolerance&&Math.abs(data[i+1]-tG)<tolerance&&Math.abs(data[i+2]-tB)<tolerance;
+  }
+  // Scanline flood fill
+  const stack=[[sx,sy]];
+  const visited=new Uint8Array(w*h);
+  while(stack.length>0){
+    let[cx,cy]=stack.pop();
+    let key=cy*w+cx;
+    if(visited[key])continue;
+    if(cx<0||cx>=w||cy<0||cy>=h)continue;
+    let pi=key*4;
+    if(!matches(pi))continue;
+    // Find left edge of this row
+    let left=cx;
+    while(left>0&&matches(((cy*w)+(left-1))*4)&&!visited[cy*w+left-1])left--;
+    // Fill right from left edge
+    let right=left;
+    while(right<w&&matches(((cy*w)+right)*4)&&!visited[cy*w+right]){
+      const ri=(cy*w+right)*4;
+      data[ri]=fc.r;data[ri+1]=fc.g;data[ri+2]=fc.b;data[ri+3]=255;
+      visited[cy*w+right]=1;
+      right++;
+    }
+    // Push spans above and below
+    for(let x=left;x<right;x++){
+      if(cy>0&&!visited[(cy-1)*w+x]&&matches(((cy-1)*w+x)*4))stack.push([x,cy-1]);
+      if(cy<h-1&&!visited[(cy+1)*w+x]&&matches(((cy+1)*w+x)*4))stack.push([x,cy+1]);
+    }
+  }
+  ctx.putImageData(imageData,0,0);
+}
+
+function saveColorUndo(){
+  S.colorHistory.push(cCx.getImageData(0,0,cCv.width,cCv.height));
+  if(S.colorHistory.length>20)S.colorHistory.shift();
+}
+
+function colorUndo(){
+  if(S.colorHistory.length===0)return;
+  cCx.putImageData(S.colorHistory.pop(),0,0);
 }
 
 function renderColorDots(){
   const dots=document.getElementById('page-dots');dots.innerHTML='';
-  const fp=filteredPages();
-  fp.forEach((_,i)=>{const d=document.createElement('div');d.className='page-dot'+(i===S.colorPageIdx?' active':'');
-    d.addEventListener('pointerdown',e=>{e.preventDefault();S.colorPageIdx=i;renderColorPage();});dots.appendChild(d);});
+  CPAGES.forEach((_,i)=>{const d=document.createElement('div');d.className='page-dot'+(i===S.colorPageIdx?' active':'');
+    d.addEventListener('pointerdown',e=>{e.preventDefault();S.colorPageIdx=i;loadColorPage();});dots.appendChild(d);});
 }
 
-function renderThemeTabs(){
-  const tabs=document.getElementById('theme-tabs');tabs.innerHTML='';
-  THEME_LIST.forEach(t=>{
-    const b=document.createElement('button');b.className='theme-tab'+(S.colorTheme===t.id?' active':'');
-    b.textContent=t.label;
-    b.addEventListener('pointerdown',e=>{e.preventDefault();S.colorTheme=t.id;S.colorPageIdx=0;renderColorPage();});
-    tabs.appendChild(b);
-  });
+function updateModeToggle(){
+  document.getElementById('mode-fill').classList.toggle('active',S.colorMode==='fill');
+  document.getElementById('mode-draw').classList.toggle('active',S.colorMode==='draw');
+  cCv.style.cursor=S.colorMode==='draw'?'crosshair':'pointer';
 }
 
 function initColoring(){
   const cv=document.getElementById('color-canvas');
-  cv.addEventListener('pointerdown',e=>{e.preventDefault();const rc=cv.getBoundingClientRect();
+  // Pointer events for fill and draw
+  cv.addEventListener('pointerdown',e=>{
+    e.preventDefault();
+    const rc=cv.getBoundingClientRect();
     const x=e.clientX-rc.left,y=e.clientY-rc.top;
-    const fp=filteredPages();if(fp.length===0)return;
-    const pg=fp[S.colorPageIdx],rg=pg.build(cCv.width,cCv.height);
-    const globalIdx=CPAGES.indexOf(pg);
-    for(let i=rg.length-1;i>=0;i--){if(cCx.isPointInPath(rg[i].path,x,y)){
-      S.regionFills[globalIdx+'-'+rg[i].n]=S.colorColor;renderColorPage();playOk();break;}}});
+    if(S.colorMode==='fill'){
+      saveColorUndo();
+      floodFill(cCx,x,y,S.colorColor);
+      playOk();
+    } else {
+      // Draw mode
+      saveColorUndo();
+      S.colorDrawing=true;
+      cCx.beginPath();
+      cCx.moveTo(x,y);
+      cCx.strokeStyle=S.colorColor;
+      cCx.lineWidth=S.colorColor==='#FFFFFF'?25:18;
+      cCx.lineCap='round';cCx.lineJoin='round';
+    }
+  });
+  cv.addEventListener('pointermove',e=>{
+    if(!S.colorDrawing||S.colorMode!=='draw')return;
+    e.preventDefault();
+    const rc=cv.getBoundingClientRect();
+    cCx.lineTo(e.clientX-rc.left,e.clientY-rc.top);
+    cCx.stroke();
+  });
+  cv.addEventListener('pointerup',()=>{S.colorDrawing=false;});
+  cv.addEventListener('pointerleave',()=>{S.colorDrawing=false;});
+  // Prevent touch scrolling on canvas
+  cv.addEventListener('touchmove',e=>{if(S.colorMode==='draw')e.preventDefault();},{passive:false});
+  // Palette
   const pal=document.getElementById('color-palette');
-  PALETTE_C.slice(0,-1).forEach((c,i)=>{const b=document.createElement('button');b.className='pal-btn'+(i===0?' active':'');b.style.background=c;
+  PALETTE_C.forEach((c,i)=>{const b=document.createElement('button');b.className='pal-btn'+(i===0?' active':'');b.style.background=c;
+    if(c==='#FFFFFF'){b.style.border='2px solid #ccc';}
     b.addEventListener('pointerdown',e=>{e.preventDefault();S.colorColor=c;
       pal.querySelectorAll('.pal-btn').forEach(x=>x.classList.remove('active'));b.classList.add('active');});pal.appendChild(b);});
+  // Mode toggle
+  document.getElementById('mode-fill').addEventListener('pointerdown',e=>{e.preventDefault();S.colorMode='fill';updateModeToggle();});
+  document.getElementById('mode-draw').addEventListener('pointerdown',e=>{e.preventDefault();S.colorMode='draw';updateModeToggle();});
+  // Nav
   document.getElementById('color-prev').addEventListener('pointerdown',e=>{e.preventDefault();
-    const fp=filteredPages();if(fp.length===0)return;
-    S.colorPageIdx=(S.colorPageIdx-1+fp.length)%fp.length;renderColorPage();});
+    S.colorPageIdx=(S.colorPageIdx-1+CPAGES.length)%CPAGES.length;loadColorPage();});
   document.getElementById('color-next').addEventListener('pointerdown',e=>{e.preventDefault();
-    const fp=filteredPages();if(fp.length===0)return;
-    S.colorPageIdx=(S.colorPageIdx+1)%fp.length;renderColorPage();});
+    S.colorPageIdx=(S.colorPageIdx+1)%CPAGES.length;loadColorPage();});
+  // Undo
+  document.getElementById('color-undo').addEventListener('pointerdown',e=>{e.preventDefault();colorUndo();});
+  // Clear (reload original image)
   document.getElementById('color-clear').addEventListener('pointerdown',e=>{e.preventDefault();
-    const fp=filteredPages();if(fp.length===0)return;
-    const globalIdx=CPAGES.indexOf(fp[S.colorPageIdx]);
-    Object.keys(S.regionFills).forEach(k=>{if(k.startsWith(globalIdx+'-'))delete S.regionFills[k];});renderColorPage();});
+    S.colorHistory=[];drawColorImage();});
   document.getElementById('color-back').addEventListener('pointerdown',e=>{e.preventDefault();showScreen('home');});
 }
 
