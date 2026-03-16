@@ -7,46 +7,94 @@
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
 html,body{width:100%;height:100%;overflow:hidden;font-family:'Comic Sans MS','Segoe UI',sans-serif;
-  touch-action:manipulation;-webkit-user-select:none;user-select:none;background:#a8edea}
+  touch-action:manipulation;-webkit-user-select:none;user-select:none;background:#FAF7F2}
 #confetti-canvas{position:fixed;top:0;left:0;width:100%;height:100%;pointer-events:none;z-index:1000}
 #app{width:100%;height:100%;position:relative}
 .screen{display:none;width:100%;height:100%;flex-direction:column;align-items:center;padding:8px;overflow-y:auto;overflow-x:hidden}
 .screen.active{display:flex}
+#app.timer-on .kid-screen{padding-top:48px}
+
+/* SESSION TIMER BAR */
+#session-timer-bar{position:fixed;top:0;left:0;width:100%;height:44px;z-index:500;display:none;
+  align-items:center;padding:0 14px;gap:10px;background:rgba(255,255,255,0.92);backdrop-filter:blur(6px);
+  border-bottom:1px solid #E8E4E0;font-family:'Comic Sans MS','Segoe UI',sans-serif}
+#session-timer-bar.visible{display:flex}
+#timer-progress-wrap{flex:1;height:14px;background:#E8E4E0;border-radius:7px;overflow:hidden}
+#timer-progress-fill{height:100%;width:100%;border-radius:7px;background:#7BADC4;transition:width 1s linear, background 0.5s}
+#timer-time-text{font-size:18px;font-weight:bold;color:#4A3F35;min-width:50px;text-align:right}
+#timer-status-text{font-size:13px;color:#C4916E;font-weight:bold;min-width:0;white-space:nowrap}
+
+/* PARENT DASHBOARD */
+#parent-screen{background:#F5F3F0;font-family:system-ui,-apple-system,sans-serif;justify-content:flex-start;padding:0}
+.parent-scroll{width:100%;max-width:480px;margin:0 auto;padding:24px 16px 40px;overflow-y:auto;flex:1}
+.parent-header{text-align:center;margin-bottom:28px}
+.parent-header h1{font-size:24px;font-weight:700;color:#4A3F35;margin-bottom:4px}
+.parent-header p{font-size:13px;color:#8A8078;font-weight:500}
+.parent-section{margin-bottom:22px}
+.parent-section-title{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:1.2px;color:#8A8078;margin-bottom:10px;padding-left:2px}
+.module-card{display:flex;align-items:center;justify-content:space-between;background:#fff;border:1px solid #E8E4E0;
+  border-radius:12px;padding:12px 14px;margin-bottom:6px}
+.module-card-left{display:flex;align-items:center;gap:10px}
+.module-card-icon{font-size:22px}
+.module-card-name{font-size:15px;font-weight:600;color:#4A3F35}
+/* iOS toggle */
+.toggle-track{width:46px;height:26px;border-radius:13px;background:#D1CEC9;position:relative;cursor:pointer;transition:background 0.25s;flex-shrink:0}
+.toggle-track.on{background:#7EA87E}
+.toggle-knob{width:22px;height:22px;border-radius:50%;background:#fff;position:absolute;top:2px;left:2px;
+  box-shadow:0 1px 3px rgba(0,0,0,0.2);transition:left 0.25s}
+.toggle-track.on .toggle-knob{left:22px}
+/* Timer presets */
+.timer-presets{display:flex;gap:6px;flex-wrap:wrap}
+.timer-preset{padding:8px 14px;border-radius:10px;border:1.5px solid #E8E4E0;background:#fff;
+  font-family:system-ui,-apple-system,sans-serif;font-size:14px;font-weight:600;color:#4A3F35;cursor:pointer;transition:all 0.15s}
+.timer-preset.selected{background:#7EA87E;color:#fff;border-color:#7EA87E}
+.timer-preset:active{transform:scale(0.95)}
+/* Difficulty selector */
+.diff-presets{display:flex;gap:6px}
+.diff-preset{flex:1;padding:10px;border-radius:10px;border:1.5px solid #E8E4E0;background:#fff;
+  font-family:system-ui,-apple-system,sans-serif;font-size:14px;font-weight:600;color:#4A3F35;cursor:pointer;text-align:center;transition:all 0.15s}
+.diff-preset.selected{background:#7EA87E;color:#fff;border-color:#7EA87E}
+.diff-preset:active{transform:scale(0.95)}
+.timer-note{font-size:11px;color:#A09890;margin-top:6px;padding-left:2px}
+/* Start button */
+.start-btn{width:100%;padding:16px;border:none;border-radius:14px;background:#7EA87E;color:#fff;
+  font-family:system-ui,-apple-system,sans-serif;font-size:18px;font-weight:700;cursor:pointer;
+  box-shadow:0 4px 14px rgba(126,168,126,0.35);transition:transform 0.12s,box-shadow 0.12s;margin-top:10px}
+.start-btn:active{transform:scale(0.97);box-shadow:0 2px 8px rgba(126,168,126,0.25)}
 
 /* HOME */
-#home-screen{background:linear-gradient(135deg,#a8edea 0%,#fed6e3 100%);justify-content:flex-start;padding-top:4px;gap:4px}
-.home-title{font-size:clamp(20px,3.8vw,34px);color:#2c3e50;text-shadow:2px 2px 0 rgba(255,255,255,0.5)}
+#home-screen{background:linear-gradient(135deg,#FAF7F2 0%,#FDF5EC 50%,#E8F0E4 100%);justify-content:flex-start;padding-top:4px;gap:4px}
+.home-title{font-size:clamp(20px,3.8vw,34px);color:#4A3F35;text-shadow:2px 2px 0 rgba(255,255,255,0.5)}
 .animal-parade{font-size:clamp(18px,3vw,28px);animation:bounce 2s ease-in-out infinite}
 @keyframes bounce{0%,100%{transform:translateY(0)}50%{transform:translateY(-5px)}}
-.section-label{font-size:clamp(11px,1.8vw,14px);color:#888;font-weight:bold;text-transform:uppercase;letter-spacing:1px;margin-top:2px}
+.section-label{font-size:clamp(11px,1.8vw,14px);color:#8A8078;font-weight:bold;text-transform:uppercase;letter-spacing:1px;margin-top:2px}
 .mode-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;max-width:640px;width:100%;padding:0 6px}
 #creative-grid{grid-template-columns:repeat(2,1fr);max-width:320px}
-.mode-btn{background:#fff;border:3px solid #ddd;border-radius:12px;padding:6px 3px;font-size:clamp(10px,1.8vw,14px);
+.mode-btn{background:#fff;border:3px solid #E8E4E0;border-radius:12px;padding:6px 3px;font-size:clamp(10px,1.8vw,14px);
   cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:1px;
-  box-shadow:0 2px 8px rgba(0,0,0,0.07);transition:transform 0.15s;font-family:inherit;min-height:0}
+  box-shadow:0 2px 8px rgba(0,0,0,0.05);transition:transform 0.15s;font-family:inherit;min-height:0}
 .mode-btn:active{transform:scale(0.93)}
 .mode-icon{font-size:clamp(22px,3.5vw,32px)}
 .home-footer{display:flex;gap:8px;align-items:center;flex-wrap:wrap;justify-content:center;margin-top:3px}
-.diff-group{display:flex;gap:3px}
-.diff-btn{padding:5px 10px;border-radius:8px;border:2px solid #3498db;background:#fff;
-  font-family:inherit;font-size:clamp(11px,1.8vw,14px);cursor:pointer;transition:background 0.15s,color 0.15s}
-.diff-btn:active,.diff-btn.selected{background:#3498db;color:#fff}
+.settings-gear{position:fixed;bottom:10px;right:10px;width:36px;height:36px;border-radius:50%;background:rgba(0,0,0,0.06);
+  border:none;font-size:18px;cursor:pointer;display:flex;align-items:center;justify-content:center;
+  color:#A09890;z-index:100;opacity:0.5;transition:opacity 0.2s}
 
 /* GAME */
 #game-screen{justify-content:flex-start;padding-top:4px;transition:background 0.5s}
 .game-header{display:flex;justify-content:space-between;align-items:center;width:100%;max-width:700px;padding:3px 10px}
-#game-prompt{font-size:clamp(20px,3.8vw,34px);color:#2c3e50;font-weight:bold;text-align:center;margin:4px 0;line-height:1.2}
+#game-prompt{font-size:clamp(20px,3.8vw,34px);color:#4A3F35;font-weight:bold;text-align:center;margin:4px 0;line-height:1.2}
 #game-display{font-size:clamp(50px,12vw,110px);text-align:center;margin:0;min-height:40px;
   display:flex;align-items:center;justify-content:center;flex-shrink:1}
 .choices-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;max-width:550px;width:100%;
   padding:8px 12px;margin-top:auto;margin-bottom:8px;flex-shrink:0}
 .choices-grid.cols3{grid-template-columns:repeat(3,1fr)}
-.choice-btn{background:#fff;border:4px solid #e0e0e0;border-radius:18px;padding:14px 8px;
+.choice-btn{background:#fff;border:4px solid #E8E4E0;border-radius:18px;padding:14px 8px;
   font-size:clamp(16px,3.2vw,28px);cursor:pointer;display:flex;flex-direction:column;
-  align-items:center;justify-content:center;gap:3px;box-shadow:0 3px 10px rgba(0,0,0,0.08);
+  align-items:center;justify-content:center;gap:3px;box-shadow:0 3px 10px rgba(0,0,0,0.05);
   transition:transform 0.12s,border-color 0.2s,background 0.2s;min-height:85px;font-family:inherit}
 .choice-btn:active{transform:scale(0.94)}
-.choice-btn.correct{border-color:#27ae60;background:#d5f5e3;animation:correctPop 0.5s ease}
+.choice-btn.correct{border-color:#7EA87E;background:#E8F0E4;animation:correctPop 0.5s ease}
 .choice-btn.wrong{animation:shake 0.4s ease}
 .choice-btn.c3{padding:8px 4px;min-height:65px}
 @keyframes correctPop{0%{transform:scale(1)}30%{transform:scale(1.12)}60%{transform:scale(0.96)}100%{transform:scale(1.04)}}
@@ -54,103 +102,137 @@ html,body{width:100%;height:100%;overflow:hidden;font-family:'Comic Sans MS','Se
 
 /* CELEBRATION TEXT */
 #celebration-text{position:fixed;top:45%;left:50%;transform:translate(-50%,-50%);
-  font-size:clamp(36px,8vw,68px);font-weight:bold;color:#e74c3c;
-  text-shadow:2px 2px 4px rgba(0,0,0,0.15);pointer-events:none;opacity:0;z-index:999}
+  font-size:clamp(36px,8vw,68px);font-weight:bold;color:#C4916E;
+  text-shadow:2px 2px 4px rgba(0,0,0,0.1);pointer-events:none;opacity:0;z-index:999}
 #celebration-text.show{animation:celebPop 1.5s ease forwards}
 @keyframes celebPop{0%{opacity:0;transform:translate(-50%,-50%) scale(0.3)}
   25%{opacity:1;transform:translate(-50%,-50%) scale(1.15)}
   50%{opacity:1;transform:translate(-50%,-50%) scale(1)}
   100%{opacity:0;transform:translate(-50%,-65%) scale(1.1)}}
 
-#score-display{font-size:clamp(14px,2.5vw,22px);color:#f39c12;font-weight:bold}
-#timer-display{font-size:clamp(12px,2.2vw,18px);color:#8e44ad;font-weight:bold}
+#score-display{font-size:clamp(14px,2.5vw,22px);color:#C4916E;font-weight:bold}
 .icon-btn{background:rgba(255,255,255,0.7);border:none;border-radius:10px;padding:5px 10px;
   font-size:clamp(12px,2vw,16px);cursor:pointer;font-family:inherit}
 .icon-btn:active{background:rgba(255,255,255,0.95)}
 
-/* MODAL */
+/* MODAL (kept for potential future use) */
 .modal{position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.4);
   display:flex;align-items:center;justify-content:center;z-index:2000}
 .modal-content{background:#fff;border-radius:20px;padding:25px;max-width:360px;width:90%;text-align:center;position:relative}
-.modal-content h2{margin-bottom:15px;color:#2c3e50}
-.timer-options{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:15px 0}
-.timer-opt{padding:14px;font-size:18px;border:2px solid #3498db;border-radius:12px;background:#fff;
-  cursor:pointer;font-family:inherit;transition:background 0.15s,color 0.15s}
-.timer-opt:active,.timer-opt.selected{background:#3498db;color:#fff}
-.modal-close{background:#e74c3c;color:#fff;border:none;border-radius:50%;width:36px;height:36px;
-  font-size:18px;cursor:pointer;position:absolute;top:10px;right:10px}
+.modal-content h2{margin-bottom:15px;color:#4A3F35}
 
 /* TIMES UP */
-#timesup-screen{background:linear-gradient(135deg,#ffecd2 0%,#fcb69f 100%);justify-content:center;gap:15px}
-#timesup-screen h1{font-size:clamp(32px,6vw,56px);color:#2c3e50}
+#timesup-screen{background:linear-gradient(135deg,#FDF5EC 0%,#E8F0E4 50%,#FAF7F2 100%);justify-content:center;gap:15px}
+#timesup-screen h1{font-size:clamp(32px,6vw,56px);color:#4A3F35}
 .timesup-animals{font-size:clamp(36px,7vw,60px);animation:bounce 2s ease-in-out infinite}
-#final-score{font-size:clamp(20px,4vw,32px);color:#e67e22}
-.big-btn{background:#27ae60;color:#fff;border:none;border-radius:18px;padding:16px 32px;
-  font-size:clamp(18px,3.5vw,28px);cursor:pointer;box-shadow:0 4px 12px rgba(39,174,96,0.3);font-family:inherit}
+#final-score{font-size:clamp(20px,4vw,32px);color:#C4916E}
+.big-btn{background:#7EA87E;color:#fff;border:none;border-radius:18px;padding:16px 32px;
+  font-size:clamp(18px,3.5vw,28px);cursor:pointer;box-shadow:0 4px 12px rgba(126,168,126,0.3);font-family:inherit}
 .big-btn:active{transform:scale(0.95)}
 
-.floater{position:fixed;pointer-events:none;opacity:0.12;z-index:-1;animation:floatUp linear infinite}
+/* FADE OVERLAY for All Done */
+#fade-overlay{position:fixed;top:0;left:0;width:100%;height:100%;background:#FAF7F2;
+  z-index:400;opacity:0;pointer-events:none;transition:opacity 0.8s}
+#fade-overlay.show{opacity:1;pointer-events:auto}
+
+.floater{position:fixed;pointer-events:none;opacity:0.08;z-index:-1;animation:floatUp linear infinite}
 @keyframes floatUp{0%{transform:translateY(100vh) rotate(0deg)}100%{transform:translateY(-80px) rotate(360deg)}}
 
-.color-swatch{width:clamp(50px,11vw,75px);height:clamp(50px,11vw,75px);border-radius:50%;margin:0 auto 2px;box-shadow:0 3px 10px rgba(0,0,0,0.15)}
-.color-swatch-big{width:clamp(70px,15vw,110px);height:clamp(70px,15vw,110px);border-radius:50%;box-shadow:0 4px 16px rgba(0,0,0,0.12)}
+.color-swatch{width:clamp(50px,11vw,75px);height:clamp(50px,11vw,75px);border-radius:50%;margin:0 auto 2px;box-shadow:0 3px 10px rgba(0,0,0,0.1)}
+.color-swatch-big{width:clamp(70px,15vw,110px);height:clamp(70px,15vw,110px);border-radius:50%;box-shadow:0 4px 16px rgba(0,0,0,0.08)}
 
 /* FAMILY */
-.fam-circle{border-radius:50%;display:flex;align-items:center;justify-content:center;box-shadow:0 2px 8px rgba(0,0,0,0.12)}
+.fam-circle{border-radius:50%;display:flex;align-items:center;justify-content:center;box-shadow:0 2px 8px rgba(0,0,0,0.08)}
 .fam-big{width:clamp(70px,15vw,110px);height:clamp(70px,15vw,110px);font-size:clamp(36px,8vw,56px)}
 .fam-sm{width:clamp(40px,9vw,60px);height:clamp(40px,9vw,60px);font-size:clamp(22px,5vw,34px);margin:0 auto}
 
 .dad-letter{display:inline-block;font-size:clamp(22px,4vw,38px);margin:0 2px;font-weight:bold}
-.dad-letter.done{color:#27ae60}.dad-letter.current{color:#e74c3c;text-decoration:underline}.dad-letter.pending{color:#bbb}
+.dad-letter.done{color:#7EA87E}.dad-letter.current{color:#C4916E;text-decoration:underline}.dad-letter.pending{color:#bbb}
 
 /* DRAW & COLOR */
-#draw-screen,#coloring-screen{background:#f8f8f8;padding:4px}
+#draw-screen,#coloring-screen{background:#FAF7F2;padding:4px}
 .draw-header{display:flex;justify-content:space-between;align-items:center;width:100%;padding:3px 6px;gap:4px;flex-shrink:0}
-.draw-header span{font-weight:bold;font-size:clamp(13px,2.3vw,18px);color:#2c3e50}
-.canvas-wrap{flex:1;width:100%;position:relative;overflow:hidden;border-radius:10px;border:2px solid #ddd;background:#fff}
+.draw-header span{font-weight:bold;font-size:clamp(13px,2.3vw,18px);color:#4A3F35}
+.canvas-wrap{flex:1;width:100%;position:relative;overflow:hidden;border-radius:10px;border:2px solid #E8E4E0;background:#fff}
 .canvas-wrap canvas{position:absolute;top:0;left:0;width:100%;height:100%;touch-action:none}
 .draw-tools{width:100%;padding:4px;display:flex;flex-direction:column;gap:3px;flex-shrink:0}
 .palette{display:flex;gap:4px;justify-content:center;flex-wrap:wrap}
 .pal-btn{width:32px;height:32px;border-radius:50%;border:3px solid #ccc;cursor:pointer}
 .pal-btn:active{transform:scale(0.9)}
-.pal-btn.active{border-color:#333;box-shadow:0 0 0 2px #333}
+.pal-btn.active{border-color:#4A3F35;box-shadow:0 0 0 2px #4A3F35}
 .brush-row{display:flex;gap:8px;justify-content:center;align-items:center}
-.brush-btn{border-radius:50%;background:#333;border:3px solid #ccc;cursor:pointer}
-.brush-btn.active{border-color:#FF6B6B}
+.brush-btn{border-radius:50%;background:#4A3F35;border:3px solid #ccc;cursor:pointer}
+.brush-btn.active{border-color:#C4916E}
 .eraser-btn{width:32px;height:32px;border-radius:50%;border:3px solid #ccc;background:#fff;cursor:pointer;
   display:flex;align-items:center;justify-content:center;font-size:16px}
-.eraser-btn.active{border-color:#333;box-shadow:0 0 0 2px #333}
+.eraser-btn.active{border-color:#4A3F35;box-shadow:0 0 0 2px #4A3F35}
 .page-dots{display:flex;gap:5px;justify-content:center}
 .page-dot{width:10px;height:10px;border-radius:50%;background:#ccc;cursor:pointer}
-.page-dot.active{background:#3498db}
+.page-dot.active{background:#7EA87E}
 </style>
 </head>
 <body>
 <canvas id="confetti-canvas"></canvas>
+<div id="fade-overlay"></div>
+
+<!-- SESSION TIMER BAR (fixed, outside screens) -->
+<div id="session-timer-bar">
+  <div id="timer-progress-wrap"><div id="timer-progress-fill"></div></div>
+  <span id="timer-status-text"></span>
+  <span id="timer-time-text"></span>
+</div>
+
 <div id="app">
 
-  <div id="home-screen" class="screen active">
+  <!-- PARENT DASHBOARD -->
+  <div id="parent-screen" class="screen active">
+    <div class="parent-scroll">
+      <div class="parent-header">
+        <h1>Hailey's Learning Farm</h1>
+        <p>Parent Controls</p>
+      </div>
+
+      <div class="parent-section">
+        <div class="parent-section-title">Learning Modules</div>
+        <div id="parent-game-toggles"></div>
+      </div>
+
+      <div class="parent-section">
+        <div class="parent-section-title">Creative Modules</div>
+        <div id="parent-creative-toggles"></div>
+      </div>
+
+      <div class="parent-section">
+        <div class="parent-section-title">Session Timer</div>
+        <div class="timer-presets" id="parent-timer-presets"></div>
+        <p class="timer-note">A gentle wind-down begins 2 minutes before the timer ends.</p>
+      </div>
+
+      <div class="parent-section">
+        <div class="parent-section-title">Difficulty</div>
+        <div class="diff-presets" id="parent-diff-presets"></div>
+      </div>
+
+      <button class="start-btn" id="start-learning-btn">Start Learning</button>
+    </div>
+  </div>
+
+  <!-- KID HOME -->
+  <div id="home-screen" class="screen kid-screen">
     <div class="home-title">🌟 Hailey's Learning Farm 🌟</div>
     <div class="animal-parade">🐭 🐮 👸 🐀 🎨 🖌️</div>
     <div class="section-label">Learning Games</div>
     <div class="mode-grid" id="mode-grid"></div>
-    <div class="section-label">Creative</div>
+    <div class="section-label" id="creative-label">Creative</div>
     <div class="mode-grid" id="creative-grid"></div>
-    <div class="home-footer">
-      <div class="diff-group">
-        <button class="diff-btn" data-diff="easy">Easy</button>
-        <button class="diff-btn selected" data-diff="medium">Medium</button>
-        <button class="diff-btn" data-diff="hard">Hard</button>
-      </div>
-      <button class="icon-btn" id="timer-btn">⏱️ Timer</button>
-    </div>
+    <button class="settings-gear" id="settings-gear-btn">⚙</button>
   </div>
 
-  <div id="game-screen" class="screen">
+  <!-- GAME -->
+  <div id="game-screen" class="screen kid-screen">
     <div class="game-header">
       <button class="icon-btn" id="back-btn">← Back</button>
       <span id="mode-title"></span>
-      <span id="timer-display" style="display:none"></span>
       <span id="score-display">⭐ 0</span>
     </div>
     <div id="game-prompt"></div>
@@ -158,7 +240,8 @@ html,body{width:100%;height:100%;overflow:hidden;font-family:'Comic Sans MS','Se
     <div id="game-choices" class="choices-grid"></div>
   </div>
 
-  <div id="draw-screen" class="screen">
+  <!-- FREE DRAW -->
+  <div id="draw-screen" class="screen kid-screen">
     <div class="draw-header">
       <button class="icon-btn" id="draw-back">← Back</button>
       <span>Free Draw 🖌️</span>
@@ -172,7 +255,8 @@ html,body{width:100%;height:100%;overflow:hidden;font-family:'Comic Sans MS','Se
     </div>
   </div>
 
-  <div id="coloring-screen" class="screen">
+  <!-- COLORING -->
+  <div id="coloring-screen" class="screen kid-screen">
     <div class="draw-header">
       <button class="icon-btn" id="color-back">← Back</button>
       <span id="color-page-name">Heart</span>
@@ -187,26 +271,15 @@ html,body{width:100%;height:100%;overflow:hidden;font-family:'Comic Sans MS','Se
     </div>
   </div>
 
+  <!-- ALL DONE -->
   <div id="timesup-screen" class="screen">
     <h1>🌟 All Done! 🌟</h1>
     <div class="timesup-animals">🐭 🐮 🐷 🐔 🐴 🐑</div>
-    <p style="font-size:clamp(22px,4vw,34px);color:#2c3e50">Great job today, Hailey!</p>
+    <p style="font-size:clamp(22px,4vw,34px);color:#4A3F35">Great job today, Hailey!</p>
     <p id="final-score"></p>
     <button class="big-btn" id="play-again-btn">Play Again!</button>
   </div>
 
-  <div id="timer-modal" class="modal" style="display:none">
-    <div class="modal-content">
-      <button class="modal-close" id="modal-close-btn">✕</button>
-      <h2>⏱️ Set Timer</h2>
-      <div class="timer-options">
-        <button class="timer-opt" data-minutes="15">15 min</button>
-        <button class="timer-opt" data-minutes="30">30 min</button>
-        <button class="timer-opt" data-minutes="45">45 min</button>
-        <button class="timer-opt selected" data-minutes="0">No limit</button>
-      </div>
-    </div>
-  </div>
 </div>
 <div id="celebration-text"></div>
 
@@ -275,14 +348,239 @@ const DAYS=['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturda
 const MONTHS=['January','February','March','April','May','June','July','August','September','October','November','December'];
 const LETTERS='ABCDEFGHIJKLMNOPQRSTUVWXYZ'.split('');
 const BACKGROUNDS=[
-  'linear-gradient(135deg,#a8edea 0%,#fed6e3 100%)','linear-gradient(135deg,#ffecd2 0%,#fcb69f 100%)',
-  'linear-gradient(135deg,#a1c4fd 0%,#c2e9fb 100%)','linear-gradient(135deg,#d4fc79 0%,#96e6a1 100%)',
-  'linear-gradient(135deg,#fbc2eb 0%,#a6c1ee 100%)','linear-gradient(135deg,#fddb92 0%,#d1fdff 100%)',
+  'linear-gradient(135deg,#FAF7F2 0%,#FDF5EC 100%)','linear-gradient(135deg,#FDF5EC 0%,#E8F0E4 100%)',
+  'linear-gradient(135deg,#E8F0E4 0%,#FAF7F2 100%)','linear-gradient(135deg,#FDF5EC 0%,#FAF7F2 100%)',
+  'linear-gradient(135deg,#E8F0E4 0%,#FDF5EC 100%)','linear-gradient(135deg,#FAF7F2 0%,#E8F0E4 100%)',
 ];
 const PHRASES=['Great job!','Awesome!','Yay!','You did it!','Amazing!','Wonderful!','Super!','Hooray!'];
 const PALETTE_C=['#FF0000','#FF8C00','#FFD700','#00AA00','#0066FF','#8B00FF','#FF69B4','#8B4513','#000000','#FFFFFF'];
 const BRUSHES=[{size:4,w:14},{size:10,w:22},{size:22,w:32}];
 const LC={};LETTERS.forEach((l,i)=>{LC[l]=`hsl(${(i*137)%360},70%,45%)`;});
+
+// ===== SVG ILLUSTRATIONS =====
+const ANIMAL_SVG = {
+  'Mouse': `<circle cx="50" cy="55" rx="20" ry="18" fill="#C4B5A6"/>
+    <circle cx="36" cy="35" r="12" fill="#D5C6B7"/><circle cx="64" cy="35" r="12" fill="#D5C6B7"/>
+    <circle cx="36" cy="35" r="7" fill="#E8C5B5"/><circle cx="64" cy="35" r="7" fill="#E8C5B5"/>
+    <circle cx="44" cy="50" r="2.5" fill="#4A3F35"/><circle cx="56" cy="50" r="2.5" fill="#4A3F35"/>
+    <circle cx="50" cy="57" r="2" fill="#C4916E"/>
+    <path d="M45,62 Q50,66 55,62" fill="none" stroke="#4A3F35" stroke-width="1.5"/>`,
+  'Rat': `<ellipse cx="50" cy="55" rx="22" ry="16" fill="#8A8078"/>
+    <circle cx="38" cy="36" r="10" fill="#9A9088"/><circle cx="62" cy="36" r="10" fill="#9A9088"/>
+    <circle cx="38" cy="36" r="6" fill="#B5AAA0"/><circle cx="62" cy="36" r="6" fill="#B5AAA0"/>
+    <circle cx="44" cy="50" r="2.5" fill="#4A3F35"/><circle cx="56" cy="50" r="2.5" fill="#4A3F35"/>
+    <circle cx="50" cy="57" r="2" fill="#C4916E"/>
+    <path d="M70,58 Q80,55 90,60" fill="none" stroke="#8A8078" stroke-width="2.5" stroke-linecap="round"/>`,
+  'Cow': `<ellipse cx="50" cy="55" rx="26" ry="22" fill="#FAF7F2"/>
+    <ellipse cx="50" cy="68" rx="14" ry="8" fill="#E8C5B5"/>
+    <circle cx="40" cy="45" r="3" fill="#4A3F35"/><circle cx="60" cy="45" r="3" fill="#4A3F35"/>
+    <ellipse cx="35" cy="30" rx="8" ry="5" fill="#FAF7F2" transform="rotate(-30,35,30)"/>
+    <ellipse cx="65" cy="30" rx="8" ry="5" fill="#FAF7F2" transform="rotate(30,65,30)"/>
+    <ellipse cx="38" cy="52" rx="8" ry="6" fill="#4A3F35" opacity="0.3"/>
+    <circle cx="46" cy="70" r="1.5" fill="#4A3F35"/><circle cx="54" cy="70" r="1.5" fill="#4A3F35"/>`,
+  'Pig': `<circle cx="50" cy="52" r="24" fill="#F0B8B8"/>
+    <ellipse cx="50" cy="62" rx="12" ry="8" fill="#E8A0A0"/>
+    <circle cx="46" cy="60" r="2" fill="#C4916E"/><circle cx="54" cy="60" r="2" fill="#C4916E"/>
+    <circle cx="40" cy="44" r="3" fill="#4A3F35"/><circle cx="60" cy="44" r="3" fill="#4A3F35"/>
+    <path d="M32,30 Q36,22 42,30" fill="#F0B8B8" stroke="#E8A0A0" stroke-width="1"/>
+    <path d="M58,30 Q64,22 68,30" fill="#F0B8B8" stroke="#E8A0A0" stroke-width="1"/>`,
+  'Hen': `<ellipse cx="50" cy="58" rx="20" ry="22" fill="#FAF7F2"/>
+    <circle cx="50" cy="36" r="13" fill="#FAF7F2"/>
+    <circle cx="45" cy="33" r="2.5" fill="#4A3F35"/>
+    <polygon points="55,35 65,37 55,39" fill="#E8C547"/>
+    <path d="M46,24 Q50,16 54,24" fill="#C4916E"/>
+    <path d="M48,24 Q50,18 52,24" fill="#E8685A"/>
+    <ellipse cx="44" cy="78" rx="3" ry="5" fill="#E8C547"/><ellipse cx="56" cy="78" rx="3" ry="5" fill="#E8C547"/>`,
+  'Horse': `<ellipse cx="50" cy="58" rx="22" ry="20" fill="#C4916E"/>
+    <ellipse cx="50" cy="38" rx="14" ry="16" fill="#C4916E"/>
+    <ellipse cx="50" cy="50" rx="8" ry="5" fill="#B07E5E"/>
+    <circle cx="42" cy="34" r="2.5" fill="#4A3F35"/><circle cx="58" cy="34" r="2.5" fill="#4A3F35"/>
+    <circle cx="46" cy="48" r="1.5" fill="#4A3F35"/><circle cx="54" cy="48" r="1.5" fill="#4A3F35"/>
+    <path d="M36,22 Q40,14 44,22" fill="#8A6E50"/><path d="M56,22 Q60,14 64,22" fill="#8A6E50"/>
+    <path d="M42,20 Q50,10 58,20" fill="#6A5040" opacity="0.7"/>`,
+  'Sheep': `<circle cx="50" cy="50" r="26" fill="#F0EDE8"/>
+    <circle cx="36" cy="38" r="8" fill="#F0EDE8"/><circle cx="64" cy="38" r="8" fill="#F0EDE8"/>
+    <circle cx="42" cy="32" r="7" fill="#F0EDE8"/><circle cx="58" cy="32" r="7" fill="#F0EDE8"/>
+    <circle cx="50" cy="55" r="12" fill="#D5C6B7"/>
+    <circle cx="45" cy="52" r="2.5" fill="#4A3F35"/><circle cx="55" cy="52" r="2.5" fill="#4A3F35"/>
+    <ellipse cx="50" cy="59" rx="3" ry="2" fill="#4A3F35"/>`,
+  'Goat': `<ellipse cx="50" cy="55" rx="20" ry="20" fill="#E8E4E0"/>
+    <ellipse cx="50" cy="42" rx="14" ry="14" fill="#E8E4E0"/>
+    <circle cx="43" cy="39" r="2.5" fill="#4A3F35"/><circle cx="57" cy="39" r="2.5" fill="#4A3F35"/>
+    <ellipse cx="50" cy="48" rx="3" ry="2" fill="#C4916E"/>
+    <path d="M36,28 L30,14" stroke="#8A8078" stroke-width="3" stroke-linecap="round"/>
+    <path d="M64,28 L70,14" stroke="#8A8078" stroke-width="3" stroke-linecap="round"/>
+    <path d="M46,52 Q50,58 54,52" fill="#E8C5B5"/>`,
+  'Cat': `<circle cx="50" cy="55" r="22" fill="#F0C880"/>
+    <polygon points="30,38 26,14 44,32" fill="#F0C880"/><polygon points="70,38 74,14 56,32" fill="#F0C880"/>
+    <polygon points="30,38 28,18 42,32" fill="#E8B870" opacity="0.5"/>
+    <polygon points="70,38 72,18 58,32" fill="#E8B870" opacity="0.5"/>
+    <circle cx="42" cy="48" r="3" fill="#4A3F35"/><circle cx="58" cy="48" r="3" fill="#4A3F35"/>
+    <polygon points="50,55 47,58 53,58" fill="#E8A0A0"/>
+    <path d="M40,62 Q50,68 60,62" fill="none" stroke="#4A3F35" stroke-width="1.2"/>`,
+  'Dog': `<ellipse cx="50" cy="55" rx="22" ry="20" fill="#C4916E"/>
+    <ellipse cx="34" cy="38" rx="10" ry="14" fill="#B07E5E" transform="rotate(-15,34,38)"/>
+    <ellipse cx="66" cy="38" rx="10" ry="14" fill="#B07E5E" transform="rotate(15,66,38)"/>
+    <circle cx="42" cy="48" r="3" fill="#4A3F35"/><circle cx="58" cy="48" r="3" fill="#4A3F35"/>
+    <ellipse cx="50" cy="58" rx="8" ry="5" fill="#E8D8C8"/>
+    <circle cx="50" cy="55" r="3" fill="#4A3F35"/>
+    <path d="M44,64 Q50,70 56,64" fill="none" stroke="#4A3F35" stroke-width="1.5"/>`,
+  'Bunny': `<ellipse cx="50" cy="62" rx="20" ry="18" fill="#E8E4E0"/>
+    <ellipse cx="40" cy="24" rx="7" ry="22" fill="#E8E4E0"/><ellipse cx="60" cy="24" rx="7" ry="22" fill="#E8E4E0"/>
+    <ellipse cx="40" cy="24" rx="4" ry="16" fill="#F0C0C0"/><ellipse cx="60" cy="24" rx="4" ry="16" fill="#F0C0C0"/>
+    <circle cx="50" cy="56" r="14" fill="#E8E4E0"/>
+    <circle cx="44" cy="52" r="2.5" fill="#4A3F35"/><circle cx="56" cy="52" r="2.5" fill="#4A3F35"/>
+    <polygon points="50,58 48,62 52,62" fill="#E8A0A0"/>
+    <path d="M42,64 Q50,70 58,64" fill="none" stroke="#4A3F35" stroke-width="1.2"/>`,
+  'Frog': `<ellipse cx="50" cy="60" rx="26" ry="20" fill="#7EA87E"/>
+    <circle cx="36" cy="36" r="10" fill="#7EA87E"/><circle cx="64" cy="36" r="10" fill="#7EA87E"/>
+    <circle cx="36" cy="34" r="6" fill="#FAF7F2"/><circle cx="64" cy="34" r="6" fill="#FAF7F2"/>
+    <circle cx="37" cy="33" r="3" fill="#4A3F35"/><circle cx="65" cy="33" r="3" fill="#4A3F35"/>
+    <path d="M38,66 Q50,74 62,66" fill="none" stroke="#5A8A5A" stroke-width="2"/>
+    <ellipse cx="50" cy="60" rx="14" ry="8" fill="#8BC48B"/>`,
+  'Chick': `<circle cx="50" cy="55" r="22" fill="#E8C547"/>
+    <circle cx="50" cy="38" r="14" fill="#E8C547"/>
+    <circle cx="44" cy="35" r="2.5" fill="#4A3F35"/><circle cx="56" cy="35" r="2.5" fill="#4A3F35"/>
+    <polygon points="50,40 44,44 56,44" fill="#E8955A"/>
+    <path d="M46,26 Q48,20 50,26" fill="#E8D060"/><path d="M50,26 Q52,20 54,26" fill="#E8D060"/>
+    <ellipse cx="42" cy="76" rx="5" ry="3" fill="#E8955A"/><ellipse cx="58" cy="76" rx="5" ry="3" fill="#E8955A"/>`,
+  'Duck': `<ellipse cx="50" cy="58" rx="22" ry="20" fill="#FAF7F2"/>
+    <circle cx="50" cy="36" r="14" fill="#FAF7F2"/>
+    <circle cx="44" cy="33" r="2.5" fill="#4A3F35"/><circle cx="56" cy="33" r="2.5" fill="#4A3F35"/>
+    <ellipse cx="50" cy="42" rx="8" ry="4" fill="#E8C547"/>
+    <path d="M42,26 Q44,20 48,26" fill="#FAF7F2" opacity="0.6"/>
+    <ellipse cx="42" cy="76" rx="5" ry="3" fill="#E8955A"/><ellipse cx="58" cy="76" rx="5" ry="3" fill="#E8955A"/>`,
+  'Bee': `<ellipse cx="50" cy="55" rx="20" ry="18" fill="#E8C547"/>
+    <rect x="30" y="52" width="40" height="5" rx="2" fill="#4A3F35"/>
+    <rect x="30" y="60" width="40" height="5" rx="2" fill="#4A3F35"/>
+    <circle cx="50" cy="40" r="10" fill="#E8C547"/>
+    <circle cx="45" cy="38" r="2" fill="#4A3F35"/><circle cx="55" cy="38" r="2" fill="#4A3F35"/>
+    <path d="M46,44 Q50,47 54,44" fill="none" stroke="#4A3F35" stroke-width="1"/>
+    <ellipse cx="36" cy="38" rx="10" ry="5" fill="#D0E8F0" opacity="0.6" transform="rotate(-30,36,38)"/>
+    <ellipse cx="64" cy="38" rx="10" ry="5" fill="#D0E8F0" opacity="0.6" transform="rotate(30,64,38)"/>`,
+};
+
+const FOOD_SVG = {
+  'Pizza': `<polygon points="50,15 15,85 85,85" fill="#E8C547"/>
+    <polygon points="50,22 22,80 78,80" fill="#E8A040"/>
+    <circle cx="42" cy="55" r="5" fill="#C4916E"/><circle cx="58" cy="62" r="5" fill="#C4916E"/>
+    <circle cx="50" cy="45" r="4" fill="#C4916E"/>
+    <path d="M15,85 L85,85" stroke="#E8C547" stroke-width="4" stroke-linecap="round"/>`,
+  'Pasta': `<ellipse cx="50" cy="55" rx="32" ry="22" fill="#E8E4E0"/>
+    <path d="M28,48 Q35,38 42,48 Q50,38 58,48 Q65,38 72,48" fill="none" stroke="#E8C547" stroke-width="4"/>
+    <path d="M30,55 Q38,45 46,55 Q54,45 62,55 Q68,45 70,55" fill="none" stroke="#E8C547" stroke-width="4"/>
+    <circle cx="40" cy="50" r="4" fill="#C45050"/><circle cx="55" cy="46" r="4" fill="#C45050"/>
+    <circle cx="50" cy="56" r="3" fill="#C45050"/>`,
+  'Cheese': `<polygon points="10,70 50,20 90,70" fill="#E8C547"/>
+    <polygon points="10,70 90,70 90,80 10,80" fill="#E8B830"/>
+    <circle cx="40" cy="58" r="5" fill="#E8D870"/><circle cx="60" cy="65" r="4" fill="#E8D870"/>
+    <circle cx="50" cy="50" r="3" fill="#E8D870"/><circle cx="70" cy="58" r="3" fill="#E8D870"/>`,
+  'Apple': `<circle cx="50" cy="55" r="26" fill="#E85050"/>
+    <ellipse cx="42" cy="55" rx="16" ry="26" fill="#D04545"/>
+    <path d="M50,30 Q52,18 58,22" stroke="#7EA87E" stroke-width="2.5" fill="none"/>
+    <ellipse cx="55" cy="26" rx="8" ry="4" fill="#7EA87E" transform="rotate(20,55,26)"/>
+    <ellipse cx="40" cy="42" rx="4" ry="6" fill="#F0A0A0" opacity="0.4"/>`,
+  'Banana': `<path d="M25,65 Q20,30 50,20 Q80,10 85,40 L78,42 Q74,18 50,28 Q30,38 30,65 Z" fill="#E8C547"/>
+    <path d="M25,65 Q20,30 50,20" stroke="#D4A830" stroke-width="1.5" fill="none"/>
+    <path d="M85,40 L82,36" stroke="#8A7030" stroke-width="2" stroke-linecap="round"/>
+    <path d="M25,65 L30,65" stroke="#8A7030" stroke-width="2" stroke-linecap="round"/>`,
+  'Carrot': `<polygon points="50,85 30,30 70,30" fill="#E8955A"/>
+    <polygon points="50,85 38,40 62,40" fill="#D47840"/>
+    <path d="M40,30 Q38,14 42,10" stroke="#7EA87E" stroke-width="3" fill="none"/>
+    <path d="M50,28 Q50,12 52,8" stroke="#7EA87E" stroke-width="3" fill="none"/>
+    <path d="M60,30 Q62,14 58,10" stroke="#7EA87E" stroke-width="3" fill="none"/>
+    <line x1="38" y1="50" x2="62" y2="50" stroke="#C46E40" stroke-width="1" opacity="0.5"/>
+    <line x1="42" y1="65" x2="58" y2="65" stroke="#C46E40" stroke-width="1" opacity="0.5"/>`,
+  'Broccoli': `<circle cx="35" cy="35" r="14" fill="#7EA87E"/><circle cx="50" cy="28" r="14" fill="#6A9A6A"/>
+    <circle cx="65" cy="35" r="14" fill="#7EA87E"/><circle cx="42" cy="25" r="10" fill="#8AB88A"/>
+    <circle cx="58" cy="25" r="10" fill="#8AB88A"/>
+    <rect x="46" y="48" width="8" height="28" rx="3" fill="#8A7A50"/>`,
+  'Cake': `<rect x="20" y="45" width="60" height="35" rx="6" fill="#E8C5B5"/>
+    <rect x="20" y="45" width="60" height="10" rx="4" fill="#F0D0D0"/>
+    <rect x="18" y="42" width="64" height="8" rx="4" fill="#FAF7F2"/>
+    <path d="M18,46 Q30,52 42,46 Q54,52 66,46 Q78,52 82,46" fill="#FAF7F2"/>
+    <rect x="47" y="24" width="6" height="20" rx="2" fill="#E8C547"/>
+    <ellipse cx="50" cy="22" rx="4" ry="5" fill="#E8955A"/>
+    <circle cx="50" cy="20" r="2" fill="#E8C547"/>`,
+  'Cookie': `<circle cx="50" cy="50" r="28" fill="#C4916E"/>
+    <circle cx="50" cy="50" r="26" fill="#D4A47E"/>
+    <circle cx="38" cy="40" r="4" fill="#6A4A30"/><circle cx="58" cy="44" r="3.5" fill="#6A4A30"/>
+    <circle cx="44" cy="58" r="3.5" fill="#6A4A30"/><circle cx="60" cy="60" r="3" fill="#6A4A30"/>
+    <circle cx="50" cy="36" r="3" fill="#6A4A30"/>`,
+  'Ice Cream': `<polygon points="35,55 50,90 65,55" fill="#D4A47E"/>
+    <line x1="38" y1="58" x2="50" y2="88" stroke="#C4916E" stroke-width="0.8"/>
+    <line x1="62" y1="58" x2="50" y2="88" stroke="#C4916E" stroke-width="0.8"/>
+    <circle cx="50" cy="42" r="18" fill="#F5E0D0"/>
+    <circle cx="38" cy="36" r="12" fill="#F0D0D0"/>
+    <circle cx="62" cy="36" r="12" fill="#E8C5B5"/>
+    <circle cx="50" cy="30" r="10" fill="#F5E8E0"/>`,
+  'Corn': `<ellipse cx="50" cy="50" rx="16" ry="30" fill="#E8C547"/>
+    <ellipse cx="44" cy="40" rx="4" ry="5" fill="#E8D060"/><ellipse cx="56" cy="40" rx="4" ry="5" fill="#E8D060"/>
+    <ellipse cx="44" cy="52" rx="4" ry="5" fill="#E8D060"/><ellipse cx="56" cy="52" rx="4" ry="5" fill="#E8D060"/>
+    <ellipse cx="50" cy="46" rx="4" ry="5" fill="#F0D870"/>
+    <path d="M40,78 Q35,85 25,82" stroke="#7EA87E" stroke-width="3" fill="none"/>
+    <path d="M60,78 Q65,85 75,82" stroke="#7EA87E" stroke-width="3" fill="none"/>
+    <path d="M50,80 Q50,88 48,90" stroke="#7EA87E" stroke-width="3" fill="none"/>`,
+  'Strawberry': `<path d="M50,22 Q20,40 25,65 Q30,85 50,88 Q70,85 75,65 Q80,40 50,22Z" fill="#E06050"/>
+    <circle cx="40" cy="45" r="1.5" fill="#E8C547"/><circle cx="55" cy="42" r="1.5" fill="#E8C547"/>
+    <circle cx="45" cy="58" r="1.5" fill="#E8C547"/><circle cx="58" cy="56" r="1.5" fill="#E8C547"/>
+    <circle cx="50" cy="70" r="1.5" fill="#E8C547"/><circle cx="42" cy="72" r="1.5" fill="#E8C547"/>
+    <path d="M42,24 Q44,14 48,18" fill="#7EA87E"/><path d="M52,18 Q56,14 58,24" fill="#7EA87E"/>
+    <path d="M48,22 Q50,12 52,22" fill="#7EA87E"/>`,
+  'Grapes': `<circle cx="42" cy="35" r="8" fill="#9070B0"/><circle cx="58" cy="35" r="8" fill="#9070B0"/>
+    <circle cx="35" cy="48" r="8" fill="#8060A0"/><circle cx="50" cy="48" r="8" fill="#9070B0"/>
+    <circle cx="65" cy="48" r="8" fill="#8060A0"/>
+    <circle cx="42" cy="60" r="8" fill="#9070B0"/><circle cx="58" cy="60" r="8" fill="#9070B0"/>
+    <circle cx="50" cy="72" r="8" fill="#8060A0"/>
+    <path d="M50,28 Q52,16 56,14" stroke="#7EA87E" stroke-width="2" fill="none"/>`,
+  'Orange': `<circle cx="50" cy="52" r="26" fill="#E8955A"/>
+    <circle cx="50" cy="52" r="24" fill="#F0A060"/>
+    <ellipse cx="42" cy="44" rx="5" ry="7" fill="#F0B070" opacity="0.5"/>
+    <path d="M50,28 Q52,20 56,22" stroke="#7EA87E" stroke-width="2.5" fill="none"/>
+    <ellipse cx="54" cy="22" rx="5" ry="3" fill="#7EA87E" transform="rotate(15,54,22)"/>`,
+  'Croissant': `<path d="M15,55 Q25,30 50,35 Q75,30 85,55 Q75,70 50,65 Q25,70 15,55Z" fill="#D4A47E"/>
+    <path d="M22,52 Q35,35 50,40 Q65,35 78,52" fill="none" stroke="#C4916E" stroke-width="1.5"/>
+    <path d="M28,50 Q42,38 50,42 Q58,38 72,50" fill="none" stroke="#C4916E" stroke-width="1"/>
+    <ellipse cx="50" cy="50" rx="28" ry="14" fill="#E8B880" opacity="0.3"/>`,
+  'Donut': `<circle cx="50" cy="50" r="28" fill="#D4A47E"/>
+    <circle cx="50" cy="50" r="11" fill="#FAF7F2"/>
+    <path d="M22,46 Q30,30 50,28 Q70,30 78,46 Q74,42 50,38 Q26,42 22,46Z" fill="#F0A0B0"/>
+    <circle cx="35" cy="36" r="2" fill="#E8C547"/><circle cx="50" cy="32" r="2" fill="#7BADC4"/>
+    <circle cx="64" cy="36" r="2" fill="#E8C547"/><circle cx="42" cy="33" r="1.5" fill="#F0A0B0"/>
+    <circle cx="58" cy="33" r="1.5" fill="#7EA87E"/>`,
+  'Watermelon': `<path d="M15,60 Q50,10 85,60Z" fill="#7EA87E"/>
+    <path d="M20,58 Q50,16 80,58Z" fill="#E06050"/>
+    <path d="M25,56 Q50,22 75,56Z" fill="#F07060"/>
+    <circle cx="40" cy="48" r="2" fill="#4A3F35"/><circle cx="55" cy="44" r="2" fill="#4A3F35"/>
+    <circle cx="48" cy="38" r="2" fill="#4A3F35"/><circle cx="60" cy="50" r="2" fill="#4A3F35"/>
+    <circle cx="50" cy="52" r="2" fill="#4A3F35"/>
+    <line x1="15" y1="60" x2="85" y2="60" stroke="#7EA87E" stroke-width="3"/>`,
+  'Sandwich': `<path d="M15,40 Q50,30 85,40 L85,44 Q50,34 15,44Z" fill="#D4A47E"/>
+    <path d="M15,44 L85,44 L85,50 L15,50Z" fill="#7EA87E"/>
+    <path d="M15,50 L85,50 L85,55 L15,55Z" fill="#E8C547"/>
+    <path d="M15,55 L85,55 L85,60 L15,60Z" fill="#E8A0A0"/>
+    <path d="M15,60 L85,60 L85,65 Q50,75 15,65Z" fill="#D4A47E"/>`,
+  'Taco': `<path d="M12,65 Q50,15 88,65Z" fill="#E8C547"/>
+    <path d="M18,60 Q50,25 82,60Z" fill="#D4A47E"/>
+    <ellipse cx="40" cy="52" rx="8" ry="5" fill="#7EA87E"/>
+    <ellipse cx="58" cy="50" rx="7" ry="5" fill="#7EA87E"/>
+    <circle cx="45" cy="45" r="4" fill="#E8955A"/>
+    <circle cx="55" cy="44" r="3.5" fill="#E8955A"/>
+    <circle cx="50" cy="55" r="3" fill="#E06050"/>`,
+  'Burger': `<path d="M18,38 Q50,28 82,38 L82,44 Q50,34 18,44Z" fill="#D4A47E"/>
+    <rect x="18" y="46" width="64" height="8" rx="2" fill="#C45050"/>
+    <rect x="18" y="54" width="64" height="6" rx="2" fill="#E8C547"/>
+    <path d="M16,60 L84,60 L84,66 Q50,76 16,66Z" fill="#D4A47E"/>
+    <path d="M18" y="44" fill="#7EA87E"/>
+    <path d="M18,44 Q30,50 42,44 Q54,50 66,44 Q78,50 82,44 L82,46 L18,46Z" fill="#7EA87E"/>`,
+};
+
+function svgIcon(name, size, type) {
+  const map = type === 'animal' ? ANIMAL_SVG : FOOD_SVG;
+  const inner = map[name];
+  if (!inner) return '';
+  return `<svg viewBox="0 0 100 100" width="${size}" height="${size}" style="display:block;margin:auto">${inner}</svg>`;
+}
 
 // ===== PRINCESS SVG =====
 function pIcon(p,sz){
@@ -323,21 +621,21 @@ function pIcon(p,sz){
 
 // ===== MODES =====
 const GAME_MODES=[
-  {id:'animals',name:'Animals',icon:'🐮',color:'#FF6B6B'},
-  {id:'princesses',name:'Princesses',icon:'👸',color:'#FF69B4'},
-  {id:'remy',name:"Remy's Kitchen",icon:'🐀',color:'#E67E22'},
-  {id:'letters',name:'Letters',icon:'🔤',color:'#4ECDC4'},
-  {id:'numbers',name:'Numbers',icon:'🔢',color:'#45B7D1'},
-  {id:'colors',name:'Colors',icon:'🎨',color:'#FFA07A'},
-  {id:'words',name:'Words',icon:'📝',color:'#85C1E9'},
-  {id:'family',name:'Family',icon:'👨‍👩‍👧',color:'#F7DC6F'},
-  {id:'days',name:'Days',icon:'📅',color:'#98D8C8'},
-  {id:'months',name:'Months',icon:'📆',color:'#BB8FCE'},
-  {id:'dad',name:'Dad Mode',icon:'🐾',color:'#A9CCE3'},
+  {id:'animals',name:'Animals',icon:'🐮',color:'#C4916E'},
+  {id:'princesses',name:'Princesses',icon:'👸',color:'#D4A0B0'},
+  {id:'remy',name:"Remy's Kitchen",icon:'🐀',color:'#C4916E'},
+  {id:'letters',name:'Letters',icon:'🔤',color:'#7BADC4'},
+  {id:'numbers',name:'Numbers',icon:'🔢',color:'#7BADC4'},
+  {id:'colors',name:'Colors',icon:'🎨',color:'#C4916E'},
+  {id:'words',name:'Words',icon:'📝',color:'#7BADC4'},
+  {id:'family',name:'Family',icon:'👨‍👩‍👧',color:'#E8C547'},
+  {id:'days',name:'Days',icon:'📅',color:'#7EA87E'},
+  {id:'months',name:'Months',icon:'📆',color:'#9070B0'},
+  {id:'dad',name:'Dad Mode',icon:'🐾',color:'#7BADC4'},
 ];
 const CREATIVE_MODES=[
-  {id:'freedraw',name:'Free Draw',icon:'🖌️',color:'#FF6347'},
-  {id:'coloring',name:'Coloring',icon:'🖍️',color:'#32CD32'},
+  {id:'freedraw',name:'Free Draw',icon:'🖌️',color:'#C4916E'},
+  {id:'coloring',name:'Coloring',icon:'🖍️',color:'#7EA87E'},
 ];
 
 // ===== COLORING PAGES =====
@@ -375,12 +673,41 @@ const CPAGES=[
 ];
 
 // ===== STATE =====
-let S={screen:'home',mode:null,target:null,choices:[],score:0,streak:0,
+let S={screen:'parent',mode:null,target:null,choices:[],score:0,streak:0,
   animating:false,lastTarget:null,bgIdx:0,difficulty:'medium',
-  timerMin:0,timerEnd:null,timerInt:null,timerRunning:false,
+  timerMin:15,timerEnd:null,timerInt:null,timerRunning:false,
   dadAnimal:null,dadIdx:0,
   drawColor:'#FF0000',brushSize:10,drawing:false,drawHistory:[],
   colorColor:'#FF0000',colorPageIdx:0,regionFills:{}};
+
+// Parent preferences
+let parentPrefs = {
+  modules: {},
+  timerMin: 15,
+  difficulty: 'medium'
+};
+
+function loadParentPrefs() {
+  try {
+    const saved = localStorage.getItem('hailey-parent');
+    if (saved) {
+      const p = JSON.parse(saved);
+      parentPrefs = { ...parentPrefs, ...p };
+      // Ensure all modules exist
+      [...GAME_MODES, ...CREATIVE_MODES].forEach(m => {
+        if (parentPrefs.modules[m.id] === undefined) parentPrefs.modules[m.id] = true;
+      });
+    } else {
+      [...GAME_MODES, ...CREATIVE_MODES].forEach(m => { parentPrefs.modules[m.id] = true; });
+    }
+  } catch(e) {
+    [...GAME_MODES, ...CREATIVE_MODES].forEach(m => { parentPrefs.modules[m.id] = true; });
+  }
+}
+
+function saveParentPrefs() {
+  try { localStorage.setItem('hailey-parent', JSON.stringify(parentPrefs)); } catch(e) {}
+}
 
 function numDist(){return S.difficulty==='easy'?1:S.difficulty==='hard'?8:3;}
 function numChoices(){return numDist()+1;}
@@ -399,7 +726,7 @@ function say(t,r=.85,p=1.1){if(!window.speechSynthesis)return;window.speechSynth
 // ===== CONFETTI =====
 function confetti(){const cv=document.getElementById('confetti-canvas'),cx=cv.getContext('2d');
   cv.width=innerWidth;cv.height=innerHeight;
-  const P=[],co=['#FF6B6B','#4ECDC4','#45B7D1','#FFA07A','#F7DC6F','#BB8FCE','#85C1E9','#FF69B4'];
+  const P=[],co=['#C4916E','#7BADC4','#7EA87E','#E8C547','#D4A0B0','#9070B0','#E8955A'];
   for(let i=0;i<70;i++)P.push({x:cv.width/2+(Math.random()-.5)*cv.width*.5,y:cv.height*.38+(Math.random()-.5)*80,
     vx:(Math.random()-.5)*16,vy:-Math.random()*14-4,c:co[Math.floor(Math.random()*co.length)],
     sz:Math.random()*9+4,r:Math.random()*360,rv:(Math.random()-.5)*12});
@@ -415,22 +742,136 @@ function pick(a){return a[Math.floor(Math.random()*a.length)];}
 function dist(a,t,n){n=Math.min(n,a.length-1);return shuffle(a.filter(x=>x!==t)).slice(0,n);}
 function nextBg(){S.bgIdx=(S.bgIdx+1)%BACKGROUNDS.length;document.getElementById('game-screen').style.background=BACKGROUNDS[S.bgIdx];}
 
-function showScreen(n){document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
+function showScreen(n){
+  document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
   document.getElementById(n+'-screen').classList.add('active');S.screen=n;
   if(n==='draw')requestAnimationFrame(()=>resizeDrawCanvas());
-  if(n==='coloring')requestAnimationFrame(()=>{resizeColorCanvas();renderColorPage();});}
+  if(n==='coloring')requestAnimationFrame(()=>{resizeColorCanvas();renderColorPage();});
+  // Show/hide timer bar for kid screens
+  const timerBar = document.getElementById('session-timer-bar');
+  const isKid = (n === 'home' || n === 'game' || n === 'draw' || n === 'coloring');
+  if (isKid && S.timerRunning) {
+    timerBar.classList.add('visible');
+    document.getElementById('app').classList.add('timer-on');
+  } else if (n === 'parent' || n === 'timesup') {
+    timerBar.classList.remove('visible');
+    document.getElementById('app').classList.remove('timer-on');
+  }
+}
 
 function celebText(t){const el=document.getElementById('celebration-text');el.textContent=t;
   el.classList.remove('show');void el.offsetWidth;el.classList.add('show');}
 
+// ===== PARENT DASHBOARD =====
+function renderParentDashboard() {
+  // Game toggles
+  const gt = document.getElementById('parent-game-toggles');
+  gt.innerHTML = '';
+  GAME_MODES.forEach(m => {
+    const card = document.createElement('div');
+    card.className = 'module-card';
+    const on = parentPrefs.modules[m.id] !== false;
+    card.innerHTML = `<div class="module-card-left">
+      <span class="module-card-icon">${m.icon}</span>
+      <span class="module-card-name">${m.name}</span>
+    </div>
+    <div class="toggle-track ${on ? 'on' : ''}" data-module="${m.id}"><div class="toggle-knob"></div></div>`;
+    card.querySelector('.toggle-track').addEventListener('pointerdown', e => {
+      e.preventDefault();
+      parentPrefs.modules[m.id] = !parentPrefs.modules[m.id];
+      saveParentPrefs();
+      renderParentDashboard();
+    });
+    gt.appendChild(card);
+  });
+
+  // Creative toggles
+  const ct = document.getElementById('parent-creative-toggles');
+  ct.innerHTML = '';
+  CREATIVE_MODES.forEach(m => {
+    const card = document.createElement('div');
+    card.className = 'module-card';
+    const on = parentPrefs.modules[m.id] !== false;
+    card.innerHTML = `<div class="module-card-left">
+      <span class="module-card-icon">${m.icon}</span>
+      <span class="module-card-name">${m.name}</span>
+    </div>
+    <div class="toggle-track ${on ? 'on' : ''}" data-module="${m.id}"><div class="toggle-knob"></div></div>`;
+    card.querySelector('.toggle-track').addEventListener('pointerdown', e => {
+      e.preventDefault();
+      parentPrefs.modules[m.id] = !parentPrefs.modules[m.id];
+      saveParentPrefs();
+      renderParentDashboard();
+    });
+    ct.appendChild(card);
+  });
+
+  // Timer presets
+  const tp = document.getElementById('parent-timer-presets');
+  tp.innerHTML = '';
+  const timerOpts = [{min:5,label:'5 min'},{min:10,label:'10 min'},{min:15,label:'15 min'},{min:20,label:'20 min'},{min:30,label:'30 min'},{min:0,label:'No limit'}];
+  timerOpts.forEach(opt => {
+    const b = document.createElement('button');
+    b.className = 'timer-preset' + (parentPrefs.timerMin === opt.min ? ' selected' : '');
+    b.textContent = opt.label;
+    b.addEventListener('pointerdown', e => {
+      e.preventDefault();
+      parentPrefs.timerMin = opt.min;
+      saveParentPrefs();
+      renderParentDashboard();
+    });
+    tp.appendChild(b);
+  });
+
+  // Difficulty presets
+  const dp = document.getElementById('parent-diff-presets');
+  dp.innerHTML = '';
+  const diffOpts = [{val:'easy',label:'Easy'},{val:'medium',label:'Medium'},{val:'hard',label:'Hard'}];
+  diffOpts.forEach(opt => {
+    const b = document.createElement('button');
+    b.className = 'diff-preset' + (parentPrefs.difficulty === opt.val ? ' selected' : '');
+    b.textContent = opt.label;
+    b.addEventListener('pointerdown', e => {
+      e.preventDefault();
+      parentPrefs.difficulty = opt.val;
+      saveParentPrefs();
+      renderParentDashboard();
+    });
+    dp.appendChild(b);
+  });
+}
+
+function startLearning() {
+  // Apply parent prefs to game state
+  S.difficulty = parentPrefs.difficulty;
+  S.timerMin = parentPrefs.timerMin;
+  S.score = 0;
+  S.streak = 0;
+
+  // Render kid home with only enabled modules
+  renderHome();
+  showScreen('home');
+
+  // Start timer if set
+  if (S.timerMin > 0) {
+    startTimer();
+  }
+}
+
 // ===== RENDER HOME =====
 function renderHome(){
   const g=document.getElementById('mode-grid');g.innerHTML='';
-  GAME_MODES.forEach(m=>{const b=document.createElement('button');b.className='mode-btn';b.style.borderColor=m.color;
+  const enabledGames = GAME_MODES.filter(m => parentPrefs.modules[m.id] !== false);
+  enabledGames.forEach(m=>{const b=document.createElement('button');b.className='mode-btn';b.style.borderColor=m.color;
     b.innerHTML=`<span class="mode-icon">${m.icon}</span><span>${m.name}</span>`;
     b.addEventListener('pointerdown',e=>{e.preventDefault();startMode(m.id);});g.appendChild(b);});
+
   const cg=document.getElementById('creative-grid');cg.innerHTML='';
-  CREATIVE_MODES.forEach(m=>{const b=document.createElement('button');b.className='mode-btn';b.style.borderColor=m.color;
+  const enabledCreative = CREATIVE_MODES.filter(m => parentPrefs.modules[m.id] !== false);
+  // Show/hide creative section
+  document.getElementById('creative-label').style.display = enabledCreative.length ? '' : 'none';
+  cg.style.display = enabledCreative.length ? '' : 'none';
+  enabledCreative.forEach(m=>{const b=document.createElement('button');b.className='mode-btn';b.style.borderColor=m.color;
     b.innerHTML=`<span class="mode-icon">${m.icon}</span><span>${m.name}</span>`;
     b.addEventListener('pointerdown',e=>{e.preventDefault();startCreative(m.id);});cg.appendChild(b);});
 }
@@ -447,16 +888,18 @@ function renderGame(){
 
   if(M==='animals'){
     pr.textContent='Find the '+S.target.name+'!';
-    di.innerHTML=S.target.emoji;di.style.fontSize='';
-    mkBtns(S.choices.map(c=>({html:`<span style="font-size:clamp(${c3?'24px,4vw,36px':'32px,6vw,50px'})">${c.emoji}</span><br><span style="font-size:clamp(11px,2vw,15px)">${c.name}</span>`,d:c})),c3);
+    const svgSz = c3 ? 50 : 70;
+    di.innerHTML=svgIcon(S.target.name, 90, 'animal');di.style.fontSize='';
+    mkBtns(S.choices.map(c=>({html:`${svgIcon(c.name, svgSz, 'animal')}<span style="font-size:clamp(11px,2vw,15px)">${c.name}</span>`,d:c})),c3);
   } else if(M==='princesses'){
     pr.textContent='Find '+S.target.name+'!';
     di.innerHTML=pIcon(S.target,c3?70:90);di.style.fontSize='';
     mkBtns(S.choices.map(c=>({html:pIcon(c,c3?38:50)+`<span style="font-size:clamp(10px,1.8vw,14px)">${c.name}</span>`,d:c})),c3);
   } else if(M==='remy'){
-    pr.innerHTML='Feed Remy some<br><b>'+S.target.name+'</b>! '+S.target.emoji;
-    di.innerHTML='<span style="font-size:clamp(50px,10vw,90px)">🐀</span>';di.style.fontSize='';
-    mkBtns(S.choices.map(c=>({html:`<span style="font-size:clamp(${c3?'24px,4vw,36px':'32px,6vw,50px'})">${c.emoji}</span><br><span style="font-size:clamp(11px,2vw,15px)">${c.name}</span>`,d:c})),c3);
+    pr.innerHTML='Feed Remy some<br><b>'+S.target.name+'</b>!';
+    const svgSz = c3 ? 50 : 70;
+    di.innerHTML=svgIcon('Rat', 90, 'animal');di.style.fontSize='';
+    mkBtns(S.choices.map(c=>({html:`${svgIcon(c.name, svgSz, 'food')}<span style="font-size:clamp(11px,2vw,15px)">${c.name}</span>`,d:c})),c3);
   } else if(M==='letters'){
     pr.textContent='Find the letter '+S.target+'!';
     di.innerHTML=`<span style="color:${LC[S.target]}">${S.target}</span>`;di.style.fontSize='';
@@ -471,7 +914,7 @@ function renderGame(){
     mkBtns(S.choices.map(c=>({html:`<div class="color-swatch" style="background:${c.hex}${c.hex==='#F0F0F0'?';border:2px solid #ccc':''}"></div><span style="font-size:clamp(10px,1.8vw,14px)">${c.name}</span>`,d:c})),c3);
   } else if(M==='words'){
     pr.textContent='What is this word?';
-    di.innerHTML=`<span style="font-size:clamp(40px,10vw,80px);font-weight:bold;color:#2c3e50;letter-spacing:4px">${S.target.word}</span>`;di.style.fontSize='';
+    di.innerHTML=`<span style="font-size:clamp(40px,10vw,80px);font-weight:bold;color:#4A3F35;letter-spacing:4px">${S.target.word}</span>`;di.style.fontSize='';
     mkBtns(S.choices.map(c=>({html:`<span style="font-size:clamp(${c3?'24px,4vw,36px':'32px,6vw,50px'})">${c.emoji}</span>`,d:c})),c3);
   } else if(M==='family'){
     pr.textContent='Find '+S.target.name+'!';
@@ -498,7 +941,7 @@ function mkBtns(items,c3){
 function renderDad(){
   const pr=document.getElementById('game-prompt'),di=document.getElementById('game-display');
   const a=S.dadAnimal,idx=S.dadIdx,nm=a.name.toUpperCase();
-  di.innerHTML=`<span style="font-size:clamp(45px,9vw,80px)">${a.emoji}</span>`;
+  di.innerHTML=svgIcon(a.name, 80, 'animal');
   let w='';for(let i=0;i<nm.length;i++){const cls=i<idx?'done':i===idx?'current':'pending';
     w+=`<span class="dad-letter ${cls}">${i<idx?nm[i]:(i===idx?nm[i]:'_')}</span>`;}
   pr.innerHTML=`Spell ${a.name}!<br>${w}`;
@@ -509,11 +952,10 @@ function renderDad(){
 
 // ===== GAME LOGIC =====
 function startMode(id){S.mode=id;S.score=0;S.streak=0;S.lastTarget=null;showScreen('game');
-  if(S.timerMin>0&&!S.timerRunning)startTimer();if(id==='dad')nextDadAnimal();else nextRound();}
+  if(id==='dad')nextDadAnimal();else nextRound();}
 
 function startCreative(id){if(id==='freedraw')showScreen('draw');
-  else if(id==='coloring'){S.colorPageIdx=0;S.regionFills={};showScreen('coloring');}
-  if(S.timerMin>0&&!S.timerRunning)startTimer();}
+  else if(id==='coloring'){S.colorPageIdx=0;S.regionFills={};showScreen('coloring');}}
 
 function nextRound(){
   S.animating=false;nextBg();const nd=numDist(),M=S.mode;
@@ -638,36 +1080,124 @@ function initColoring(){
   document.getElementById('color-back').addEventListener('pointerdown',e=>{e.preventDefault();showScreen('home');});
 }
 
-// ===== TIMER =====
-function startTimer(){if(S.timerInt)clearInterval(S.timerInt);S.timerEnd=Date.now()+S.timerMin*60000;S.timerRunning=true;
-  const el=document.getElementById('timer-display');el.style.display='inline';
-  S.timerInt=setInterval(()=>{const rem=Math.max(0,S.timerEnd-Date.now());
-    el.textContent='⏱️ '+Math.floor(rem/60000)+':'+String(Math.floor((rem%60000)/1000)).padStart(2,'0');
-    if(rem<=0){clearInterval(S.timerInt);S.timerRunning=false;timesUp();}},1000);}
-function timesUp(){if(S.timerInt)clearInterval(S.timerInt);S.timerRunning=false;
-  document.getElementById('timer-display').style.display='none';
+// ===== SESSION TIMER =====
+function startTimer(){
+  if(S.timerInt)clearInterval(S.timerInt);
+  S.timerEnd=Date.now()+S.timerMin*60000;
+  S.timerRunning=true;
+  const bar=document.getElementById('session-timer-bar');
+  const fill=document.getElementById('timer-progress-fill');
+  const timeText=document.getElementById('timer-time-text');
+  const statusText=document.getElementById('timer-status-text');
+  bar.classList.add('visible');
+  document.getElementById('app').classList.add('timer-on');
+  const totalMs = S.timerMin * 60000;
+
+  S.timerInt=setInterval(()=>{
+    const rem=Math.max(0,S.timerEnd-Date.now());
+    const pct = (rem / totalMs) * 100;
+    const mins = Math.floor(rem/60000);
+    const secs = Math.floor((rem%60000)/1000);
+    timeText.textContent = mins + ':' + String(secs).padStart(2,'0');
+    fill.style.width = pct + '%';
+
+    // Color transitions
+    if (rem > 120000) {
+      fill.style.background = '#7BADC4';
+      statusText.textContent = '';
+    } else if (rem > 30000) {
+      fill.style.background = '#E8955A';
+      statusText.textContent = 'Almost done!';
+    } else if (rem > 0) {
+      fill.style.background = '#E08070';
+      statusText.textContent = 'Wrapping up...';
+    }
+
+    if(rem<=0){clearInterval(S.timerInt);S.timerRunning=false;timesUp();}
+  },1000);
+
+  // Initial tick
+  const rem0 = Math.max(0, S.timerEnd - Date.now());
+  const pct0 = (rem0 / totalMs) * 100;
+  fill.style.width = pct0 + '%';
+  timeText.textContent = Math.floor(rem0/60000) + ':' + String(Math.floor((rem0%60000)/1000)).padStart(2,'0');
+}
+
+function stopTimer() {
+  if (S.timerInt) clearInterval(S.timerInt);
+  S.timerRunning = false;
+  S.timerEnd = null;
+  document.getElementById('session-timer-bar').classList.remove('visible');
+  document.getElementById('app').classList.remove('timer-on');
+}
+
+function timesUp(){
+  if(S.timerInt)clearInterval(S.timerInt);S.timerRunning=false;
+  document.getElementById('session-timer-bar').classList.remove('visible');
+  document.getElementById('app').classList.remove('timer-on');
   document.getElementById('final-score').textContent='You earned ⭐ '+S.score+' stars!';
-  showScreen('timesup');say('All done! Great job today Hailey!');}
+
+  // Gentle fade transition
+  const overlay = document.getElementById('fade-overlay');
+  overlay.classList.add('show');
+  setTimeout(() => {
+    showScreen('timesup');
+    setTimeout(() => { overlay.classList.remove('show'); }, 100);
+  }, 800);
+  say('All done! Great job today Hailey!');
+}
 
 function makeFloaters(){const em=['☁️','⭐','💫','🌟','✨'];
   for(let i=0;i<5;i++){const d=document.createElement('div');d.className='floater';d.textContent=pick(em);
     d.style.left=Math.random()*100+'%';d.style.fontSize=(Math.random()*14+12)+'px';
     d.style.animationDuration=(Math.random()*12+16)+'s';d.style.animationDelay=(-Math.random()*20)+'s';document.body.appendChild(d);}}
 
+// ===== SETTINGS GEAR (double-tap) =====
+let gearTapCount = 0;
+let gearTapTimer = null;
+function handleGearTap() {
+  gearTapCount++;
+  if (gearTapCount === 1) {
+    gearTapTimer = setTimeout(() => { gearTapCount = 0; }, 400);
+  } else if (gearTapCount >= 2) {
+    clearTimeout(gearTapTimer);
+    gearTapCount = 0;
+    // Stop timer and go to parent dashboard
+    stopTimer();
+    showScreen('parent');
+    renderParentDashboard();
+  }
+}
+
 // ===== INIT =====
-function init(){renderHome();makeFloaters();initDraw();initColoring();
-  document.getElementById('back-btn').addEventListener('pointerdown',e=>{e.preventDefault();
-    document.getElementById('timer-display').style.display='none';showScreen('home');});
-  document.getElementById('timer-btn').addEventListener('pointerdown',e=>{e.preventDefault();
-    document.getElementById('timer-modal').style.display='flex';});
-  document.querySelectorAll('.timer-opt').forEach(b=>{b.addEventListener('pointerdown',e=>{e.preventDefault();
-    S.timerMin=parseInt(b.dataset.minutes);document.querySelectorAll('.timer-opt').forEach(x=>x.classList.remove('selected'));
-    b.classList.add('selected');setTimeout(()=>document.getElementById('timer-modal').style.display='none',250);});});
-  document.querySelectorAll('.diff-btn').forEach(b=>{b.addEventListener('pointerdown',e=>{e.preventDefault();
-    S.difficulty=b.dataset.diff;document.querySelectorAll('.diff-btn').forEach(x=>x.classList.remove('selected'));b.classList.add('selected');});});
-  document.getElementById('modal-close-btn').addEventListener('pointerdown',e=>{e.preventDefault();
-    document.getElementById('timer-modal').style.display='none';});
-  document.getElementById('play-again-btn').addEventListener('pointerdown',e=>{e.preventDefault();S.timerRunning=false;showScreen('home');});
+function init(){
+  loadParentPrefs();
+  renderParentDashboard();
+  makeFloaters();
+  initDraw();
+  initColoring();
+
+  // Start Learning button
+  document.getElementById('start-learning-btn').addEventListener('pointerdown', e => {
+    e.preventDefault();
+    startLearning();
+  });
+
+  // Back from game to kid home
+  document.getElementById('back-btn').addEventListener('pointerdown',e=>{e.preventDefault();showScreen('home');});
+
+  // Settings gear (double-tap)
+  document.getElementById('settings-gear-btn').addEventListener('pointerdown', e => {
+    e.preventDefault();
+    handleGearTap();
+  });
+
+  // Play Again -> parent dashboard
+  document.getElementById('play-again-btn').addEventListener('pointerdown',e=>{e.preventDefault();
+    stopTimer();
+    showScreen('parent');
+    renderParentDashboard();
+  });
 }
 document.addEventListener('DOMContentLoaded',init);
 </script>
