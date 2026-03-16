@@ -26,40 +26,48 @@ html,body{width:100%;height:100%;overflow:hidden;font-family:'Comic Sans MS','Se
 
 /* PARENT DASHBOARD */
 #parent-screen{background:#F5F3F0;font-family:system-ui,-apple-system,sans-serif;justify-content:flex-start;padding:0}
-.parent-scroll{width:100%;max-width:480px;margin:0 auto;padding:24px 16px 40px;overflow-y:auto;flex:1}
-.parent-header{text-align:center;margin-bottom:28px}
-.parent-header h1{font-size:24px;font-weight:700;color:#4A3F35;margin-bottom:4px}
-.parent-header p{font-size:13px;color:#8A8078;font-weight:500}
-.parent-section{margin-bottom:22px}
-.parent-section-title{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:1.2px;color:#8A8078;margin-bottom:10px;padding-left:2px}
+.parent-scroll{width:100%;max-width:480px;margin:0 auto;padding:16px 12px 30px;overflow-y:auto;flex:1}
+.parent-header{text-align:center;margin-bottom:16px}
+.parent-header h1{font-size:22px;font-weight:700;color:#4A3F35;margin-bottom:2px}
+.parent-header p{font-size:12px;color:#8A8078;font-weight:500}
+.parent-section{margin-bottom:14px}
+.parent-section-title{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:1.2px;color:#8A8078;margin-bottom:8px;padding-left:2px}
+#parent-game-toggles, #parent-creative-toggles {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 6px;
+}
+@media (min-width: 500px) {
+  #parent-game-toggles { grid-template-columns: repeat(3, 1fr); }
+}
 .module-card{display:flex;align-items:center;justify-content:space-between;background:#fff;border:1px solid #E8E4E0;
-  border-radius:12px;padding:12px 14px;margin-bottom:6px}
-.module-card-left{display:flex;align-items:center;gap:10px}
-.module-card-icon{font-size:22px}
-.module-card-name{font-size:15px;font-weight:600;color:#4A3F35}
+  border-radius:10px;padding:8px 10px}
+.module-card-left{display:flex;align-items:center;gap:6px}
+.module-card-icon{font-size:18px}
+.module-card-name{font-size:13px;font-weight:600;color:#4A3F35}
 /* iOS toggle */
-.toggle-track{width:46px;height:26px;border-radius:13px;background:#D1CEC9;position:relative;cursor:pointer;transition:background 0.25s;flex-shrink:0}
+.toggle-track{width:40px;height:22px;border-radius:11px;background:#D1CEC9;position:relative;cursor:pointer;transition:background 0.25s;flex-shrink:0}
 .toggle-track.on{background:#7EA87E}
-.toggle-knob{width:22px;height:22px;border-radius:50%;background:#fff;position:absolute;top:2px;left:2px;
+.toggle-knob{width:18px;height:18px;border-radius:50%;background:#fff;position:absolute;top:2px;left:2px;
   box-shadow:0 1px 3px rgba(0,0,0,0.2);transition:left 0.25s}
-.toggle-track.on .toggle-knob{left:22px}
+.toggle-track.on .toggle-knob{left:20px}
 /* Timer presets */
-.timer-presets{display:flex;gap:6px;flex-wrap:wrap}
-.timer-preset{padding:8px 14px;border-radius:10px;border:1.5px solid #E8E4E0;background:#fff;
-  font-family:system-ui,-apple-system,sans-serif;font-size:14px;font-weight:600;color:#4A3F35;cursor:pointer;transition:all 0.15s}
+.timer-presets{display:flex;gap:5px;flex-wrap:wrap}
+.timer-preset{padding:7px 12px;border-radius:8px;border:1.5px solid #E8E4E0;background:#fff;
+  font-family:system-ui,-apple-system,sans-serif;font-size:13px;font-weight:600;color:#4A3F35;cursor:pointer;transition:all 0.15s}
 .timer-preset.selected{background:#7EA87E;color:#fff;border-color:#7EA87E}
 .timer-preset:active{transform:scale(0.95)}
 /* Difficulty selector */
-.diff-presets{display:flex;gap:6px}
-.diff-preset{flex:1;padding:10px;border-radius:10px;border:1.5px solid #E8E4E0;background:#fff;
-  font-family:system-ui,-apple-system,sans-serif;font-size:14px;font-weight:600;color:#4A3F35;cursor:pointer;text-align:center;transition:all 0.15s}
+.diff-presets{display:flex;gap:5px;flex-wrap:wrap}
+.diff-preset{flex:1;padding:8px;border-radius:8px;border:1.5px solid #E8E4E0;background:#fff;
+  font-family:system-ui,-apple-system,sans-serif;font-size:13px;font-weight:600;color:#4A3F35;cursor:pointer;text-align:center;transition:all 0.15s}
 .diff-preset.selected{background:#7EA87E;color:#fff;border-color:#7EA87E}
 .diff-preset:active{transform:scale(0.95)}
-.timer-note{font-size:11px;color:#A09890;margin-top:6px;padding-left:2px}
+.timer-note{font-size:11px;color:#A09890;margin-top:4px;padding-left:2px}
 /* Start button */
-.start-btn{width:100%;padding:16px;border:none;border-radius:14px;background:#7EA87E;color:#fff;
+.start-btn{width:100%;padding:14px;border:none;border-radius:14px;background:#7EA87E;color:#fff;
   font-family:system-ui,-apple-system,sans-serif;font-size:18px;font-weight:700;cursor:pointer;
-  box-shadow:0 4px 14px rgba(126,168,126,0.35);transition:transform 0.12s,box-shadow 0.12s;margin-top:10px}
+  box-shadow:0 4px 14px rgba(126,168,126,0.35);transition:transform 0.12s,box-shadow 0.12s;margin-top:8px}
 .start-btn:active{transform:scale(0.97);box-shadow:0 2px 8px rgba(126,168,126,0.25)}
 
 /* HOME */
@@ -166,9 +174,16 @@ html,body{width:100%;height:100%;overflow:hidden;font-family:'Comic Sans MS','Se
 .eraser-btn{width:32px;height:32px;border-radius:50%;border:3px solid #ccc;background:#fff;cursor:pointer;
   display:flex;align-items:center;justify-content:center;font-size:16px}
 .eraser-btn.active{border-color:#4A3F35;box-shadow:0 0 0 2px #4A3F35}
-.page-dots{display:flex;gap:5px;justify-content:center}
+.page-dots{display:flex;gap:5px;justify-content:center;flex-wrap:wrap}
 .page-dot{width:10px;height:10px;border-radius:50%;background:#ccc;cursor:pointer}
 .page-dot.active{background:#7EA87E}
+
+/* THEME TABS */
+.theme-tabs{display:flex;gap:5px;justify-content:center;flex-wrap:wrap;padding:4px 0}
+.theme-tab{padding:4px 10px;border-radius:12px;border:1.5px solid #E8E4E0;background:#fff;
+  font-family:inherit;font-size:11px;font-weight:600;color:#8A8078;cursor:pointer;transition:all 0.15s;white-space:nowrap}
+.theme-tab.active{background:#7EA87E;color:#fff;border-color:#7EA87E}
+.theme-tab:active{transform:scale(0.95)}
 </style>
 </head>
 <body>
@@ -219,21 +234,21 @@ html,body{width:100%;height:100%;overflow:hidden;font-family:'Comic Sans MS','Se
 
   <!-- KID HOME -->
   <div id="home-screen" class="screen kid-screen">
-    <div class="home-title">🌟 Hailey's Learning Farm 🌟</div>
-    <div class="animal-parade">🐭 🐮 👸 🐀 🎨 🖌️</div>
+    <div class="home-title">&#127775; Hailey's Learning Farm &#127775;</div>
+    <div class="animal-parade">&#128045; &#128046; &#128120; &#128000; &#127912; &#128396;&#65039;</div>
     <div class="section-label">Learning Games</div>
     <div class="mode-grid" id="mode-grid"></div>
     <div class="section-label" id="creative-label">Creative</div>
     <div class="mode-grid" id="creative-grid"></div>
-    <button class="settings-gear" id="settings-gear-btn">⚙</button>
+    <button class="settings-gear" id="settings-gear-btn">&#9881;</button>
   </div>
 
   <!-- GAME -->
   <div id="game-screen" class="screen kid-screen">
     <div class="game-header">
-      <button class="icon-btn" id="back-btn">← Back</button>
+      <button class="icon-btn" id="back-btn">&larr; Back</button>
       <span id="mode-title"></span>
-      <span id="score-display">⭐ 0</span>
+      <span id="score-display">&#11088; 0</span>
     </div>
     <div id="game-prompt"></div>
     <div id="game-display"></div>
@@ -243,10 +258,10 @@ html,body{width:100%;height:100%;overflow:hidden;font-family:'Comic Sans MS','Se
   <!-- FREE DRAW -->
   <div id="draw-screen" class="screen kid-screen">
     <div class="draw-header">
-      <button class="icon-btn" id="draw-back">← Back</button>
-      <span>Free Draw 🖌️</span>
-      <button class="icon-btn" id="draw-undo">↩ Undo</button>
-      <button class="icon-btn" id="draw-clear">🗑 Clear</button>
+      <button class="icon-btn" id="draw-back">&larr; Back</button>
+      <span>Free Draw &#128396;&#65039;</span>
+      <button class="icon-btn" id="draw-undo">&#8617; Undo</button>
+      <button class="icon-btn" id="draw-clear">&#128465; Clear</button>
     </div>
     <div class="canvas-wrap"><canvas id="draw-canvas"></canvas></div>
     <div class="draw-tools">
@@ -258,23 +273,24 @@ html,body{width:100%;height:100%;overflow:hidden;font-family:'Comic Sans MS','Se
   <!-- COLORING -->
   <div id="coloring-screen" class="screen kid-screen">
     <div class="draw-header">
-      <button class="icon-btn" id="color-back">← Back</button>
+      <button class="icon-btn" id="color-back">&larr; Back</button>
       <span id="color-page-name">Heart</span>
-      <button class="icon-btn" id="color-prev">◀</button>
-      <button class="icon-btn" id="color-next">▶</button>
-      <button class="icon-btn" id="color-clear">🗑</button>
+      <button class="icon-btn" id="color-prev">&#9664;</button>
+      <button class="icon-btn" id="color-next">&#9654;</button>
+      <button class="icon-btn" id="color-clear">&#128465;</button>
     </div>
     <div class="canvas-wrap"><canvas id="color-canvas"></canvas></div>
     <div class="draw-tools">
       <div class="palette" id="color-palette"></div>
+      <div class="theme-tabs" id="theme-tabs"></div>
       <div class="page-dots" id="page-dots"></div>
     </div>
   </div>
 
   <!-- ALL DONE -->
   <div id="timesup-screen" class="screen">
-    <h1>🌟 All Done! 🌟</h1>
-    <div class="timesup-animals">🐭 🐮 🐷 🐔 🐴 🐑</div>
+    <h1>&#127775; All Done! &#127775;</h1>
+    <div class="timesup-animals">&#128045; &#128046; &#128055; &#128020; &#128052; &#128017;</div>
     <p style="font-size:clamp(22px,4vw,34px);color:#4A3F35">Great job today, Hailey!</p>
     <p id="final-score"></p>
     <button class="big-btn" id="play-again-btn">Play Again!</button>
@@ -286,56 +302,56 @@ html,body{width:100%;height:100%;overflow:hidden;font-family:'Comic Sans MS','Se
 <script>
 // ===== DATA =====
 const ANIMALS=[
-  {emoji:'🐭',name:'Mouse'},{emoji:'🐀',name:'Rat'},{emoji:'🐮',name:'Cow'},
-  {emoji:'🐷',name:'Pig'},{emoji:'🐔',name:'Hen'},{emoji:'🐴',name:'Horse'},
-  {emoji:'🐑',name:'Sheep'},{emoji:'🐐',name:'Goat'},{emoji:'🐱',name:'Cat'},
-  {emoji:'🐶',name:'Dog'},{emoji:'🐰',name:'Bunny'},{emoji:'🐸',name:'Frog'},
-  {emoji:'🐥',name:'Chick'},{emoji:'🦆',name:'Duck'},{emoji:'🐝',name:'Bee'},
+  {emoji:'\u{1F42D}',name:'Mouse'},{emoji:'\u{1F400}',name:'Rat'},{emoji:'\u{1F42E}',name:'Cow'},
+  {emoji:'\u{1F437}',name:'Pig'},{emoji:'\u{1F414}',name:'Hen'},{emoji:'\u{1F434}',name:'Horse'},
+  {emoji:'\u{1F411}',name:'Sheep'},{emoji:'\u{1F410}',name:'Goat'},{emoji:'\u{1F431}',name:'Cat'},
+  {emoji:'\u{1F436}',name:'Dog'},{emoji:'\u{1F430}',name:'Bunny'},{emoji:'\u{1F438}',name:'Frog'},
+  {emoji:'\u{1F425}',name:'Chick'},{emoji:'\u{1F986}',name:'Duck'},{emoji:'\u{1F41D}',name:'Bee'},
 ];
 const PRINCESSES=[
-  {name:'Elsa',hair:'#F5DEB3',hs:'braid1',skin:'#FDBCB4',dress:'#87CEEB',emoji:'❄️'},
-  {name:'Anna',hair:'#CD853F',hs:'braid2',skin:'#FDBCB4',dress:'#8B2252',emoji:'🌻'},
-  {name:'Rapunzel',hair:'#FFD700',hs:'long',skin:'#FDBCB4',dress:'#9370DB',emoji:'🔆'},
-  {name:'Ariel',hair:'#FF0000',hs:'long',skin:'#FDBCB4',dress:'#00CED1',emoji:'🧜‍♀️'},
-  {name:'Belle',hair:'#8B4513',hs:'updo',skin:'#FDBCB4',dress:'#FFD700',emoji:'🌹'},
-  {name:'Cinderella',hair:'#F5DEB3',hs:'updo',skin:'#FDBCB4',dress:'#6495ED',emoji:'👠'},
-  {name:'Moana',hair:'#1C1C1C',hs:'long',skin:'#C68642',dress:'#CD853F',emoji:'🌊'},
-  {name:'Snow White',hair:'#1C1C1C',hs:'short',skin:'#FDBCB4',dress:'#0000CD',emoji:'🍎'},
-  {name:'Aurora',hair:'#FFD700',hs:'long',skin:'#FDBCB4',dress:'#FF69B4',emoji:'🦋'},
-  {name:'Jasmine',hair:'#1C1C1C',hs:'long',skin:'#C68642',dress:'#008B8B',emoji:'✨'},
-  {name:'Tiana',hair:'#1C1C1C',hs:'updo',skin:'#8D5524',dress:'#00AA00',emoji:'🐸'},
-  {name:'Merida',hair:'#FF4500',hs:'curly',skin:'#FDBCB4',dress:'#006400',emoji:'🏹'},
+  {name:'Elsa',hair:'#F5DEB3',hs:'braid1',skin:'#FDBCB4',dress:'#87CEEB',emoji:'\u2744\uFE0F'},
+  {name:'Anna',hair:'#CD853F',hs:'braid2',skin:'#FDBCB4',dress:'#8B2252',emoji:'\u{1F33B}'},
+  {name:'Rapunzel',hair:'#FFD700',hs:'long',skin:'#FDBCB4',dress:'#9370DB',emoji:'\u{1F506}'},
+  {name:'Ariel',hair:'#FF0000',hs:'long',skin:'#FDBCB4',dress:'#00CED1',emoji:'\u{1F9DC}\u200D\u2640\uFE0F'},
+  {name:'Belle',hair:'#8B4513',hs:'updo',skin:'#FDBCB4',dress:'#FFD700',emoji:'\u{1F339}'},
+  {name:'Cinderella',hair:'#F5DEB3',hs:'updo',skin:'#FDBCB4',dress:'#6495ED',emoji:'\u{1F460}'},
+  {name:'Moana',hair:'#1C1C1C',hs:'long',skin:'#C68642',dress:'#CD853F',emoji:'\u{1F30A}'},
+  {name:'Snow White',hair:'#1C1C1C',hs:'short',skin:'#FDBCB4',dress:'#0000CD',emoji:'\u{1F34E}'},
+  {name:'Aurora',hair:'#FFD700',hs:'long',skin:'#FDBCB4',dress:'#FF69B4',emoji:'\u{1F98B}'},
+  {name:'Jasmine',hair:'#1C1C1C',hs:'long',skin:'#C68642',dress:'#008B8B',emoji:'\u2728'},
+  {name:'Tiana',hair:'#1C1C1C',hs:'updo',skin:'#8D5524',dress:'#00AA00',emoji:'\u{1F438}'},
+  {name:'Merida',hair:'#FF4500',hs:'curly',skin:'#FDBCB4',dress:'#006400',emoji:'\u{1F3F9}'},
 ];
 const FOODS=[
-  {emoji:'🍕',name:'Pizza'},{emoji:'🍝',name:'Pasta'},{emoji:'🧀',name:'Cheese'},
-  {emoji:'🍎',name:'Apple'},{emoji:'🍌',name:'Banana'},{emoji:'🥕',name:'Carrot'},
-  {emoji:'🥦',name:'Broccoli'},{emoji:'🎂',name:'Cake'},{emoji:'🍪',name:'Cookie'},
-  {emoji:'🍦',name:'Ice Cream'},{emoji:'🌽',name:'Corn'},{emoji:'🍓',name:'Strawberry'},
-  {emoji:'🍇',name:'Grapes'},{emoji:'🍊',name:'Orange'},{emoji:'🥐',name:'Croissant'},
-  {emoji:'🍩',name:'Donut'},{emoji:'🍉',name:'Watermelon'},{emoji:'🥪',name:'Sandwich'},
-  {emoji:'🌮',name:'Taco'},{emoji:'🍔',name:'Burger'},
+  {emoji:'\u{1F355}',name:'Pizza'},{emoji:'\u{1F35D}',name:'Pasta'},{emoji:'\u{1F9C0}',name:'Cheese'},
+  {emoji:'\u{1F34E}',name:'Apple'},{emoji:'\u{1F34C}',name:'Banana'},{emoji:'\u{1F955}',name:'Carrot'},
+  {emoji:'\u{1F966}',name:'Broccoli'},{emoji:'\u{1F382}',name:'Cake'},{emoji:'\u{1F36A}',name:'Cookie'},
+  {emoji:'\u{1F366}',name:'Ice Cream'},{emoji:'\u{1F33D}',name:'Corn'},{emoji:'\u{1F353}',name:'Strawberry'},
+  {emoji:'\u{1F347}',name:'Grapes'},{emoji:'\u{1F34A}',name:'Orange'},{emoji:'\u{1F950}',name:'Croissant'},
+  {emoji:'\u{1F369}',name:'Donut'},{emoji:'\u{1F349}',name:'Watermelon'},{emoji:'\u{1F96A}',name:'Sandwich'},
+  {emoji:'\u{1F32E}',name:'Taco'},{emoji:'\u{1F354}',name:'Burger'},
 ];
 const WORDS=[
-  {word:'DOG',emoji:'🐶'},{word:'CAT',emoji:'🐱'},{word:'COW',emoji:'🐮'},
-  {word:'PIG',emoji:'🐷'},{word:'FISH',emoji:'🐟'},{word:'BIRD',emoji:'🐦'},
-  {word:'SUN',emoji:'☀️'},{word:'MOON',emoji:'🌙'},{word:'STAR',emoji:'⭐'},
-  {word:'TREE',emoji:'🌳'},{word:'RAIN',emoji:'🌧️'},{word:'CAR',emoji:'🚗'},
-  {word:'BOAT',emoji:'⛵'},{word:'BALL',emoji:'⚽'},{word:'BOOK',emoji:'📖'},
-  {word:'HEART',emoji:'❤️'},{word:'APPLE',emoji:'🍎'},{word:'HOUSE',emoji:'🏠'},
-  {word:'FROG',emoji:'🐸'},{word:'BEE',emoji:'🐝'},
+  {word:'DOG',emoji:'\u{1F436}'},{word:'CAT',emoji:'\u{1F431}'},{word:'COW',emoji:'\u{1F42E}'},
+  {word:'PIG',emoji:'\u{1F437}'},{word:'FISH',emoji:'\u{1F41F}'},{word:'BIRD',emoji:'\u{1F426}'},
+  {word:'SUN',emoji:'\u2600\uFE0F'},{word:'MOON',emoji:'\u{1F319}'},{word:'STAR',emoji:'\u2B50'},
+  {word:'TREE',emoji:'\u{1F333}'},{word:'RAIN',emoji:'\u{1F327}\uFE0F'},{word:'CAR',emoji:'\u{1F697}'},
+  {word:'BOAT',emoji:'\u26F5'},{word:'BALL',emoji:'\u26BD'},{word:'BOOK',emoji:'\u{1F4D6}'},
+  {word:'HEART',emoji:'\u2764\uFE0F'},{word:'APPLE',emoji:'\u{1F34E}'},{word:'HOUSE',emoji:'\u{1F3E0}'},
+  {word:'FROG',emoji:'\u{1F438}'},{word:'BEE',emoji:'\u{1F41D}'},
 ];
 const FAMILY=[
-  {name:'Joey',emoji:'👨',color:'#3498db'},
-  {name:'Hailey',emoji:'👧',color:'#FF69B4'},
-  {name:'Grammy',emoji:'👵',color:'#9B59B6'},
-  {name:'Pop Pop',emoji:'👴',color:'#27AE60'},
-  {name:'Papa Joe',emoji:'👴',color:'#E67E22'},
-  {name:'Grace',emoji:'👩',color:'#E74C3C'},
-  {name:'Kyle',emoji:'👦',color:'#1ABC9C'},
-  {name:'Michelle & Greg',emoji:'👫',color:'#D4AC0D'},
-  {name:'Aunt Chris',emoji:'👩',color:'#E88D72'},
-  {name:'Aunt Cait',emoji:'👩',color:'#AF7AC5'},
-  {name:'Uncle Marky',emoji:'👨',color:'#2C3E50'},
+  {name:'Joey',emoji:'\u{1F468}',color:'#3498db'},
+  {name:'Hailey',emoji:'\u{1F467}',color:'#FF69B4'},
+  {name:'Grammy',emoji:'\u{1F475}',color:'#9B59B6'},
+  {name:'Pop Pop',emoji:'\u{1F474}',color:'#27AE60'},
+  {name:'Papa Joe',emoji:'\u{1F474}',color:'#E67E22'},
+  {name:'Grace',emoji:'\u{1F469}',color:'#E74C3C'},
+  {name:'Kyle',emoji:'\u{1F466}',color:'#1ABC9C'},
+  {name:'Michelle & Greg',emoji:'\u{1F46B}',color:'#D4AC0D'},
+  {name:'Aunt Chris',emoji:'\u{1F469}',color:'#E88D72'},
+  {name:'Aunt Cait',emoji:'\u{1F469}',color:'#AF7AC5'},
+  {name:'Uncle Marky',emoji:'\u{1F468}',color:'#2C3E50'},
 ];
 const COLORS=[
   {name:'Red',hex:'#EE0000'},{name:'Blue',hex:'#0066FF'},{name:'Green',hex:'#00AA00'},
@@ -343,7 +359,7 @@ const COLORS=[
   {name:'Pink',hex:'#FF69B4'},{name:'Brown',hex:'#8B4513'},{name:'Black',hex:'#222'},
   {name:'White',hex:'#F0F0F0'},
 ];
-const COUNT_EMOJIS=['⭐','🍎','🌺','🎈','🦋','🍓','🐝','🌟'];
+const COUNT_EMOJIS=['\u2B50','\u{1F34E}','\u{1F33A}','\u{1F388}','\u{1F98B}','\u{1F353}','\u{1F41D}','\u{1F31F}'];
 const DAYS=['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
 const MONTHS=['January','February','March','April','May','June','July','August','September','October','November','December'];
 const LETTERS='ABCDEFGHIJKLMNOPQRSTUVWXYZ'.split('');
@@ -357,230 +373,41 @@ const PALETTE_C=['#FF0000','#FF8C00','#FFD700','#00AA00','#0066FF','#8B00FF','#F
 const BRUSHES=[{size:4,w:14},{size:10,w:22},{size:22,w:32}];
 const LC={};LETTERS.forEach((l,i)=>{LC[l]=`hsl(${(i*137)%360},70%,45%)`;});
 
-// ===== SVG ILLUSTRATIONS =====
-const ANIMAL_SVG = {
-  'Mouse': `<circle cx="50" cy="55" rx="20" ry="18" fill="#C4B5A6"/>
-    <circle cx="36" cy="35" r="12" fill="#D5C6B7"/><circle cx="64" cy="35" r="12" fill="#D5C6B7"/>
-    <circle cx="36" cy="35" r="7" fill="#E8C5B5"/><circle cx="64" cy="35" r="7" fill="#E8C5B5"/>
-    <circle cx="44" cy="50" r="2.5" fill="#4A3F35"/><circle cx="56" cy="50" r="2.5" fill="#4A3F35"/>
-    <circle cx="50" cy="57" r="2" fill="#C4916E"/>
-    <path d="M45,62 Q50,66 55,62" fill="none" stroke="#4A3F35" stroke-width="1.5"/>`,
-  'Rat': `<ellipse cx="50" cy="55" rx="22" ry="16" fill="#8A8078"/>
-    <circle cx="38" cy="36" r="10" fill="#9A9088"/><circle cx="62" cy="36" r="10" fill="#9A9088"/>
-    <circle cx="38" cy="36" r="6" fill="#B5AAA0"/><circle cx="62" cy="36" r="6" fill="#B5AAA0"/>
-    <circle cx="44" cy="50" r="2.5" fill="#4A3F35"/><circle cx="56" cy="50" r="2.5" fill="#4A3F35"/>
-    <circle cx="50" cy="57" r="2" fill="#C4916E"/>
-    <path d="M70,58 Q80,55 90,60" fill="none" stroke="#8A8078" stroke-width="2.5" stroke-linecap="round"/>`,
-  'Cow': `<ellipse cx="50" cy="55" rx="26" ry="22" fill="#FAF7F2"/>
-    <ellipse cx="50" cy="68" rx="14" ry="8" fill="#E8C5B5"/>
-    <circle cx="40" cy="45" r="3" fill="#4A3F35"/><circle cx="60" cy="45" r="3" fill="#4A3F35"/>
-    <ellipse cx="35" cy="30" rx="8" ry="5" fill="#FAF7F2" transform="rotate(-30,35,30)"/>
-    <ellipse cx="65" cy="30" rx="8" ry="5" fill="#FAF7F2" transform="rotate(30,65,30)"/>
-    <ellipse cx="38" cy="52" rx="8" ry="6" fill="#4A3F35" opacity="0.3"/>
-    <circle cx="46" cy="70" r="1.5" fill="#4A3F35"/><circle cx="54" cy="70" r="1.5" fill="#4A3F35"/>`,
-  'Pig': `<circle cx="50" cy="52" r="24" fill="#F0B8B8"/>
-    <ellipse cx="50" cy="62" rx="12" ry="8" fill="#E8A0A0"/>
-    <circle cx="46" cy="60" r="2" fill="#C4916E"/><circle cx="54" cy="60" r="2" fill="#C4916E"/>
-    <circle cx="40" cy="44" r="3" fill="#4A3F35"/><circle cx="60" cy="44" r="3" fill="#4A3F35"/>
-    <path d="M32,30 Q36,22 42,30" fill="#F0B8B8" stroke="#E8A0A0" stroke-width="1"/>
-    <path d="M58,30 Q64,22 68,30" fill="#F0B8B8" stroke="#E8A0A0" stroke-width="1"/>`,
-  'Hen': `<ellipse cx="50" cy="58" rx="20" ry="22" fill="#FAF7F2"/>
-    <circle cx="50" cy="36" r="13" fill="#FAF7F2"/>
-    <circle cx="45" cy="33" r="2.5" fill="#4A3F35"/>
-    <polygon points="55,35 65,37 55,39" fill="#E8C547"/>
-    <path d="M46,24 Q50,16 54,24" fill="#C4916E"/>
-    <path d="M48,24 Q50,18 52,24" fill="#E8685A"/>
-    <ellipse cx="44" cy="78" rx="3" ry="5" fill="#E8C547"/><ellipse cx="56" cy="78" rx="3" ry="5" fill="#E8C547"/>`,
-  'Horse': `<ellipse cx="50" cy="58" rx="22" ry="20" fill="#C4916E"/>
-    <ellipse cx="50" cy="38" rx="14" ry="16" fill="#C4916E"/>
-    <ellipse cx="50" cy="50" rx="8" ry="5" fill="#B07E5E"/>
-    <circle cx="42" cy="34" r="2.5" fill="#4A3F35"/><circle cx="58" cy="34" r="2.5" fill="#4A3F35"/>
-    <circle cx="46" cy="48" r="1.5" fill="#4A3F35"/><circle cx="54" cy="48" r="1.5" fill="#4A3F35"/>
-    <path d="M36,22 Q40,14 44,22" fill="#8A6E50"/><path d="M56,22 Q60,14 64,22" fill="#8A6E50"/>
-    <path d="M42,20 Q50,10 58,20" fill="#6A5040" opacity="0.7"/>`,
-  'Sheep': `<circle cx="50" cy="50" r="26" fill="#F0EDE8"/>
-    <circle cx="36" cy="38" r="8" fill="#F0EDE8"/><circle cx="64" cy="38" r="8" fill="#F0EDE8"/>
-    <circle cx="42" cy="32" r="7" fill="#F0EDE8"/><circle cx="58" cy="32" r="7" fill="#F0EDE8"/>
-    <circle cx="50" cy="55" r="12" fill="#D5C6B7"/>
-    <circle cx="45" cy="52" r="2.5" fill="#4A3F35"/><circle cx="55" cy="52" r="2.5" fill="#4A3F35"/>
-    <ellipse cx="50" cy="59" rx="3" ry="2" fill="#4A3F35"/>`,
-  'Goat': `<ellipse cx="50" cy="55" rx="20" ry="20" fill="#E8E4E0"/>
-    <ellipse cx="50" cy="42" rx="14" ry="14" fill="#E8E4E0"/>
-    <circle cx="43" cy="39" r="2.5" fill="#4A3F35"/><circle cx="57" cy="39" r="2.5" fill="#4A3F35"/>
-    <ellipse cx="50" cy="48" rx="3" ry="2" fill="#C4916E"/>
-    <path d="M36,28 L30,14" stroke="#8A8078" stroke-width="3" stroke-linecap="round"/>
-    <path d="M64,28 L70,14" stroke="#8A8078" stroke-width="3" stroke-linecap="round"/>
-    <path d="M46,52 Q50,58 54,52" fill="#E8C5B5"/>`,
-  'Cat': `<circle cx="50" cy="55" r="22" fill="#F0C880"/>
-    <polygon points="30,38 26,14 44,32" fill="#F0C880"/><polygon points="70,38 74,14 56,32" fill="#F0C880"/>
-    <polygon points="30,38 28,18 42,32" fill="#E8B870" opacity="0.5"/>
-    <polygon points="70,38 72,18 58,32" fill="#E8B870" opacity="0.5"/>
-    <circle cx="42" cy="48" r="3" fill="#4A3F35"/><circle cx="58" cy="48" r="3" fill="#4A3F35"/>
-    <polygon points="50,55 47,58 53,58" fill="#E8A0A0"/>
-    <path d="M40,62 Q50,68 60,62" fill="none" stroke="#4A3F35" stroke-width="1.2"/>`,
-  'Dog': `<ellipse cx="50" cy="55" rx="22" ry="20" fill="#C4916E"/>
-    <ellipse cx="34" cy="38" rx="10" ry="14" fill="#B07E5E" transform="rotate(-15,34,38)"/>
-    <ellipse cx="66" cy="38" rx="10" ry="14" fill="#B07E5E" transform="rotate(15,66,38)"/>
-    <circle cx="42" cy="48" r="3" fill="#4A3F35"/><circle cx="58" cy="48" r="3" fill="#4A3F35"/>
-    <ellipse cx="50" cy="58" rx="8" ry="5" fill="#E8D8C8"/>
-    <circle cx="50" cy="55" r="3" fill="#4A3F35"/>
-    <path d="M44,64 Q50,70 56,64" fill="none" stroke="#4A3F35" stroke-width="1.5"/>`,
-  'Bunny': `<ellipse cx="50" cy="62" rx="20" ry="18" fill="#E8E4E0"/>
-    <ellipse cx="40" cy="24" rx="7" ry="22" fill="#E8E4E0"/><ellipse cx="60" cy="24" rx="7" ry="22" fill="#E8E4E0"/>
-    <ellipse cx="40" cy="24" rx="4" ry="16" fill="#F0C0C0"/><ellipse cx="60" cy="24" rx="4" ry="16" fill="#F0C0C0"/>
-    <circle cx="50" cy="56" r="14" fill="#E8E4E0"/>
-    <circle cx="44" cy="52" r="2.5" fill="#4A3F35"/><circle cx="56" cy="52" r="2.5" fill="#4A3F35"/>
-    <polygon points="50,58 48,62 52,62" fill="#E8A0A0"/>
-    <path d="M42,64 Q50,70 58,64" fill="none" stroke="#4A3F35" stroke-width="1.2"/>`,
-  'Frog': `<ellipse cx="50" cy="60" rx="26" ry="20" fill="#7EA87E"/>
-    <circle cx="36" cy="36" r="10" fill="#7EA87E"/><circle cx="64" cy="36" r="10" fill="#7EA87E"/>
-    <circle cx="36" cy="34" r="6" fill="#FAF7F2"/><circle cx="64" cy="34" r="6" fill="#FAF7F2"/>
-    <circle cx="37" cy="33" r="3" fill="#4A3F35"/><circle cx="65" cy="33" r="3" fill="#4A3F35"/>
-    <path d="M38,66 Q50,74 62,66" fill="none" stroke="#5A8A5A" stroke-width="2"/>
-    <ellipse cx="50" cy="60" rx="14" ry="8" fill="#8BC48B"/>`,
-  'Chick': `<circle cx="50" cy="55" r="22" fill="#E8C547"/>
-    <circle cx="50" cy="38" r="14" fill="#E8C547"/>
-    <circle cx="44" cy="35" r="2.5" fill="#4A3F35"/><circle cx="56" cy="35" r="2.5" fill="#4A3F35"/>
-    <polygon points="50,40 44,44 56,44" fill="#E8955A"/>
-    <path d="M46,26 Q48,20 50,26" fill="#E8D060"/><path d="M50,26 Q52,20 54,26" fill="#E8D060"/>
-    <ellipse cx="42" cy="76" rx="5" ry="3" fill="#E8955A"/><ellipse cx="58" cy="76" rx="5" ry="3" fill="#E8955A"/>`,
-  'Duck': `<ellipse cx="50" cy="58" rx="22" ry="20" fill="#FAF7F2"/>
-    <circle cx="50" cy="36" r="14" fill="#FAF7F2"/>
-    <circle cx="44" cy="33" r="2.5" fill="#4A3F35"/><circle cx="56" cy="33" r="2.5" fill="#4A3F35"/>
-    <ellipse cx="50" cy="42" rx="8" ry="4" fill="#E8C547"/>
-    <path d="M42,26 Q44,20 48,26" fill="#FAF7F2" opacity="0.6"/>
-    <ellipse cx="42" cy="76" rx="5" ry="3" fill="#E8955A"/><ellipse cx="58" cy="76" rx="5" ry="3" fill="#E8955A"/>`,
-  'Bee': `<ellipse cx="50" cy="55" rx="20" ry="18" fill="#E8C547"/>
-    <rect x="30" y="52" width="40" height="5" rx="2" fill="#4A3F35"/>
-    <rect x="30" y="60" width="40" height="5" rx="2" fill="#4A3F35"/>
-    <circle cx="50" cy="40" r="10" fill="#E8C547"/>
-    <circle cx="45" cy="38" r="2" fill="#4A3F35"/><circle cx="55" cy="38" r="2" fill="#4A3F35"/>
-    <path d="M46,44 Q50,47 54,44" fill="none" stroke="#4A3F35" stroke-width="1"/>
-    <ellipse cx="36" cy="38" rx="10" ry="5" fill="#D0E8F0" opacity="0.6" transform="rotate(-30,36,38)"/>
-    <ellipse cx="64" cy="38" rx="10" ry="5" fill="#D0E8F0" opacity="0.6" transform="rotate(30,64,38)"/>`,
-};
+// ===== SIGHT WORDS =====
+const SIGHT_WORDS=['a','and','away','big','blue','can','come','down','find','for',
+  'funny','go','help','here','I','in','is','it','jump','little',
+  'look','make','me','my','not','one','play','red','run','said',
+  'see','the','three','to','two','up','we','where','yellow','you'];
 
-const FOOD_SVG = {
-  'Pizza': `<polygon points="50,15 15,85 85,85" fill="#E8C547"/>
-    <polygon points="50,22 22,80 78,80" fill="#E8A040"/>
-    <circle cx="42" cy="55" r="5" fill="#C4916E"/><circle cx="58" cy="62" r="5" fill="#C4916E"/>
-    <circle cx="50" cy="45" r="4" fill="#C4916E"/>
-    <path d="M15,85 L85,85" stroke="#E8C547" stroke-width="4" stroke-linecap="round"/>`,
-  'Pasta': `<ellipse cx="50" cy="55" rx="32" ry="22" fill="#E8E4E0"/>
-    <path d="M28,48 Q35,38 42,48 Q50,38 58,48 Q65,38 72,48" fill="none" stroke="#E8C547" stroke-width="4"/>
-    <path d="M30,55 Q38,45 46,55 Q54,45 62,55 Q68,45 70,55" fill="none" stroke="#E8C547" stroke-width="4"/>
-    <circle cx="40" cy="50" r="4" fill="#C45050"/><circle cx="55" cy="46" r="4" fill="#C45050"/>
-    <circle cx="50" cy="56" r="3" fill="#C45050"/>`,
-  'Cheese': `<polygon points="10,70 50,20 90,70" fill="#E8C547"/>
-    <polygon points="10,70 90,70 90,80 10,80" fill="#E8B830"/>
-    <circle cx="40" cy="58" r="5" fill="#E8D870"/><circle cx="60" cy="65" r="4" fill="#E8D870"/>
-    <circle cx="50" cy="50" r="3" fill="#E8D870"/><circle cx="70" cy="58" r="3" fill="#E8D870"/>`,
-  'Apple': `<circle cx="50" cy="55" r="26" fill="#E85050"/>
-    <ellipse cx="42" cy="55" rx="16" ry="26" fill="#D04545"/>
-    <path d="M50,30 Q52,18 58,22" stroke="#7EA87E" stroke-width="2.5" fill="none"/>
-    <ellipse cx="55" cy="26" rx="8" ry="4" fill="#7EA87E" transform="rotate(20,55,26)"/>
-    <ellipse cx="40" cy="42" rx="4" ry="6" fill="#F0A0A0" opacity="0.4"/>`,
-  'Banana': `<path d="M25,65 Q20,30 50,20 Q80,10 85,40 L78,42 Q74,18 50,28 Q30,38 30,65 Z" fill="#E8C547"/>
-    <path d="M25,65 Q20,30 50,20" stroke="#D4A830" stroke-width="1.5" fill="none"/>
-    <path d="M85,40 L82,36" stroke="#8A7030" stroke-width="2" stroke-linecap="round"/>
-    <path d="M25,65 L30,65" stroke="#8A7030" stroke-width="2" stroke-linecap="round"/>`,
-  'Carrot': `<polygon points="50,85 30,30 70,30" fill="#E8955A"/>
-    <polygon points="50,85 38,40 62,40" fill="#D47840"/>
-    <path d="M40,30 Q38,14 42,10" stroke="#7EA87E" stroke-width="3" fill="none"/>
-    <path d="M50,28 Q50,12 52,8" stroke="#7EA87E" stroke-width="3" fill="none"/>
-    <path d="M60,30 Q62,14 58,10" stroke="#7EA87E" stroke-width="3" fill="none"/>
-    <line x1="38" y1="50" x2="62" y2="50" stroke="#C46E40" stroke-width="1" opacity="0.5"/>
-    <line x1="42" y1="65" x2="58" y2="65" stroke="#C46E40" stroke-width="1" opacity="0.5"/>`,
-  'Broccoli': `<circle cx="35" cy="35" r="14" fill="#7EA87E"/><circle cx="50" cy="28" r="14" fill="#6A9A6A"/>
-    <circle cx="65" cy="35" r="14" fill="#7EA87E"/><circle cx="42" cy="25" r="10" fill="#8AB88A"/>
-    <circle cx="58" cy="25" r="10" fill="#8AB88A"/>
-    <rect x="46" y="48" width="8" height="28" rx="3" fill="#8A7A50"/>`,
-  'Cake': `<rect x="20" y="45" width="60" height="35" rx="6" fill="#E8C5B5"/>
-    <rect x="20" y="45" width="60" height="10" rx="4" fill="#F0D0D0"/>
-    <rect x="18" y="42" width="64" height="8" rx="4" fill="#FAF7F2"/>
-    <path d="M18,46 Q30,52 42,46 Q54,52 66,46 Q78,52 82,46" fill="#FAF7F2"/>
-    <rect x="47" y="24" width="6" height="20" rx="2" fill="#E8C547"/>
-    <ellipse cx="50" cy="22" rx="4" ry="5" fill="#E8955A"/>
-    <circle cx="50" cy="20" r="2" fill="#E8C547"/>`,
-  'Cookie': `<circle cx="50" cy="50" r="28" fill="#C4916E"/>
-    <circle cx="50" cy="50" r="26" fill="#D4A47E"/>
-    <circle cx="38" cy="40" r="4" fill="#6A4A30"/><circle cx="58" cy="44" r="3.5" fill="#6A4A30"/>
-    <circle cx="44" cy="58" r="3.5" fill="#6A4A30"/><circle cx="60" cy="60" r="3" fill="#6A4A30"/>
-    <circle cx="50" cy="36" r="3" fill="#6A4A30"/>`,
-  'Ice Cream': `<polygon points="35,55 50,90 65,55" fill="#D4A47E"/>
-    <line x1="38" y1="58" x2="50" y2="88" stroke="#C4916E" stroke-width="0.8"/>
-    <line x1="62" y1="58" x2="50" y2="88" stroke="#C4916E" stroke-width="0.8"/>
-    <circle cx="50" cy="42" r="18" fill="#F5E0D0"/>
-    <circle cx="38" cy="36" r="12" fill="#F0D0D0"/>
-    <circle cx="62" cy="36" r="12" fill="#E8C5B5"/>
-    <circle cx="50" cy="30" r="10" fill="#F5E8E0"/>`,
-  'Corn': `<ellipse cx="50" cy="50" rx="16" ry="30" fill="#E8C547"/>
-    <ellipse cx="44" cy="40" rx="4" ry="5" fill="#E8D060"/><ellipse cx="56" cy="40" rx="4" ry="5" fill="#E8D060"/>
-    <ellipse cx="44" cy="52" rx="4" ry="5" fill="#E8D060"/><ellipse cx="56" cy="52" rx="4" ry="5" fill="#E8D060"/>
-    <ellipse cx="50" cy="46" rx="4" ry="5" fill="#F0D870"/>
-    <path d="M40,78 Q35,85 25,82" stroke="#7EA87E" stroke-width="3" fill="none"/>
-    <path d="M60,78 Q65,85 75,82" stroke="#7EA87E" stroke-width="3" fill="none"/>
-    <path d="M50,80 Q50,88 48,90" stroke="#7EA87E" stroke-width="3" fill="none"/>`,
-  'Strawberry': `<path d="M50,22 Q20,40 25,65 Q30,85 50,88 Q70,85 75,65 Q80,40 50,22Z" fill="#E06050"/>
-    <circle cx="40" cy="45" r="1.5" fill="#E8C547"/><circle cx="55" cy="42" r="1.5" fill="#E8C547"/>
-    <circle cx="45" cy="58" r="1.5" fill="#E8C547"/><circle cx="58" cy="56" r="1.5" fill="#E8C547"/>
-    <circle cx="50" cy="70" r="1.5" fill="#E8C547"/><circle cx="42" cy="72" r="1.5" fill="#E8C547"/>
-    <path d="M42,24 Q44,14 48,18" fill="#7EA87E"/><path d="M52,18 Q56,14 58,24" fill="#7EA87E"/>
-    <path d="M48,22 Q50,12 52,22" fill="#7EA87E"/>`,
-  'Grapes': `<circle cx="42" cy="35" r="8" fill="#9070B0"/><circle cx="58" cy="35" r="8" fill="#9070B0"/>
-    <circle cx="35" cy="48" r="8" fill="#8060A0"/><circle cx="50" cy="48" r="8" fill="#9070B0"/>
-    <circle cx="65" cy="48" r="8" fill="#8060A0"/>
-    <circle cx="42" cy="60" r="8" fill="#9070B0"/><circle cx="58" cy="60" r="8" fill="#9070B0"/>
-    <circle cx="50" cy="72" r="8" fill="#8060A0"/>
-    <path d="M50,28 Q52,16 56,14" stroke="#7EA87E" stroke-width="2" fill="none"/>`,
-  'Orange': `<circle cx="50" cy="52" r="26" fill="#E8955A"/>
-    <circle cx="50" cy="52" r="24" fill="#F0A060"/>
-    <ellipse cx="42" cy="44" rx="5" ry="7" fill="#F0B070" opacity="0.5"/>
-    <path d="M50,28 Q52,20 56,22" stroke="#7EA87E" stroke-width="2.5" fill="none"/>
-    <ellipse cx="54" cy="22" rx="5" ry="3" fill="#7EA87E" transform="rotate(15,54,22)"/>`,
-  'Croissant': `<path d="M15,55 Q25,30 50,35 Q75,30 85,55 Q75,70 50,65 Q25,70 15,55Z" fill="#D4A47E"/>
-    <path d="M22,52 Q35,35 50,40 Q65,35 78,52" fill="none" stroke="#C4916E" stroke-width="1.5"/>
-    <path d="M28,50 Q42,38 50,42 Q58,38 72,50" fill="none" stroke="#C4916E" stroke-width="1"/>
-    <ellipse cx="50" cy="50" rx="28" ry="14" fill="#E8B880" opacity="0.3"/>`,
-  'Donut': `<circle cx="50" cy="50" r="28" fill="#D4A47E"/>
-    <circle cx="50" cy="50" r="11" fill="#FAF7F2"/>
-    <path d="M22,46 Q30,30 50,28 Q70,30 78,46 Q74,42 50,38 Q26,42 22,46Z" fill="#F0A0B0"/>
-    <circle cx="35" cy="36" r="2" fill="#E8C547"/><circle cx="50" cy="32" r="2" fill="#7BADC4"/>
-    <circle cx="64" cy="36" r="2" fill="#E8C547"/><circle cx="42" cy="33" r="1.5" fill="#F0A0B0"/>
-    <circle cx="58" cy="33" r="1.5" fill="#7EA87E"/>`,
-  'Watermelon': `<path d="M15,60 Q50,10 85,60Z" fill="#7EA87E"/>
-    <path d="M20,58 Q50,16 80,58Z" fill="#E06050"/>
-    <path d="M25,56 Q50,22 75,56Z" fill="#F07060"/>
-    <circle cx="40" cy="48" r="2" fill="#4A3F35"/><circle cx="55" cy="44" r="2" fill="#4A3F35"/>
-    <circle cx="48" cy="38" r="2" fill="#4A3F35"/><circle cx="60" cy="50" r="2" fill="#4A3F35"/>
-    <circle cx="50" cy="52" r="2" fill="#4A3F35"/>
-    <line x1="15" y1="60" x2="85" y2="60" stroke="#7EA87E" stroke-width="3"/>`,
-  'Sandwich': `<path d="M15,40 Q50,30 85,40 L85,44 Q50,34 15,44Z" fill="#D4A47E"/>
-    <path d="M15,44 L85,44 L85,50 L15,50Z" fill="#7EA87E"/>
-    <path d="M15,50 L85,50 L85,55 L15,55Z" fill="#E8C547"/>
-    <path d="M15,55 L85,55 L85,60 L15,60Z" fill="#E8A0A0"/>
-    <path d="M15,60 L85,60 L85,65 Q50,75 15,65Z" fill="#D4A47E"/>`,
-  'Taco': `<path d="M12,65 Q50,15 88,65Z" fill="#E8C547"/>
-    <path d="M18,60 Q50,25 82,60Z" fill="#D4A47E"/>
-    <ellipse cx="40" cy="52" rx="8" ry="5" fill="#7EA87E"/>
-    <ellipse cx="58" cy="50" rx="7" ry="5" fill="#7EA87E"/>
-    <circle cx="45" cy="45" r="4" fill="#E8955A"/>
-    <circle cx="55" cy="44" r="3.5" fill="#E8955A"/>
-    <circle cx="50" cy="55" r="3" fill="#E06050"/>`,
-  'Burger': `<path d="M18,38 Q50,28 82,38 L82,44 Q50,34 18,44Z" fill="#D4A47E"/>
-    <rect x="18" y="46" width="64" height="8" rx="2" fill="#C45050"/>
-    <rect x="18" y="54" width="64" height="6" rx="2" fill="#E8C547"/>
-    <path d="M16,60 L84,60 L84,66 Q50,76 16,66Z" fill="#D4A47E"/>
-    <path d="M18" y="44" fill="#7EA87E"/>
-    <path d="M18,44 Q30,50 42,44 Q54,50 66,44 Q78,50 82,44 L82,46 L18,46Z" fill="#7EA87E"/>`,
-};
-
-function svgIcon(name, size, type) {
-  const map = type === 'animal' ? ANIMAL_SVG : FOOD_SVG;
-  const inner = map[name];
-  if (!inner) return '';
-  return `<svg viewBox="0 0 100 100" width="${size}" height="${size}" style="display:block;margin:auto">${inner}</svg>`;
-}
+// ===== QUESTIONS =====
+const QUESTIONS=[
+  // Easy
+  {q:'What color is the grass?',a:'Green',ch:['Green','Blue','Red','Yellow'],diff:'easy'},
+  {q:'What does a cow say?',a:'Moo',ch:['Moo','Woof','Meow','Oink'],diff:'easy'},
+  {q:'What color is the sky?',a:'Blue',ch:['Blue','Green','Red','Pink'],diff:'easy'},
+  {q:'How many eyes do you have?',a:'2',ch:['2','3','1','4'],diff:'easy'},
+  {q:'What shape is a ball?',a:'Circle',ch:['Circle','Square','Triangle','Star'],diff:'easy'},
+  {q:'What color is a banana?',a:'Yellow',ch:['Yellow','Blue','Green','Purple'],diff:'easy'},
+  {q:'What animal says woof?',a:'Dog',ch:['Dog','Cat','Fish','Bird'],diff:'easy'},
+  {q:'What do you see at night?',a:'Moon',ch:['Moon','Sun','Rainbow','Cloud'],diff:'easy'},
+  {q:'How many legs does a dog have?',a:'4',ch:['4','2','6','8'],diff:'easy'},
+  {q:'What animal says meow?',a:'Cat',ch:['Cat','Dog','Cow','Duck'],diff:'easy'},
+  // Medium
+  {q:'What does a red light mean?',a:'Stop',ch:['Stop','Go','Dance','Jump'],diff:'medium'},
+  {q:'What do you wear on your feet?',a:'Shoes',ch:['Shoes','Hat','Gloves','Scarf'],diff:'medium'},
+  {q:'What season is it cold?',a:'Winter',ch:['Winter','Summer','Spring','Fall'],diff:'medium'},
+  {q:'What do bees make?',a:'Honey',ch:['Honey','Milk','Juice','Water'],diff:'medium'},
+  {q:'Where do fish live?',a:'Water',ch:['Water','Trees','Sky','Sand'],diff:'medium'},
+  {q:'What do you use to write?',a:'Pencil',ch:['Pencil','Fork','Shoe','Cup'],diff:'medium'},
+  {q:'What grows on trees?',a:'Leaves',ch:['Leaves','Rocks','Clouds','Fish'],diff:'medium'},
+  {q:'What falls from clouds?',a:'Rain',ch:['Rain','Stars','Candy','Books'],diff:'medium'},
+  // Hard
+  {q:'What comes after Tuesday?',a:'Wednesday',ch:['Wednesday','Monday','Friday','Sunday'],diff:'hard'},
+  {q:'How many legs does a spider have?',a:'8',ch:['8','6','4','10'],diff:'hard'},
+  {q:'What season do leaves fall?',a:'Fall',ch:['Fall','Spring','Summer','Winter'],diff:'hard'},
+  {q:'How many months in a year?',a:'12',ch:['12','10','7','15'],diff:'hard'},
+  {q:'What planet do we live on?',a:'Earth',ch:['Earth','Mars','Moon','Sun'],diff:'hard'},
+];
 
 // ===== PRINCESS SVG =====
 function pIcon(p,sz){
@@ -621,55 +448,283 @@ function pIcon(p,sz){
 
 // ===== MODES =====
 const GAME_MODES=[
-  {id:'animals',name:'Animals',icon:'🐮',color:'#C4916E'},
-  {id:'princesses',name:'Princesses',icon:'👸',color:'#D4A0B0'},
-  {id:'remy',name:"Remy's Kitchen",icon:'🐀',color:'#C4916E'},
-  {id:'letters',name:'Letters',icon:'🔤',color:'#7BADC4'},
-  {id:'numbers',name:'Numbers',icon:'🔢',color:'#7BADC4'},
-  {id:'colors',name:'Colors',icon:'🎨',color:'#C4916E'},
-  {id:'words',name:'Words',icon:'📝',color:'#7BADC4'},
-  {id:'family',name:'Family',icon:'👨‍👩‍👧',color:'#E8C547'},
-  {id:'days',name:'Days',icon:'📅',color:'#7EA87E'},
-  {id:'months',name:'Months',icon:'📆',color:'#9070B0'},
-  {id:'dad',name:'Dad Mode',icon:'🐾',color:'#7BADC4'},
+  {id:'animals',name:'Animals',icon:'\u{1F42E}',color:'#C4916E'},
+  {id:'princesses',name:'Princesses',icon:'\u{1F478}',color:'#D4A0B0'},
+  {id:'remy',name:"Remy's Kitchen",icon:'\u{1F400}',color:'#C4916E'},
+  {id:'letters',name:'Letters',icon:'\u{1F524}',color:'#7BADC4'},
+  {id:'numbers',name:'Numbers',icon:'\u{1F522}',color:'#7BADC4'},
+  {id:'colors',name:'Colors',icon:'\u{1F3A8}',color:'#C4916E'},
+  {id:'words',name:'Words',icon:'\u{1F4DD}',color:'#7BADC4'},
+  {id:'sightwords',name:'Sight Words',icon:'\u{1F4D6}',color:'#7EA87E'},
+  {id:'questions',name:'Questions',icon:'\u2753',color:'#E8C547'},
+  {id:'family',name:'Family',icon:'\u{1F468}\u200D\u{1F469}\u200D\u{1F467}',color:'#E8C547'},
+  {id:'days',name:'Days',icon:'\u{1F4C5}',color:'#7EA87E'},
+  {id:'months',name:'Months',icon:'\u{1F4C6}',color:'#9070B0'},
+  {id:'dad',name:'Dad Mode',icon:'\u{1F43E}',color:'#7BADC4'},
 ];
 const CREATIVE_MODES=[
-  {id:'freedraw',name:'Free Draw',icon:'🖌️',color:'#C4916E'},
-  {id:'coloring',name:'Coloring',icon:'🖍️',color:'#7EA87E'},
+  {id:'freedraw',name:'Free Draw',icon:'\u{1F58C}\uFE0F',color:'#C4916E'},
+  {id:'coloring',name:'Coloring',icon:'\u{1F58D}\uFE0F',color:'#7EA87E'},
 ];
 
 // ===== COLORING PAGES =====
 const CPAGES=[
-  {name:'Heart ❤️',build(w,h){const cx=w/2,cy=h*.45,s=Math.min(w,h)*.35,p=new Path2D();
+  // Fun
+  {name:'Heart \u2764\uFE0F',theme:'fun',build(w,h){const cx=w/2,cy=h*.45,s=Math.min(w,h)*.35,p=new Path2D();
     p.moveTo(cx,cy+s);p.bezierCurveTo(cx-s*1.5,cy+s*.1,cx-s*1.2,cy-s*1.1,cx,cy-s*.2);
     p.bezierCurveTo(cx+s*1.2,cy-s*1.1,cx+s*1.5,cy+s*.1,cx,cy+s);return[{n:'h',path:p}];}},
-  {name:'Star ⭐',build(w,h){const cx=w/2,cy=h*.45,s=Math.min(w,h)*.38,p=new Path2D();
+  {name:'Star \u2B50',theme:'fun',build(w,h){const cx=w/2,cy=h*.45,s=Math.min(w,h)*.38,p=new Path2D();
     for(let i=0;i<5;i++){const oa=(i*72-90)*Math.PI/180,ia=((i*72+36)-90)*Math.PI/180;
       if(!i)p.moveTo(cx+s*Math.cos(oa),cy+s*Math.sin(oa));else p.lineTo(cx+s*Math.cos(oa),cy+s*Math.sin(oa));
       p.lineTo(cx+s*.4*Math.cos(ia),cy+s*.4*Math.sin(ia));}p.closePath();return[{n:'s',path:p}];}},
-  {name:'House 🏠',build(w,h){const wl=new Path2D();wl.rect(w*.2,h*.42,w*.6,h*.42);
+  {name:'House \u{1F3E0}',theme:'fun',build(w,h){const wl=new Path2D();wl.rect(w*.2,h*.42,w*.6,h*.42);
     const rf=new Path2D();rf.moveTo(w*.13,h*.42);rf.lineTo(w*.5,h*.12);rf.lineTo(w*.87,h*.42);rf.closePath();
     const dr=new Path2D();dr.rect(w*.42,h*.58,w*.16,h*.26);
     const w1=new Path2D();w1.rect(w*.26,h*.5,w*.11,h*.1);
     const w2=new Path2D();w2.rect(w*.63,h*.5,w*.11,h*.1);
     return[{n:'wl',path:wl},{n:'rf',path:rf},{n:'dr',path:dr},{n:'w1',path:w1},{n:'w2',path:w2}];}},
-  {name:'Butterfly 🦋',build(w,h){const cx=w/2,cy=h*.45,s=Math.min(w,h)*.28;
+  // Animals
+  {name:'Butterfly \u{1F98B}',theme:'animals',build(w,h){const cx=w/2,cy=h*.45,s=Math.min(w,h)*.28;
     const bd=new Path2D();bd.ellipse(cx,cy,s*.12,s*.7,0,0,Math.PI*2);
     const wl=new Path2D();wl.ellipse(cx-s*.8,cy-s*.15,s*.65,s*.5,-.2,0,Math.PI*2);
     const wr=new Path2D();wr.ellipse(cx+s*.8,cy-s*.15,s*.65,s*.5,.2,0,Math.PI*2);
     const bl=new Path2D();bl.ellipse(cx-s*.6,cy+s*.55,s*.45,s*.35,-.15,0,Math.PI*2);
     const br=new Path2D();br.ellipse(cx+s*.6,cy+s*.55,s*.45,s*.35,.15,0,Math.PI*2);
     return[{n:'wl',path:wl},{n:'wr',path:wr},{n:'bl',path:bl},{n:'br',path:br},{n:'bd',path:bd}];}},
-  {name:'Flower 🌸',build(w,h){const cx=w/2,cy=h*.38,s=Math.min(w,h)*.14,r=[];
+  // Nature
+  {name:'Flower \u{1F338}',theme:'nature',build(w,h){const cx=w/2,cy=h*.38,s=Math.min(w,h)*.14,r=[];
     for(let i=0;i<5;i++){const a=(i*72-90)*Math.PI/180,px=cx+s*2*Math.cos(a),py=cy+s*2*Math.sin(a),p=new Path2D();
       p.ellipse(px,py,s,s*.65,a+Math.PI/2,0,Math.PI*2);r.push({n:'p'+i,path:p});}
     const c=new Path2D();c.arc(cx,cy,s*.8,0,Math.PI*2);r.push({n:'c',path:c});
     const st=new Path2D();st.rect(cx-s*.2,cy+s*1.8,s*.4,h*.3);r.push({n:'st',path:st});return r;}},
-  {name:'Fish 🐟',build(w,h){const cx=w*.42,cy=h*.45,s=Math.min(w,h)*.28;
+  // Animals
+  {name:'Fish \u{1F41F}',theme:'animals',build(w,h){const cx=w*.42,cy=h*.45,s=Math.min(w,h)*.28;
     const bd=new Path2D();bd.ellipse(cx,cy,s*1.1,s*.7,0,0,Math.PI*2);
     const tl=new Path2D();tl.moveTo(cx+s*.9,cy);tl.lineTo(cx+s*1.7,cy-s*.6);tl.lineTo(cx+s*1.7,cy+s*.6);tl.closePath();
     const ey=new Path2D();ey.arc(cx-s*.4,cy-s*.15,s*.15,0,Math.PI*2);
     return[{n:'bd',path:bd},{n:'tl',path:tl},{n:'ey',path:ey}];}},
+
+  // ===== NEW PAGES =====
+
+  // Nature: Tree
+  {name:'Tree \u{1F333}',theme:'nature',build(w,h){
+    const cx=w/2,s=Math.min(w,h);
+    const trunk=new Path2D();trunk.rect(cx-s*.06,h*.5,s*.12,h*.34);
+    const c1=new Path2D();c1.arc(cx,h*.35,s*.2,0,Math.PI*2);
+    const c2=new Path2D();c2.arc(cx-s*.15,h*.42,s*.15,0,Math.PI*2);
+    const c3=new Path2D();c3.arc(cx+s*.15,h*.42,s*.15,0,Math.PI*2);
+    return[{n:'tr',path:trunk},{n:'c1',path:c1},{n:'c2',path:c2},{n:'c3',path:c3}];}},
+
+  // Nature: Sun
+  {name:'Sun \u2600\uFE0F',theme:'nature',build(w,h){
+    const cx=w/2,cy=h*.42,s=Math.min(w,h)*.18;
+    const center=new Path2D();center.arc(cx,cy,s,0,Math.PI*2);
+    const rays=new Path2D();
+    for(let i=0;i<8;i++){
+      const a=i*Math.PI/4,x1=cx+s*1.3*Math.cos(a),y1=cy+s*1.3*Math.sin(a);
+      const x2=cx+s*2*Math.cos(a),y2=cy+s*2*Math.sin(a);
+      const px=s*.3*Math.cos(a+Math.PI/2),py=s*.3*Math.sin(a+Math.PI/2);
+      rays.moveTo(x1-px,y1-py);rays.lineTo(x2,y2);rays.lineTo(x1+px,y1+py);rays.closePath();
+    }
+    return[{n:'ctr',path:center},{n:'rays',path:rays}];}},
+
+  // Nature: Cloud
+  {name:'Cloud \u2601\uFE0F',theme:'nature',build(w,h){
+    const cx=w/2,cy=h*.45,s=Math.min(w,h)*.15;
+    const c1=new Path2D();c1.arc(cx-s*1.2,cy,s,0,Math.PI*2);
+    const c2=new Path2D();c2.arc(cx,cy-s*.4,s*1.2,0,Math.PI*2);
+    const c3=new Path2D();c3.arc(cx+s*1.2,cy,s,0,Math.PI*2);
+    const c4=new Path2D();c4.arc(cx,cy+s*.3,s*1.1,0,Math.PI*2);
+    return[{n:'c1',path:c1},{n:'c2',path:c2},{n:'c3',path:c3},{n:'c4',path:c4}];}},
+
+  // Nature: Moon
+  {name:'Moon \u{1F319}',theme:'nature',build(w,h){
+    const cx=w/2,cy=h*.42,s=Math.min(w,h)*.28;
+    const moon=new Path2D();
+    moon.arc(cx,cy,s,0,Math.PI*2);
+    const inner=new Path2D();
+    inner.arc(cx+s*.4,cy-s*.2,s*.8,0,Math.PI*2);
+    return[{n:'moon',path:moon},{n:'inner',path:inner}];}},
+
+  // Nature: Rainbow
+  {name:'Rainbow \u{1F308}',theme:'nature',build(w,h){
+    const cx=w/2,by=h*.7,s=Math.min(w,h)*.32,r=[];
+    const colors=['r1','r2','r3','r4','r5'];
+    for(let i=0;i<5;i++){
+      const radius=s-i*s*.15;
+      const p=new Path2D();p.arc(cx,by,radius,Math.PI,0);p.arc(cx,by,radius-s*.1,0,Math.PI,true);p.closePath();
+      r.push({n:colors[i],path:p});
+    }
+    const cl=new Path2D();cl.arc(cx-s*.8,by,s*.18,0,Math.PI*2);
+    const cr2=new Path2D();cr2.arc(cx+s*.8,by,s*.18,0,Math.PI*2);
+    r.push({n:'cl',path:cl},{n:'cr',path:cr2});
+    return r;}},
+
+  // Animals: Cat Face
+  {name:'Cat Face \u{1F431}',theme:'animals',build(w,h){
+    const cx=w/2,cy=h*.5,s=Math.min(w,h)*.25;
+    const head=new Path2D();head.arc(cx,cy,s,0,Math.PI*2);
+    const el=new Path2D();el.moveTo(cx-s*.8,cy-s*.2);el.lineTo(cx-s*.55,cy-s*1.3);el.lineTo(cx-s*.15,cy-s*.5);el.closePath();
+    const er=new Path2D();er.moveTo(cx+s*.8,cy-s*.2);er.lineTo(cx+s*.55,cy-s*1.3);er.lineTo(cx+s*.15,cy-s*.5);er.closePath();
+    const ey1=new Path2D();ey1.arc(cx-s*.35,cy-s*.1,s*.12,0,Math.PI*2);
+    const ey2=new Path2D();ey2.arc(cx+s*.35,cy-s*.1,s*.12,0,Math.PI*2);
+    const nose=new Path2D();nose.moveTo(cx,cy+s*.15);nose.lineTo(cx-s*.1,cy+s*.3);nose.lineTo(cx+s*.1,cy+s*.3);nose.closePath();
+    return[{n:'hd',path:head},{n:'el',path:el},{n:'er',path:er},{n:'ey1',path:ey1},{n:'ey2',path:ey2},{n:'ns',path:nose}];}},
+
+  // Animals: Dog Face
+  {name:'Dog Face \u{1F436}',theme:'animals',build(w,h){
+    const cx=w/2,cy=h*.48,s=Math.min(w,h)*.24;
+    const head=new Path2D();head.arc(cx,cy,s,0,Math.PI*2);
+    const el=new Path2D();el.ellipse(cx-s*.85,cy+s*.1,s*.35,s*.6,-.2,0,Math.PI*2);
+    const er=new Path2D();er.ellipse(cx+s*.85,cy+s*.1,s*.35,s*.6,.2,0,Math.PI*2);
+    const ey1=new Path2D();ey1.arc(cx-s*.3,cy-s*.15,s*.1,0,Math.PI*2);
+    const ey2=new Path2D();ey2.arc(cx+s*.3,cy-s*.15,s*.1,0,Math.PI*2);
+    const nose=new Path2D();nose.arc(cx,cy+s*.15,s*.14,0,Math.PI*2);
+    const tongue=new Path2D();tongue.ellipse(cx,cy+s*.55,s*.15,s*.25,0,0,Math.PI*2);
+    return[{n:'hd',path:head},{n:'el',path:el},{n:'er',path:er},{n:'ey1',path:ey1},{n:'ey2',path:ey2},{n:'ns',path:nose},{n:'tg',path:tongue}];}},
+
+  // Animals: Dinosaur
+  {name:'Dinosaur \u{1F995}',theme:'animals',build(w,h){
+    const cx=w/2,cy=h*.5,s=Math.min(w,h)*.2;
+    const body=new Path2D();body.ellipse(cx,cy,s*1.3,s*.9,0,0,Math.PI*2);
+    const head=new Path2D();head.arc(cx-s*1.4,cy-s*.6,s*.55,0,Math.PI*2);
+    const tail=new Path2D();tail.moveTo(cx+s*1.1,cy-s*.3);tail.lineTo(cx+s*2.2,cy-s*.8);tail.lineTo(cx+s*1.1,cy+s*.3);tail.closePath();
+    const l1=new Path2D();l1.rect(cx-s*.5,cy+s*.7,s*.3,s*.6);
+    const l2=new Path2D();l2.rect(cx+s*.3,cy+s*.7,s*.3,s*.6);
+    const spines=new Path2D();
+    for(let i=0;i<4;i++){const x=cx-s*.4+i*s*.5,yt=cy-s*.85;
+      spines.moveTo(x-s*.12,cy-s*.6);spines.lineTo(x,yt);spines.lineTo(x+s*.12,cy-s*.6);spines.closePath();}
+    return[{n:'bd',path:body},{n:'hd',path:head},{n:'tl',path:tail},{n:'l1',path:l1},{n:'l2',path:l2},{n:'sp',path:spines}];}},
+
+  // Food: Cupcake
+  {name:'Cupcake \u{1F9C1}',theme:'food',build(w,h){
+    const cx=w/2,s=Math.min(w,h)*.2;
+    const wrapper=new Path2D();wrapper.moveTo(cx-s*1.1,h*.48);wrapper.lineTo(cx-s*.8,h*.78);wrapper.lineTo(cx+s*.8,h*.78);wrapper.lineTo(cx+s*1.1,h*.48);wrapper.closePath();
+    const frost=new Path2D();
+    frost.moveTo(cx-s*1.2,h*.48);
+    frost.bezierCurveTo(cx-s*.8,h*.3,cx-s*.3,h*.38,cx,h*.28);
+    frost.bezierCurveTo(cx+s*.3,h*.38,cx+s*.8,h*.3,cx+s*1.2,h*.48);
+    frost.closePath();
+    const cherry=new Path2D();cherry.arc(cx,h*.24,s*.25,0,Math.PI*2);
+    return[{n:'wr',path:wrapper},{n:'fr',path:frost},{n:'ch',path:cherry}];}},
+
+  // Food: Ice Cream Cone
+  {name:'Ice Cream \u{1F366}',theme:'food',build(w,h){
+    const cx=w/2,s=Math.min(w,h)*.18;
+    const cone=new Path2D();cone.moveTo(cx-s*1,h*.45);cone.lineTo(cx,h*.88);cone.lineTo(cx+s*1,h*.45);cone.closePath();
+    const s1=new Path2D();s1.arc(cx,h*.35,s*.9,0,Math.PI*2);
+    const s2=new Path2D();s2.arc(cx-s*.5,h*.25,s*.7,0,Math.PI*2);
+    const s3=new Path2D();s3.arc(cx+s*.5,h*.25,s*.7,0,Math.PI*2);
+    return[{n:'cn',path:cone},{n:'s1',path:s1},{n:'s2',path:s2},{n:'s3',path:s3}];}},
+
+  // Fun: Car
+  {name:'Car \u{1F697}',theme:'fun',build(w,h){
+    const cx=w/2,cy=h*.5,s=Math.min(w,h)*.18;
+    const body=new Path2D();body.rect(cx-s*1.8,cy-s*.3,s*3.6,s*1.2);
+    const roof=new Path2D();roof.moveTo(cx-s*.8,cy-s*.3);roof.lineTo(cx-s*.4,cy-s*1.2);roof.lineTo(cx+s*.6,cy-s*1.2);roof.lineTo(cx+s*1,cy-s*.3);roof.closePath();
+    const w1=new Path2D();w1.arc(cx-s*1.1,cy+s*.9,s*.45,0,Math.PI*2);
+    const w2=new Path2D();w2.arc(cx+s*1.1,cy+s*.9,s*.45,0,Math.PI*2);
+    const win1=new Path2D();win1.rect(cx-s*.7,cy-s*1.05,s*.55,s*.65);
+    const win2=new Path2D();win2.rect(cx+s*.05,cy-s*1.05,s*.55,s*.65);
+    return[{n:'bd',path:body},{n:'rf',path:roof},{n:'w1',path:w1},{n:'w2',path:w2},{n:'wn1',path:win1},{n:'wn2',path:win2}];}},
+
+  // Fun: Balloon
+  {name:'Balloon \u{1F388}',theme:'fun',build(w,h){
+    const cx=w/2,s=Math.min(w,h)*.25;
+    const bal=new Path2D();bal.ellipse(cx,h*.35,s*.8,s*1.1,0,0,Math.PI*2);
+    const knot=new Path2D();knot.moveTo(cx-s*.15,h*.35+s*1.1);knot.lineTo(cx,h*.35+s*1.3);knot.lineTo(cx+s*.15,h*.35+s*1.1);knot.closePath();
+    return[{n:'bal',path:bal},{n:'kn',path:knot}];}},
+
+  // Fun: Crown
+  {name:'Crown \u{1F451}',theme:'fun',build(w,h){
+    const cx=w/2,cy=h*.45,s=Math.min(w,h)*.25;
+    const crown=new Path2D();
+    crown.moveTo(cx-s*1.3,cy+s*.6);crown.lineTo(cx-s*1.3,cy-s*.3);crown.lineTo(cx-s*.65,cy+s*.1);
+    crown.lineTo(cx,cy-s*.8);crown.lineTo(cx+s*.65,cy+s*.1);crown.lineTo(cx+s*1.3,cy-s*.3);
+    crown.lineTo(cx+s*1.3,cy+s*.6);crown.closePath();
+    const j1=new Path2D();j1.arc(cx-s*.65,cy+s*.15,s*.15,0,Math.PI*2);
+    const j2=new Path2D();j2.arc(cx,cy-s*.35,s*.15,0,Math.PI*2);
+    const j3=new Path2D();j3.arc(cx+s*.65,cy+s*.15,s*.15,0,Math.PI*2);
+    return[{n:'cr',path:crown},{n:'j1',path:j1},{n:'j2',path:j2},{n:'j3',path:j3}];}},
+
+  // Fun: Rocket
+  {name:'Rocket \u{1F680}',theme:'fun',build(w,h){
+    const cx=w/2,cy=h*.42,s=Math.min(w,h)*.15;
+    const body=new Path2D();body.ellipse(cx,cy,s*.7,s*2,0,0,Math.PI*2);
+    const fl=new Path2D();fl.moveTo(cx-s*.7,cy+s*1.2);fl.lineTo(cx-s*1.5,cy+s*2.2);fl.lineTo(cx-s*.2,cy+s*1.8);fl.closePath();
+    const fr=new Path2D();fr.moveTo(cx+s*.7,cy+s*1.2);fr.lineTo(cx+s*1.5,cy+s*2.2);fr.lineTo(cx+s*.2,cy+s*1.8);fr.closePath();
+    const win=new Path2D();win.arc(cx,cy-s*.3,s*.3,0,Math.PI*2);
+    const flame=new Path2D();flame.moveTo(cx-s*.4,cy+s*2);flame.lineTo(cx,cy+s*3);flame.lineTo(cx+s*.4,cy+s*2);flame.closePath();
+    return[{n:'bd',path:body},{n:'fl',path:fl},{n:'fr',path:fr},{n:'wn',path:win},{n:'fm',path:flame}];}},
+
+  // Fun: Snowman
+  {name:'Snowman \u26C4',theme:'fun',build(w,h){
+    const cx=w/2,s=Math.min(w,h)*.12;
+    const bot=new Path2D();bot.arc(cx,h*.68,s*1.5,0,Math.PI*2);
+    const mid=new Path2D();mid.arc(cx,h*.47,s*1.1,0,Math.PI*2);
+    const top=new Path2D();top.arc(cx,h*.3,s*.8,0,Math.PI*2);
+    const hat=new Path2D();hat.rect(cx-s*.9,h*.15,s*1.8,s*.6);hat.rect(cx-s*.5,h*.15-s*1,s*1,s*1);
+    const nose=new Path2D();nose.moveTo(cx,h*.3);nose.lineTo(cx+s*.9,h*.32);nose.lineTo(cx,h*.34);nose.closePath();
+    const b1=new Path2D();b1.arc(cx,h*.44,s*.15,0,Math.PI*2);
+    const b2=new Path2D();b2.arc(cx,h*.52,s*.15,0,Math.PI*2);
+    return[{n:'bt',path:bot},{n:'md',path:mid},{n:'tp',path:top},{n:'ht',path:hat},{n:'ns',path:nose},{n:'b1',path:b1},{n:'b2',path:b2}];}},
+
+  // Mice: Mouse with Cheese
+  {name:'Mouse & Cheese \u{1F42D}\u{1F9C0}',theme:'mice',build(w,h){
+    const s=Math.min(w,h)*.15;
+    // mouse
+    const mbody=new Path2D();mbody.ellipse(w*.3,h*.5,s*1.2,s*.9,0,0,Math.PI*2);
+    const mear1=new Path2D();mear1.arc(w*.2,h*.35,s*.5,0,Math.PI*2);
+    const mear2=new Path2D();mear2.arc(w*.4,h*.35,s*.5,0,Math.PI*2);
+    // cheese triangle
+    const cheese=new Path2D();cheese.moveTo(w*.6,h*.65);cheese.lineTo(w*.75,h*.35);cheese.lineTo(w*.9,h*.65);cheese.closePath();
+    const hole1=new Path2D();hole1.arc(w*.72,h*.52,s*.2,0,Math.PI*2);
+    const hole2=new Path2D();hole2.arc(w*.78,h*.58,s*.15,0,Math.PI*2);
+    return[{n:'mb',path:mbody},{n:'e1',path:mear1},{n:'e2',path:mear2},{n:'ch',path:cheese},{n:'h1',path:hole1},{n:'h2',path:hole2}];}},
+
+  // Mice: Mouse Sleeping
+  {name:'Sleepy Mouse \u{1F634}\u{1F42D}',theme:'mice',build(w,h){
+    const cx=w/2,cy=h*.55,s=Math.min(w,h)*.2;
+    const body=new Path2D();body.ellipse(cx,cy,s*1.5,s*.8,0,0,Math.PI*2);
+    const ear=new Path2D();ear.arc(cx-s*.9,cy-s*.7,s*.5,0,Math.PI*2);
+    const blanket=new Path2D();blanket.ellipse(cx,cy+s*.2,s*1.6,s*.9,0,0.3,Math.PI-0.3);blanket.closePath();
+    const z1=new Path2D();z1.rect(cx+s*1.3,cy-s*1.2,s*.4,s*.4);
+    const z2=new Path2D();z2.rect(cx+s*1.6,cy-s*1.8,s*.3,s*.3);
+    return[{n:'bd',path:body},{n:'ear',path:ear},{n:'bl',path:blanket},{n:'z1',path:z1},{n:'z2',path:z2}];}},
+
+  // Mice: Mouse in a Hat
+  {name:'Mouse in Hat \u{1F3A9}\u{1F42D}',theme:'mice',build(w,h){
+    const cx=w/2,s=Math.min(w,h)*.14;
+    const body=new Path2D();body.ellipse(cx,h*.65,s*1.2,s*1,0,0,Math.PI*2);
+    const ear1=new Path2D();ear1.arc(cx-s*.8,h*.5,s*.45,0,Math.PI*2);
+    const ear2=new Path2D();ear2.arc(cx+s*.8,h*.5,s*.45,0,Math.PI*2);
+    const brim=new Path2D();brim.ellipse(cx,h*.42,s*1.8,s*.4,0,0,Math.PI*2);
+    const crown=new Path2D();crown.rect(cx-s*.8,h*.15,s*1.6,s*2);
+    const top=new Path2D();top.ellipse(cx,h*.15,s*.8,s*.25,0,0,Math.PI*2);
+    return[{n:'bd',path:body},{n:'e1',path:ear1},{n:'e2',path:ear2},{n:'br',path:brim},{n:'cr',path:crown},{n:'tp',path:top}];}},
+
+  // Mice: Mouse with Balloon
+  {name:'Mouse & Balloon \u{1F42D}\u{1F388}',theme:'mice',build(w,h){
+    const s=Math.min(w,h)*.14;
+    const body=new Path2D();body.ellipse(w*.35,h*.65,s*1.2,s*1,0,0,Math.PI*2);
+    const ear1=new Path2D();ear1.arc(w*.25,h*.5,s*.5,0,Math.PI*2);
+    const ear2=new Path2D();ear2.arc(w*.45,h*.5,s*.5,0,Math.PI*2);
+    const balloon=new Path2D();balloon.ellipse(w*.65,h*.28,s*1,s*1.3,0,0,Math.PI*2);
+    const tail=new Path2D();tail.moveTo(w*.35+s*1.2,h*.65);
+    tail.bezierCurveTo(w*.35+s*2,h*.55,w*.35+s*2.2,h*.7,w*.35+s*2.5,h*.65);
+    tail.lineTo(w*.35+s*2.5,h*.68);
+    tail.bezierCurveTo(w*.35+s*2.2,h*.73,w*.35+s*2,h*.58,w*.35+s*1.2,h*.68);
+    tail.closePath();
+    return[{n:'bd',path:body},{n:'e1',path:ear1},{n:'e2',path:ear2},{n:'bal',path:balloon},{n:'tl',path:tail}];}},
+];
+
+const THEME_LIST=[
+  {id:'all',label:'All'},
+  {id:'animals',label:'Animals'},
+  {id:'nature',label:'Nature'},
+  {id:'food',label:'Food'},
+  {id:'fun',label:'Fun'},
+  {id:'mice',label:'Mice'},
 ];
 
 // ===== STATE =====
@@ -678,7 +733,13 @@ let S={screen:'parent',mode:null,target:null,choices:[],score:0,streak:0,
   timerMin:15,timerEnd:null,timerInt:null,timerRunning:false,
   dadAnimal:null,dadIdx:0,
   drawColor:'#FF0000',brushSize:10,drawing:false,drawHistory:[],
-  colorColor:'#FF0000',colorPageIdx:0,regionFills:{}};
+  colorColor:'#FF0000',colorPageIdx:0,regionFills:{},
+  colorTheme:'all'};
+
+function filteredPages(){
+  if(S.colorTheme==='all')return CPAGES;
+  return CPAGES.filter(p=>p.theme===S.colorTheme);
+}
 
 // Parent preferences
 let parentPrefs = {
@@ -693,7 +754,6 @@ function loadParentPrefs() {
     if (saved) {
       const p = JSON.parse(saved);
       parentPrefs = { ...parentPrefs, ...p };
-      // Ensure all modules exist
       [...GAME_MODES, ...CREATIVE_MODES].forEach(m => {
         if (parentPrefs.modules[m.id] === undefined) parentPrefs.modules[m.id] = true;
       });
@@ -747,7 +807,6 @@ function showScreen(n){
   document.getElementById(n+'-screen').classList.add('active');S.screen=n;
   if(n==='draw')requestAnimationFrame(()=>resizeDrawCanvas());
   if(n==='coloring')requestAnimationFrame(()=>{resizeColorCanvas();renderColorPage();});
-  // Show/hide timer bar for kid screens
   const timerBar = document.getElementById('session-timer-bar');
   const isKid = (n === 'home' || n === 'game' || n === 'draw' || n === 'coloring');
   if (isKid && S.timerRunning) {
@@ -764,7 +823,6 @@ function celebText(t){const el=document.getElementById('celebration-text');el.te
 
 // ===== PARENT DASHBOARD =====
 function renderParentDashboard() {
-  // Game toggles
   const gt = document.getElementById('parent-game-toggles');
   gt.innerHTML = '';
   GAME_MODES.forEach(m => {
@@ -785,7 +843,6 @@ function renderParentDashboard() {
     gt.appendChild(card);
   });
 
-  // Creative toggles
   const ct = document.getElementById('parent-creative-toggles');
   ct.innerHTML = '';
   CREATIVE_MODES.forEach(m => {
@@ -806,7 +863,6 @@ function renderParentDashboard() {
     ct.appendChild(card);
   });
 
-  // Timer presets
   const tp = document.getElementById('parent-timer-presets');
   tp.innerHTML = '';
   const timerOpts = [{min:5,label:'5 min'},{min:10,label:'10 min'},{min:15,label:'15 min'},{min:20,label:'20 min'},{min:30,label:'30 min'},{min:0,label:'No limit'}];
@@ -823,7 +879,6 @@ function renderParentDashboard() {
     tp.appendChild(b);
   });
 
-  // Difficulty presets
   const dp = document.getElementById('parent-diff-presets');
   dp.innerHTML = '';
   const diffOpts = [{val:'easy',label:'Easy'},{val:'medium',label:'Medium'},{val:'hard',label:'Hard'}];
@@ -842,17 +897,12 @@ function renderParentDashboard() {
 }
 
 function startLearning() {
-  // Apply parent prefs to game state
   S.difficulty = parentPrefs.difficulty;
   S.timerMin = parentPrefs.timerMin;
   S.score = 0;
   S.streak = 0;
-
-  // Render kid home with only enabled modules
   renderHome();
   showScreen('home');
-
-  // Start timer if set
   if (S.timerMin > 0) {
     startTimer();
   }
@@ -868,7 +918,6 @@ function renderHome(){
 
   const cg=document.getElementById('creative-grid');cg.innerHTML='';
   const enabledCreative = CREATIVE_MODES.filter(m => parentPrefs.modules[m.id] !== false);
-  // Show/hide creative section
   document.getElementById('creative-label').style.display = enabledCreative.length ? '' : 'none';
   cg.style.display = enabledCreative.length ? '' : 'none';
   enabledCreative.forEach(m=>{const b=document.createElement('button');b.className='mode-btn';b.style.borderColor=m.color;
@@ -881,25 +930,26 @@ function renderGame(){
   const pr=document.getElementById('game-prompt'),di=document.getElementById('game-display');
   const ti=document.getElementById('mode-title'),sc=document.getElementById('score-display');
   const gr=document.getElementById('game-choices');
-  const mi=GAME_MODES.find(m=>m.id===S.mode);ti.textContent=mi?mi.name:'';sc.textContent='⭐ '+S.score;
+  // Reset grid styles
+  gr.style.gridTemplateColumns='';
+  gr.style.maxWidth='';
+  const mi=GAME_MODES.find(m=>m.id===S.mode);ti.textContent=mi?mi.name:'';sc.textContent='\u2B50 '+S.score;
   const nc=S.choices.length,c3=nc>4;
   gr.className='choices-grid'+(c3?' cols3':'');
   const M=S.mode;
 
   if(M==='animals'){
     pr.textContent='Find the '+S.target.name+'!';
-    const svgSz = c3 ? 50 : 70;
-    di.innerHTML=svgIcon(S.target.name, 90, 'animal');di.style.fontSize='';
-    mkBtns(S.choices.map(c=>({html:`${svgIcon(c.name, svgSz, 'animal')}<span style="font-size:clamp(11px,2vw,15px)">${c.name}</span>`,d:c})),c3);
+    di.textContent=S.target.emoji;di.style.fontSize='';
+    mkBtns(S.choices.map(c=>({html:`<span style="font-size:clamp(${c3?'28px,5vw,42px':'36px,7vw,56px'})">${c.emoji}</span><span style="font-size:clamp(11px,2vw,15px)">${c.name}</span>`,d:c})),c3);
   } else if(M==='princesses'){
     pr.textContent='Find '+S.target.name+'!';
     di.innerHTML=pIcon(S.target,c3?70:90);di.style.fontSize='';
     mkBtns(S.choices.map(c=>({html:pIcon(c,c3?38:50)+`<span style="font-size:clamp(10px,1.8vw,14px)">${c.name}</span>`,d:c})),c3);
   } else if(M==='remy'){
-    pr.innerHTML='Feed Remy some<br><b>'+S.target.name+'</b>!';
-    const svgSz = c3 ? 50 : 70;
-    di.innerHTML=svgIcon('Rat', 90, 'animal');di.style.fontSize='';
-    mkBtns(S.choices.map(c=>({html:`${svgIcon(c.name, svgSz, 'food')}<span style="font-size:clamp(11px,2vw,15px)">${c.name}</span>`,d:c})),c3);
+    pr.innerHTML='Feed Remy some<br><b>'+S.target.name+'</b>! '+S.target.emoji;
+    di.innerHTML='<span style="font-size:clamp(50px,10vw,90px)">\u{1F400}</span>';di.style.fontSize='';
+    mkBtns(S.choices.map(c=>({html:`<span style="font-size:clamp(${c3?'28px,5vw,42px':'36px,7vw,56px'})">${c.emoji}</span><span style="font-size:clamp(11px,2vw,15px)">${c.name}</span>`,d:c})),c3);
   } else if(M==='letters'){
     pr.textContent='Find the letter '+S.target+'!';
     di.innerHTML=`<span style="color:${LC[S.target]}">${S.target}</span>`;di.style.fontSize='';
@@ -916,18 +966,48 @@ function renderGame(){
     pr.textContent='What is this word?';
     di.innerHTML=`<span style="font-size:clamp(40px,10vw,80px);font-weight:bold;color:#4A3F35;letter-spacing:4px">${S.target.word}</span>`;di.style.fontSize='';
     mkBtns(S.choices.map(c=>({html:`<span style="font-size:clamp(${c3?'24px,4vw,36px':'32px,6vw,50px'})">${c.emoji}</span>`,d:c})),c3);
+  } else if(M==='sightwords'){
+    pr.textContent='Find the word!';
+    di.innerHTML=`<span style="font-size:clamp(44px,10vw,80px);font-weight:bold;color:#4A3F35;letter-spacing:6px">${S.target.toUpperCase()}</span>`;
+    di.style.fontSize='';
+    mkBtns(S.choices.map(c=>({html:`<span style="font-size:clamp(${c3?'18px,3vw,28px':'22px,4vw,36px'});font-weight:bold;color:#4A3F35">${c.toUpperCase()}</span>`,d:c})),c3);
+  } else if(M==='questions'){
+    pr.textContent=S.target.q;
+    di.innerHTML='<span style="font-size:clamp(36px,8vw,60px)">\u{1F914}</span>';
+    di.style.fontSize='';
+    mkBtns(S.choices.map(c=>({html:`<span style="font-size:clamp(${c3?'14px,2.5vw,22px':'16px,3vw,26px'});font-weight:bold;color:#4A3F35">${c}</span>`,d:c})),c3);
   } else if(M==='family'){
     pr.textContent='Find '+S.target.name+'!';
     di.innerHTML=`<div class="fam-circle fam-big" style="background:${S.target.color}">${S.target.emoji}</div>`;di.style.fontSize='';
     mkBtns(S.choices.map(c=>({html:`<div class="fam-circle fam-sm" style="background:${c.color}">${c.emoji}</div><span style="font-size:clamp(${c3?'9px,1.5vw,12px':'11px,2vw,15px'})">${c.name}</span>`,d:c})),c3);
   } else if(M==='days'){
-    pr.textContent='Find this day!';
-    di.textContent=S.target;di.style.fontSize='clamp(22px,4.5vw,38px)';
-    mkBtns(S.choices.map(c=>({html:`<span style="font-size:clamp(${c3?'11px,1.8vw,14px':'13px,2.3vw,18px'});font-weight:bold">${c}</span>`,d:c})),c3);
+    const dayAbbr=['S','M','T','W','T','F','S'];
+    pr.textContent='Find '+S.target+'!';
+    di.innerHTML='<div style="display:flex;gap:6px;font-size:clamp(14px,2.5vw,20px);font-weight:bold;color:#8A8078">'+dayAbbr.map(d=>'<span>'+d+'</span>').join('')+'</div>';
+    di.style.fontSize='';
+    gr.style.gridTemplateColumns='repeat(7, 1fr)';
+    gr.style.maxWidth='600px';
+    gr.className='choices-grid';
+    const abbrs=['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
+    const g2=document.getElementById('game-choices');g2.innerHTML='';
+    DAYS.forEach((d,i)=>{const b=document.createElement('button');
+      b.className='choice-btn';b.style.padding='8px 2px';b.style.minHeight='50px';
+      b.innerHTML=`<span style="font-size:clamp(11px,2vw,16px);font-weight:bold">${abbrs[i]}</span>`;
+      b.addEventListener('pointerdown',e=>{e.preventDefault();handleChoice(i);});g2.appendChild(b);});
+    S.choices=DAYS;
   } else if(M==='months'){
-    pr.textContent='Find this month!';
-    di.textContent=S.target;di.style.fontSize='clamp(22px,4.5vw,38px)';
-    mkBtns(S.choices.map(c=>({html:`<span style="font-size:clamp(${c3?'11px,1.8vw,14px':'13px,2.3vw,18px'});font-weight:bold">${c}</span>`,d:c})),c3);
+    pr.textContent='Find '+S.target+'!';
+    di.innerHTML='';di.style.fontSize='';
+    gr.style.gridTemplateColumns='repeat(4, 1fr)';
+    gr.style.maxWidth='600px';
+    gr.className='choices-grid';
+    const abbrs=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+    const g2=document.getElementById('game-choices');g2.innerHTML='';
+    MONTHS.forEach((m,i)=>{const b=document.createElement('button');
+      b.className='choice-btn';b.style.padding='8px 2px';b.style.minHeight='50px';
+      b.innerHTML=`<span style="font-size:clamp(11px,2vw,16px);font-weight:bold">${abbrs[i]}</span>`;
+      b.addEventListener('pointerdown',e=>{e.preventDefault();handleChoice(i);});g2.appendChild(b);});
+    S.choices=MONTHS;
   } else if(M==='dad'){renderDad();}
 }
 
@@ -941,7 +1021,7 @@ function mkBtns(items,c3){
 function renderDad(){
   const pr=document.getElementById('game-prompt'),di=document.getElementById('game-display');
   const a=S.dadAnimal,idx=S.dadIdx,nm=a.name.toUpperCase();
-  di.innerHTML=svgIcon(a.name, 80, 'animal');
+  di.innerHTML='<span style="font-size:clamp(45px,9vw,80px)">'+a.emoji+'</span>';
   let w='';for(let i=0;i<nm.length;i++){const cls=i<idx?'done':i===idx?'current':'pending';
     w+=`<span class="dad-letter ${cls}">${i<idx?nm[i]:(i===idx?nm[i]:'_')}</span>`;}
   pr.innerHTML=`Spell ${a.name}!<br>${w}`;
@@ -968,8 +1048,25 @@ function nextRound(){
   else if(M==='colors')pick1(COLORS);
   else if(M==='words')pick1(WORDS);
   else if(M==='family')pick1(FAMILY);
-  else if(M==='days')pick1(DAYS);
-  else if(M==='months')pick1(MONTHS);
+  else if(M==='days'){
+    let t;do{t=pick(DAYS);}while(t===S.lastTarget&&DAYS.length>1);
+    S.target=t;S.lastTarget=t;S.choices=DAYS;
+  }
+  else if(M==='months'){
+    let t;do{t=pick(MONTHS);}while(t===S.lastTarget&&MONTHS.length>1);
+    S.target=t;S.lastTarget=t;S.choices=MONTHS;
+  }
+  else if(M==='sightwords'){
+    let t;do{t=pick(SIGHT_WORDS);}while(t===S.lastTarget&&SIGHT_WORDS.length>1);
+    S.target=t;S.lastTarget=t;S.choices=shuffle([t,...dist(SIGHT_WORDS,t,nd)]);
+  }
+  else if(M==='questions'){
+    const allowed = S.difficulty==='easy'?['easy']:S.difficulty==='hard'?['easy','medium','hard']:['easy','medium'];
+    const pool = QUESTIONS.filter(q=>allowed.includes(q.diff));
+    let q;do{q=pick(pool);}while(q===S.lastTarget&&pool.length>1);
+    S.target=q;S.lastTarget=q;
+    S.choices=shuffle([...q.ch]);
+  }
   else if(M==='numbers'){
     const em=pick(COUNT_EMOJIS),mx=S.difficulty==='hard'?9:5;
     let v;do{v=Math.floor(Math.random()*mx)+1;}while(S.lastTarget&&v===S.lastTarget.value);
@@ -985,19 +1082,23 @@ function nextRound(){
     else if(M==='letters')say('Find the letter '+S.target);
     else if(M==='numbers')say('How many? Count them!');
     else if(M==='colors')say('Find '+S.target.name);
-    else if(M==='words')say('What is '+S.target.word+'?');
     else if(M==='family')say('Find '+S.target.name);
     else if(M==='days')say('Find '+S.target);
     else if(M==='months')say('Find '+S.target);
+    else if(M==='questions')say(S.target.q);
+    // words and sightwords: no audio
   },350);
 }
 
 function handleChoice(i){
   if(S.animating)return;const ch=S.choices[i];
-  let ok=S.mode==='numbers'?ch.value===S.target.value:ch===S.target;
+  let ok;
+  if(S.mode==='numbers') ok=ch.value===S.target.value;
+  else if(S.mode==='questions') ok=ch===S.target.a;
+  else ok=ch===S.target;
   const btns=document.querySelectorAll('.choice-btn');
   if(ok){S.animating=true;S.score++;S.streak++;btns[i].classList.add('correct');playOk();confetti();
-    const ph=pick(PHRASES);celebText(ph);document.getElementById('score-display').textContent='⭐ '+S.score;
+    const ph=pick(PHRASES);celebText(ph);document.getElementById('score-display').textContent='\u2B50 '+S.score;
     setTimeout(()=>say(ph.replace(/[^\w\s]/g,'')),350);
     setTimeout(()=>{if(S.mode==='dad')advanceDad();else nextRound();},1800);
   } else {S.streak=0;btns[i].classList.add('wrong');playNo();setTimeout(()=>btns[i].classList.remove('wrong'),450);}
@@ -1032,7 +1133,7 @@ function initDraw(){
     b.addEventListener('pointerdown',e=>{e.preventDefault();S.drawColor=c;
       pal.querySelectorAll('.pal-btn').forEach(x=>x.classList.remove('active'));b.classList.add('active');
       document.getElementById('eraser-btn')?.classList.remove('active');});pal.appendChild(b);});
-  const eb=document.createElement('button');eb.className='eraser-btn';eb.id='eraser-btn';eb.textContent='🧽';
+  const eb=document.createElement('button');eb.className='eraser-btn';eb.id='eraser-btn';eb.textContent='\u{1F9FD}';
   eb.addEventListener('pointerdown',e=>{e.preventDefault();S.drawColor='#FFFFFF';
     pal.querySelectorAll('.pal-btn').forEach(x=>x.classList.remove('active'));eb.classList.add('active');});pal.appendChild(eb);
   const br=document.getElementById('brush-row');
@@ -1051,32 +1152,64 @@ function initDraw(){
 let cCv,cCx;
 function resizeColorCanvas(){cCv=document.getElementById('color-canvas');cCx=cCv.getContext('2d');
   const r=cCv.parentElement.getBoundingClientRect();cCv.width=r.width;cCv.height=r.height;}
-function renderColorPage(){if(!cCv)return;const pg=CPAGES[S.colorPageIdx];
+
+function renderColorPage(){
+  if(!cCv)return;
+  const fp=filteredPages();
+  if(fp.length===0)return;
+  if(S.colorPageIdx>=fp.length)S.colorPageIdx=0;
+  const pg=fp[S.colorPageIdx];
   document.getElementById('color-page-name').textContent=pg.name;
   const w=cCv.width,h=cCv.height;cCx.fillStyle='#FFF';cCx.fillRect(0,0,w,h);
   const rg=pg.build(w,h);
-  rg.forEach(r=>{const k=S.colorPageIdx+'-'+r.n;if(S.regionFills[k]){cCx.fillStyle=S.regionFills[k];cCx.fill(r.path);}});
+  // Use global CPAGES index for fill storage
+  const globalIdx=CPAGES.indexOf(pg);
+  rg.forEach(r=>{const k=globalIdx+'-'+r.n;if(S.regionFills[k]){cCx.fillStyle=S.regionFills[k];cCx.fill(r.path);}});
   rg.forEach(r=>{cCx.strokeStyle='#333';cCx.lineWidth=3;cCx.stroke(r.path);});
-  document.querySelectorAll('.page-dot').forEach((d,i)=>d.classList.toggle('active',i===S.colorPageIdx));}
+  renderColorDots();
+  renderThemeTabs();
+}
+
+function renderColorDots(){
+  const dots=document.getElementById('page-dots');dots.innerHTML='';
+  const fp=filteredPages();
+  fp.forEach((_,i)=>{const d=document.createElement('div');d.className='page-dot'+(i===S.colorPageIdx?' active':'');
+    d.addEventListener('pointerdown',e=>{e.preventDefault();S.colorPageIdx=i;renderColorPage();});dots.appendChild(d);});
+}
+
+function renderThemeTabs(){
+  const tabs=document.getElementById('theme-tabs');tabs.innerHTML='';
+  THEME_LIST.forEach(t=>{
+    const b=document.createElement('button');b.className='theme-tab'+(S.colorTheme===t.id?' active':'');
+    b.textContent=t.label;
+    b.addEventListener('pointerdown',e=>{e.preventDefault();S.colorTheme=t.id;S.colorPageIdx=0;renderColorPage();});
+    tabs.appendChild(b);
+  });
+}
+
 function initColoring(){
   const cv=document.getElementById('color-canvas');
   cv.addEventListener('pointerdown',e=>{e.preventDefault();const rc=cv.getBoundingClientRect();
-    const x=e.clientX-rc.left,y=e.clientY-rc.top,pg=CPAGES[S.colorPageIdx],rg=pg.build(cCv.width,cCv.height);
+    const x=e.clientX-rc.left,y=e.clientY-rc.top;
+    const fp=filteredPages();if(fp.length===0)return;
+    const pg=fp[S.colorPageIdx],rg=pg.build(cCv.width,cCv.height);
+    const globalIdx=CPAGES.indexOf(pg);
     for(let i=rg.length-1;i>=0;i--){if(cCx.isPointInPath(rg[i].path,x,y)){
-      S.regionFills[S.colorPageIdx+'-'+rg[i].n]=S.colorColor;renderColorPage();playOk();break;}}});
+      S.regionFills[globalIdx+'-'+rg[i].n]=S.colorColor;renderColorPage();playOk();break;}}});
   const pal=document.getElementById('color-palette');
   PALETTE_C.slice(0,-1).forEach((c,i)=>{const b=document.createElement('button');b.className='pal-btn'+(i===0?' active':'');b.style.background=c;
     b.addEventListener('pointerdown',e=>{e.preventDefault();S.colorColor=c;
       pal.querySelectorAll('.pal-btn').forEach(x=>x.classList.remove('active'));b.classList.add('active');});pal.appendChild(b);});
-  const dots=document.getElementById('page-dots');
-  CPAGES.forEach((_,i)=>{const d=document.createElement('div');d.className='page-dot'+(i===0?' active':'');
-    d.addEventListener('pointerdown',e=>{e.preventDefault();S.colorPageIdx=i;renderColorPage();});dots.appendChild(d);});
   document.getElementById('color-prev').addEventListener('pointerdown',e=>{e.preventDefault();
-    S.colorPageIdx=(S.colorPageIdx-1+CPAGES.length)%CPAGES.length;renderColorPage();});
+    const fp=filteredPages();if(fp.length===0)return;
+    S.colorPageIdx=(S.colorPageIdx-1+fp.length)%fp.length;renderColorPage();});
   document.getElementById('color-next').addEventListener('pointerdown',e=>{e.preventDefault();
-    S.colorPageIdx=(S.colorPageIdx+1)%CPAGES.length;renderColorPage();});
+    const fp=filteredPages();if(fp.length===0)return;
+    S.colorPageIdx=(S.colorPageIdx+1)%fp.length;renderColorPage();});
   document.getElementById('color-clear').addEventListener('pointerdown',e=>{e.preventDefault();
-    Object.keys(S.regionFills).forEach(k=>{if(k.startsWith(S.colorPageIdx+'-'))delete S.regionFills[k];});renderColorPage();});
+    const fp=filteredPages();if(fp.length===0)return;
+    const globalIdx=CPAGES.indexOf(fp[S.colorPageIdx]);
+    Object.keys(S.regionFills).forEach(k=>{if(k.startsWith(globalIdx+'-'))delete S.regionFills[k];});renderColorPage();});
   document.getElementById('color-back').addEventListener('pointerdown',e=>{e.preventDefault();showScreen('home');});
 }
 
@@ -1101,7 +1234,6 @@ function startTimer(){
     timeText.textContent = mins + ':' + String(secs).padStart(2,'0');
     fill.style.width = pct + '%';
 
-    // Color transitions
     if (rem > 120000) {
       fill.style.background = '#7BADC4';
       statusText.textContent = '';
@@ -1116,7 +1248,6 @@ function startTimer(){
     if(rem<=0){clearInterval(S.timerInt);S.timerRunning=false;timesUp();}
   },1000);
 
-  // Initial tick
   const rem0 = Math.max(0, S.timerEnd - Date.now());
   const pct0 = (rem0 / totalMs) * 100;
   fill.style.width = pct0 + '%';
@@ -1135,9 +1266,8 @@ function timesUp(){
   if(S.timerInt)clearInterval(S.timerInt);S.timerRunning=false;
   document.getElementById('session-timer-bar').classList.remove('visible');
   document.getElementById('app').classList.remove('timer-on');
-  document.getElementById('final-score').textContent='You earned ⭐ '+S.score+' stars!';
+  document.getElementById('final-score').textContent='You earned \u2B50 '+S.score+' stars!';
 
-  // Gentle fade transition
   const overlay = document.getElementById('fade-overlay');
   overlay.classList.add('show');
   setTimeout(() => {
@@ -1147,7 +1277,7 @@ function timesUp(){
   say('All done! Great job today Hailey!');
 }
 
-function makeFloaters(){const em=['☁️','⭐','💫','🌟','✨'];
+function makeFloaters(){const em=['\u2601\uFE0F','\u2B50','\u{1F4AB}','\u{1F31F}','\u2728'];
   for(let i=0;i<5;i++){const d=document.createElement('div');d.className='floater';d.textContent=pick(em);
     d.style.left=Math.random()*100+'%';d.style.fontSize=(Math.random()*14+12)+'px';
     d.style.animationDuration=(Math.random()*12+16)+'s';d.style.animationDelay=(-Math.random()*20)+'s';document.body.appendChild(d);}}
@@ -1162,7 +1292,6 @@ function handleGearTap() {
   } else if (gearTapCount >= 2) {
     clearTimeout(gearTapTimer);
     gearTapCount = 0;
-    // Stop timer and go to parent dashboard
     stopTimer();
     showScreen('parent');
     renderParentDashboard();
@@ -1177,22 +1306,18 @@ function init(){
   initDraw();
   initColoring();
 
-  // Start Learning button
   document.getElementById('start-learning-btn').addEventListener('pointerdown', e => {
     e.preventDefault();
     startLearning();
   });
 
-  // Back from game to kid home
   document.getElementById('back-btn').addEventListener('pointerdown',e=>{e.preventDefault();showScreen('home');});
 
-  // Settings gear (double-tap)
   document.getElementById('settings-gear-btn').addEventListener('pointerdown', e => {
     e.preventDefault();
     handleGearTap();
   });
 
-  // Play Again -> parent dashboard
   document.getElementById('play-again-btn').addEventListener('pointerdown',e=>{e.preventDefault();
     stopTimer();
     showScreen('parent');
