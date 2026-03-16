@@ -12,8 +12,13 @@ html,body{width:100%;height:100%;overflow:hidden;font-family:'Comic Sans MS','Se
 #app{width:100%;height:100%;position:relative}
 .screen{display:none;width:100%;height:100%;flex-direction:column;align-items:center;padding:8px;overflow-y:auto;overflow-x:hidden}
 .screen.active{display:flex}
-/* TIMER RING */
-#timer-ring-fill{transition:stroke 2s ease}
+/* TIMER BORDER */
+#timer-border-fill{transition:stroke 2s ease}
+#timer-time-display{position:fixed;top:10px;right:12px;
+  font-family:system-ui,-apple-system,sans-serif;font-weight:bold;font-size:22px;
+  color:#4A3F35;z-index:101;pointer-events:none;display:none;text-align:center;line-height:1;
+  background:rgba(250,247,242,0.85);padding:4px 10px;border-radius:10px}
+#timer-time-display .timer-msg{font-size:11px;font-weight:500;color:#C4916E;margin-top:1px}
 
 /* PARENT DASHBOARD */
 #parent-screen{background:#F5F3F0;font-family:system-ui,-apple-system,sans-serif;justify-content:flex-start;padding:0}
@@ -181,13 +186,12 @@ html,body{width:100%;height:100%;overflow:hidden;font-family:'Comic Sans MS','Se
 <canvas id="confetti-canvas"></canvas>
 <div id="fade-overlay"></div>
 
-<!-- SESSION TIMER RING (circular overlay) -->
-<svg id="timer-ring" style="position:fixed;top:0;left:0;width:100%;height:100%;pointer-events:none;z-index:100;display:none">
-  <circle id="timer-ring-bg" fill="none" stroke="#E8E4E0" stroke-width="8"/>
-  <circle id="timer-ring-fill" fill="none" stroke="#7EA87E" stroke-width="8" stroke-linecap="round"/>
-  <text id="timer-ring-time" text-anchor="middle" font-family="system-ui,-apple-system,sans-serif" font-weight="bold" fill="#4A3F35"/>
-  <text id="timer-ring-msg" text-anchor="middle" font-family="system-ui,-apple-system,sans-serif" fill="#C4916E"/>
+<!-- SESSION TIMER BORDER (rectangular overlay) -->
+<svg id="timer-border" style="position:fixed;top:0;left:0;width:100%;height:100%;pointer-events:none;z-index:100;display:none">
+  <rect id="timer-border-bg" fill="none" stroke="#E8E4E0" stroke-width="8" rx="12" ry="12"/>
+  <rect id="timer-border-fill" fill="none" stroke="#7EA87E" stroke-width="8" rx="12" ry="12" stroke-linecap="round"/>
 </svg>
+<div id="timer-time-display"><span id="timer-time-text"></span><div class="timer-msg" id="timer-msg-text"></div></div>
 
 <div id="app">
 
@@ -875,12 +879,13 @@ function showScreen(n){
   document.getElementById(n+'-screen').classList.add('active');S.screen=n;
   if(n==='draw')requestAnimationFrame(()=>resizeDrawCanvas());
   if(n==='coloring')requestAnimationFrame(()=>{resizeColorCanvas();renderColorPage();});
-  const ring = document.getElementById('timer-ring');
+  const border = document.getElementById('timer-border');
+  const timeDisp = document.getElementById('timer-time-display');
   const isKid = (n === 'home' || n === 'game' || n === 'draw' || n === 'coloring');
   if (isKid && S.timerRunning && S.timerMin > 0) {
-    ring.style.display = 'block';
+    border.style.display = 'block'; timeDisp.style.display = 'block';
   } else {
-    ring.style.display = 'none';
+    border.style.display = 'none'; timeDisp.style.display = 'none';
   }
 }
 
@@ -1279,60 +1284,54 @@ function initColoring(){
   document.getElementById('color-back').addEventListener('pointerdown',e=>{e.preventDefault();showScreen('home');});
 }
 
-// ===== SESSION TIMER (RING) =====
-function sizeTimerRing(){
-  const svg=document.getElementById('timer-ring');
+// ===== SESSION TIMER (RECTANGULAR BORDER) =====
+function sizeTimerBorder(){
+  const svg=document.getElementById('timer-border');
   if(!svg)return;
   const vw=window.innerWidth, vh=window.innerHeight;
-  const cx=vw/2, cy=vh/2;
-  const radius=Math.min(vw,vh)/2 - 20;
-  const circumference=2*Math.PI*radius;
-  const bg=document.getElementById('timer-ring-bg');
-  const fill=document.getElementById('timer-ring-fill');
-  const time=document.getElementById('timer-ring-time');
-  const msg=document.getElementById('timer-ring-msg');
-  [bg,fill].forEach(c=>{
-    c.setAttribute('cx',cx);
-    c.setAttribute('cy',cy);
-    c.setAttribute('r',radius);
+  const inset=5, sw=8;
+  const x=inset+sw/2, y=inset+sw/2;
+  const w=vw-2*(inset+sw/2), h=vh-2*(inset+sw/2);
+  const perimeter=2*(w+h);
+  const bg=document.getElementById('timer-border-bg');
+  const fill=document.getElementById('timer-border-fill');
+  [bg,fill].forEach(r=>{
+    r.setAttribute('x',x); r.setAttribute('y',y);
+    r.setAttribute('width',w); r.setAttribute('height',h);
+    r.setAttribute('stroke-width',sw);
   });
-  fill.setAttribute('stroke-dasharray',circumference);
-  fill.setAttribute('transform','rotate(-90 '+cx+' '+cy+')');
-  fill.dataset.circumference=circumference;
-  time.setAttribute('x',cx);
-  time.setAttribute('y',vh - 105);
-  time.setAttribute('font-size','28');
-  msg.setAttribute('x',cx);
-  msg.setAttribute('y',vh - 85);
-  msg.setAttribute('font-size','14');
+  fill.setAttribute('stroke-dasharray',perimeter);
+  fill.dataset.perimeter=perimeter;
 }
 
-function updateTimerRing(){
-  const svg=document.getElementById('timer-ring');
+function updateTimerBorder(){
+  const svg=document.getElementById('timer-border');
+  const timeDisp=document.getElementById('timer-time-display');
   if(!svg)return;
-  if(!S.timerRunning||S.timerMin<=0){svg.style.display='none';return;}
-  // Only show on kid screens
+  if(!S.timerRunning||S.timerMin<=0){svg.style.display='none';timeDisp.style.display='none';return;}
   const isKid=(S.screen==='home'||S.screen==='game'||S.screen==='draw'||S.screen==='coloring');
-  if(!isKid){svg.style.display='none';return;}
-  svg.style.display='block';
+  if(!isKid){svg.style.display='none';timeDisp.style.display='none';return;}
+  svg.style.display='block'; timeDisp.style.display='block';
   const rem=Math.max(0,S.timerEnd-Date.now());
   const total=S.timerMin*60000;
   const pct=rem/total;
-  const fill=document.getElementById('timer-ring-fill');
-  const circ=parseFloat(fill.dataset.circumference);
-  fill.setAttribute('stroke-dashoffset',circ*(1-pct));
+  const fill=document.getElementById('timer-border-fill');
+  const perim=parseFloat(fill.dataset.perimeter);
+  fill.setAttribute('stroke-dashoffset',perim*(1-pct));
   let color;
   if(rem>120000)color='#7EA87E';
   else if(rem>30000)color='#E8A030';
   else color='#D4909A';
   fill.setAttribute('stroke',color);
+  const timeText=document.getElementById('timer-time-text');
+  const msgText=document.getElementById('timer-msg-text');
   const min=Math.floor(rem/60000);
   const sec=Math.floor((rem%60000)/1000);
-  document.getElementById('timer-ring-time').textContent=min+':'+String(sec).padStart(2,'0');
-  const msg=document.getElementById('timer-ring-msg');
-  if(rem<=120000&&rem>30000)msg.textContent='Almost done!';
-  else if(rem<=30000)msg.textContent='Wrapping up...';
-  else msg.textContent='';
+  timeText.textContent=min+':'+String(sec).padStart(2,'0');
+  timeText.style.color=color;
+  if(rem<=120000&&rem>30000)msgText.textContent='Almost done!';
+  else if(rem<=30000)msgText.textContent='Wrapping up...';
+  else msgText.textContent='';
   if(rem<=0){clearInterval(S.timerInt);S.timerRunning=false;timesUp();}
 }
 
@@ -1340,22 +1339,25 @@ function startTimer(){
   if(S.timerInt)clearInterval(S.timerInt);
   S.timerEnd=Date.now()+S.timerMin*60000;
   S.timerRunning=true;
-  sizeTimerRing();
-  document.getElementById('timer-ring').style.display='block';
-  updateTimerRing();
-  S.timerInt=setInterval(updateTimerRing,1000);
+  sizeTimerBorder();
+  document.getElementById('timer-border').style.display='block';
+  document.getElementById('timer-time-display').style.display='block';
+  updateTimerBorder();
+  S.timerInt=setInterval(updateTimerBorder,1000);
 }
 
 function stopTimer() {
   if (S.timerInt) clearInterval(S.timerInt);
   S.timerRunning = false;
   S.timerEnd = null;
-  document.getElementById('timer-ring').style.display = 'none';
+  document.getElementById('timer-border').style.display = 'none';
+  document.getElementById('timer-time-display').style.display = 'none';
 }
 
 function timesUp(){
   if(S.timerInt)clearInterval(S.timerInt);S.timerRunning=false;
-  document.getElementById('timer-ring').style.display='none';
+  document.getElementById('timer-border').style.display='none';
+  document.getElementById('timer-time-display').style.display='none';
   document.getElementById('final-score').textContent='You earned \u2B50 '+S.score+' stars!';
 
   const overlay = document.getElementById('fade-overlay');
@@ -1395,8 +1397,8 @@ function init(){
   makeFloaters();
   initDraw();
   initColoring();
-  sizeTimerRing();
-  window.addEventListener('resize', sizeTimerRing);
+  sizeTimerBorder();
+  window.addEventListener('resize', sizeTimerBorder);
 
   document.getElementById('start-learning-btn').addEventListener('pointerdown', e => {
     e.preventDefault();
