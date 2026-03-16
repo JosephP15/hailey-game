@@ -12,17 +12,8 @@ html,body{width:100%;height:100%;overflow:hidden;font-family:'Comic Sans MS','Se
 #app{width:100%;height:100%;position:relative}
 .screen{display:none;width:100%;height:100%;flex-direction:column;align-items:center;padding:8px;overflow-y:auto;overflow-x:hidden}
 .screen.active{display:flex}
-#app.timer-on .kid-screen{padding-top:48px}
-
-/* SESSION TIMER BAR */
-#session-timer-bar{position:fixed;top:0;left:0;width:100%;height:44px;z-index:500;display:none;
-  align-items:center;padding:0 14px;gap:10px;background:rgba(255,255,255,0.92);backdrop-filter:blur(6px);
-  border-bottom:1px solid #E8E4E0;font-family:'Comic Sans MS','Segoe UI',sans-serif}
-#session-timer-bar.visible{display:flex}
-#timer-progress-wrap{flex:1;height:14px;background:#E8E4E0;border-radius:7px;overflow:hidden}
-#timer-progress-fill{height:100%;width:100%;border-radius:7px;background:#7BADC4;transition:width 1s linear, background 0.5s}
-#timer-time-text{font-size:18px;font-weight:bold;color:#4A3F35;min-width:50px;text-align:right}
-#timer-status-text{font-size:13px;color:#C4916E;font-weight:bold;min-width:0;white-space:nowrap}
+/* TIMER RING */
+#timer-ring-fill{transition:stroke 2s ease}
 
 /* PARENT DASHBOARD */
 #parent-screen{background:#F5F3F0;font-family:system-ui,-apple-system,sans-serif;justify-content:flex-start;padding:0}
@@ -190,12 +181,13 @@ html,body{width:100%;height:100%;overflow:hidden;font-family:'Comic Sans MS','Se
 <canvas id="confetti-canvas"></canvas>
 <div id="fade-overlay"></div>
 
-<!-- SESSION TIMER BAR (fixed, outside screens) -->
-<div id="session-timer-bar">
-  <div id="timer-progress-wrap"><div id="timer-progress-fill"></div></div>
-  <span id="timer-status-text"></span>
-  <span id="timer-time-text"></span>
-</div>
+<!-- SESSION TIMER RING (circular overlay) -->
+<svg id="timer-ring" style="position:fixed;top:0;left:0;width:100%;height:100%;pointer-events:none;z-index:100;display:none">
+  <circle id="timer-ring-bg" fill="none" stroke="#E8E4E0" stroke-width="8"/>
+  <circle id="timer-ring-fill" fill="none" stroke="#7EA87E" stroke-width="8" stroke-linecap="round"/>
+  <text id="timer-ring-time" text-anchor="middle" font-family="system-ui,-apple-system,sans-serif" font-weight="bold" fill="#4A3F35"/>
+  <text id="timer-ring-msg" text-anchor="middle" font-family="system-ui,-apple-system,sans-serif" fill="#C4916E"/>
+</svg>
 
 <div id="app">
 
@@ -671,51 +663,127 @@ const CPAGES=[
 
   // Mice: Mouse with Cheese
   {name:'Mouse & Cheese \u{1F42D}\u{1F9C0}',theme:'mice',build(w,h){
-    const s=Math.min(w,h)*.15;
-    // mouse
-    const mbody=new Path2D();mbody.ellipse(w*.3,h*.5,s*1.2,s*.9,0,0,Math.PI*2);
-    const mear1=new Path2D();mear1.arc(w*.2,h*.35,s*.5,0,Math.PI*2);
-    const mear2=new Path2D();mear2.arc(w*.4,h*.35,s*.5,0,Math.PI*2);
-    // cheese triangle
-    const cheese=new Path2D();cheese.moveTo(w*.6,h*.65);cheese.lineTo(w*.75,h*.35);cheese.lineTo(w*.9,h*.65);cheese.closePath();
-    const hole1=new Path2D();hole1.arc(w*.72,h*.52,s*.2,0,Math.PI*2);
-    const hole2=new Path2D();hole2.arc(w*.78,h*.58,s*.15,0,Math.PI*2);
-    return[{n:'mb',path:mbody},{n:'e1',path:mear1},{n:'e2',path:mear2},{n:'ch',path:cheese},{n:'h1',path:hole1},{n:'h2',path:hole2}];}},
+    const cx=w*0.35, cy=h*0.52, bodyW=w*0.28, bodyH=h*0.38;
+    // Pear/teardrop mouse body
+    const body=new Path2D();
+    body.moveTo(cx, cy - bodyH*0.5);
+    body.bezierCurveTo(cx + bodyW*0.6, cy - bodyH*0.3, cx + bodyW*0.5, cy + bodyH*0.4, cx, cy + bodyH*0.5);
+    body.bezierCurveTo(cx - bodyW*0.5, cy + bodyH*0.4, cx - bodyW*0.6, cy - bodyH*0.3, cx, cy - bodyH*0.5);
+    body.closePath();
+    // Round ears
+    const leftEar=new Path2D(); leftEar.arc(cx - bodyW*0.32, cy - bodyH*0.48, bodyW*0.28, 0, Math.PI*2);
+    const rightEar=new Path2D(); rightEar.arc(cx + bodyW*0.32, cy - bodyH*0.48, bodyW*0.28, 0, Math.PI*2);
+    // Curved thick tail
+    const tail=new Path2D();
+    tail.moveTo(cx - bodyW*0.1, cy + bodyH*0.45);
+    tail.bezierCurveTo(cx - bodyW*0.7, cy + bodyH*0.7, cx - bodyW*1.0, cy + bodyH*0.15, cx - bodyW*0.85, cy - bodyH*0.1);
+    tail.lineTo(cx - bodyW*0.75, cy - bodyH*0.05);
+    tail.bezierCurveTo(cx - bodyW*0.88, cy + bodyH*0.2, cx - bodyW*0.55, cy + bodyH*0.6, cx + bodyW*0.0, cy + bodyH*0.48);
+    tail.closePath();
+    // Cheese wedge to the right
+    const cheese=new Path2D();
+    cheese.moveTo(w*0.6, h*0.7); cheese.lineTo(w*0.73, h*0.3); cheese.lineTo(w*0.92, h*0.7); cheese.closePath();
+    // Cheese holes
+    const hole1=new Path2D(); hole1.arc(w*0.72, h*0.52, w*0.03, 0, Math.PI*2);
+    const hole2=new Path2D(); hole2.arc(w*0.78, h*0.6, w*0.025, 0, Math.PI*2);
+    return[{n:'body',path:body},{n:'leftEar',path:leftEar},{n:'rightEar',path:rightEar},{n:'tail',path:tail},{n:'cheese',path:cheese},{n:'hole1',path:hole1},{n:'hole2',path:hole2}];}},
 
-  // Mice: Mouse Sleeping
+  // Mice: Sleepy Mouse
   {name:'Sleepy Mouse \u{1F634}\u{1F42D}',theme:'mice',build(w,h){
-    const cx=w/2,cy=h*.55,s=Math.min(w,h)*.2;
-    const body=new Path2D();body.ellipse(cx,cy,s*1.5,s*.8,0,0,Math.PI*2);
-    const ear=new Path2D();ear.arc(cx-s*.9,cy-s*.7,s*.5,0,Math.PI*2);
-    const blanket=new Path2D();blanket.ellipse(cx,cy+s*.2,s*1.6,s*.9,0,0.3,Math.PI-0.3);blanket.closePath();
-    const z1=new Path2D();z1.rect(cx+s*1.3,cy-s*1.2,s*.4,s*.4);
-    const z2=new Path2D();z2.rect(cx+s*1.6,cy-s*1.8,s*.3,s*.3);
-    return[{n:'bd',path:body},{n:'ear',path:ear},{n:'bl',path:blanket},{n:'z1',path:z1},{n:'z2',path:z2}];}},
+    const cx=w*0.5, cy=h*0.58, bodyW=w*0.32, bodyH=h*0.22;
+    // Curled-up C-shape body
+    const body=new Path2D();
+    body.moveTo(cx + bodyW*0.5, cy - bodyH*0.2);
+    body.bezierCurveTo(cx + bodyW*0.7, cy - bodyH*0.8, cx - bodyW*0.2, cy - bodyH*1.1, cx - bodyW*0.6, cy - bodyH*0.3);
+    body.bezierCurveTo(cx - bodyW*0.8, cy + bodyH*0.2, cx - bodyW*0.7, cy + bodyH*0.8, cx, cy + bodyH*0.7);
+    body.bezierCurveTo(cx + bodyW*0.5, cy + bodyH*0.6, cx + bodyW*0.7, cy + bodyH*0.1, cx + bodyW*0.5, cy - bodyH*0.2);
+    body.closePath();
+    // Round ears on top
+    const leftEar=new Path2D(); leftEar.arc(cx - bodyW*0.25, cy - bodyH*0.9, bodyW*0.22, 0, Math.PI*2);
+    const rightEar=new Path2D(); rightEar.arc(cx + bodyW*0.15, cy - bodyH*0.95, bodyW*0.22, 0, Math.PI*2);
+    // Tail curving around the body
+    const tail=new Path2D();
+    tail.moveTo(cx + bodyW*0.45, cy + bodyH*0.3);
+    tail.bezierCurveTo(cx + bodyW*0.9, cy + bodyH*0.7, cx + bodyW*0.8, cy + bodyH*1.1, cx + bodyW*0.2, cy + bodyH*0.95);
+    tail.lineTo(cx + bodyW*0.25, cy + bodyH*0.85);
+    tail.bezierCurveTo(cx + bodyW*0.7, cy + bodyH*0.95, cx + bodyW*0.75, cy + bodyH*0.6, cx + bodyW*0.4, cy + bodyH*0.35);
+    tail.closePath();
+    // Blanket/pillow underneath
+    const blanket=new Path2D();
+    blanket.moveTo(cx - bodyW*0.9, cy + bodyH*0.5);
+    blanket.bezierCurveTo(cx - bodyW*0.8, cy + bodyH*1.2, cx + bodyW*0.8, cy + bodyH*1.2, cx + bodyW*0.9, cy + bodyH*0.5);
+    blanket.bezierCurveTo(cx + bodyW*0.6, cy + bodyH*0.9, cx - bodyW*0.6, cy + bodyH*0.9, cx - bodyW*0.9, cy + bodyH*0.5);
+    blanket.closePath();
+    // Crescent moon above
+    const moon=new Path2D();
+    const mx=cx + bodyW*0.6, my=cy - bodyH*1.6, mr=bodyW*0.25;
+    moon.arc(mx, my, mr, 0, Math.PI*2);
+    // Cut-out for crescent shape (draw outer then inner as separate fillable region)
+    // Just use a crescent as a single closed shape
+    const moonCut=new Path2D();
+    moonCut.arc(mx, my, mr, -0.5, Math.PI*2 - 0.5);
+    moonCut.arc(mx + mr*0.4, my - mr*0.2, mr*0.75, Math.PI*2 - 0.5, -0.5, true);
+    moonCut.closePath();
+    // Face area (small oval for the closed-eyes face region)
+    const face=new Path2D();
+    face.ellipse(cx + bodyW*0.1, cy - bodyH*0.35, bodyW*0.2, bodyH*0.28, 0.15, 0, Math.PI*2);
+    return[{n:'body',path:body},{n:'leftEar',path:leftEar},{n:'rightEar',path:rightEar},{n:'tail',path:tail},{n:'blanket',path:blanket},{n:'moon',path:moonCut},{n:'face',path:face}];}},
 
   // Mice: Mouse in a Hat
   {name:'Mouse in Hat \u{1F3A9}\u{1F42D}',theme:'mice',build(w,h){
-    const cx=w/2,s=Math.min(w,h)*.14;
-    const body=new Path2D();body.ellipse(cx,h*.65,s*1.2,s*1,0,0,Math.PI*2);
-    const ear1=new Path2D();ear1.arc(cx-s*.8,h*.5,s*.45,0,Math.PI*2);
-    const ear2=new Path2D();ear2.arc(cx+s*.8,h*.5,s*.45,0,Math.PI*2);
-    const brim=new Path2D();brim.ellipse(cx,h*.42,s*1.8,s*.4,0,0,Math.PI*2);
-    const crown=new Path2D();crown.rect(cx-s*.8,h*.15,s*1.6,s*2);
-    const top=new Path2D();top.ellipse(cx,h*.15,s*.8,s*.25,0,0,Math.PI*2);
-    return[{n:'bd',path:body},{n:'e1',path:ear1},{n:'e2',path:ear2},{n:'br',path:brim},{n:'cr',path:crown},{n:'tp',path:top}];}},
+    const cx=w*0.5, cy=h*0.62, bodyW=w*0.24, bodyH=h*0.32;
+    // Upright pear/teardrop body
+    const body=new Path2D();
+    body.moveTo(cx, cy - bodyH*0.5);
+    body.bezierCurveTo(cx + bodyW*0.6, cy - bodyH*0.3, cx + bodyW*0.55, cy + bodyH*0.4, cx, cy + bodyH*0.5);
+    body.bezierCurveTo(cx - bodyW*0.55, cy + bodyH*0.4, cx - bodyW*0.6, cy - bodyH*0.3, cx, cy - bodyH*0.5);
+    body.closePath();
+    // Ears peeking from under hat
+    const leftEar=new Path2D(); leftEar.arc(cx - bodyW*0.48, cy - bodyH*0.42, bodyW*0.24, 0, Math.PI*2);
+    const rightEar=new Path2D(); rightEar.arc(cx + bodyW*0.48, cy - bodyH*0.42, bodyW*0.24, 0, Math.PI*2);
+    // Tail
+    const tail=new Path2D();
+    tail.moveTo(cx + bodyW*0.45, cy + bodyH*0.35);
+    tail.bezierCurveTo(cx + bodyW*1.0, cy + bodyH*0.55, cx + bodyW*1.2, cy + bodyH*0.2, cx + bodyW*0.9, cy + bodyH*0.0);
+    tail.lineTo(cx + bodyW*0.85, cy + bodyH*0.08);
+    tail.bezierCurveTo(cx + bodyW*1.05, cy + bodyH*0.25, cx + bodyW*0.85, cy + bodyH*0.48, cx + bodyW*0.4, cy + bodyH*0.4);
+    tail.closePath();
+    // Oversized top hat - tall rectangle top
+    const hatW=bodyW*0.8, hatH=bodyH*0.65;
+    const hatTop=new Path2D();
+    hatTop.moveTo(cx - hatW*0.55, cy - bodyH*0.45);
+    hatTop.lineTo(cx - hatW*0.55, cy - bodyH*0.45 - hatH);
+    hatTop.bezierCurveTo(cx - hatW*0.55, cy - bodyH*0.45 - hatH - hatH*0.15, cx + hatW*0.55, cy - bodyH*0.45 - hatH - hatH*0.15, cx + hatW*0.55, cy - bodyH*0.45 - hatH);
+    hatTop.lineTo(cx + hatW*0.55, cy - bodyH*0.45);
+    hatTop.closePath();
+    // Hat brim
+    const hatBrim=new Path2D();
+    hatBrim.ellipse(cx, cy - bodyH*0.45, hatW*0.9, hatH*0.15, 0, 0, Math.PI*2);
+    return[{n:'body',path:body},{n:'leftEar',path:leftEar},{n:'rightEar',path:rightEar},{n:'tail',path:tail},{n:'hatTop',path:hatTop},{n:'hatBrim',path:hatBrim}];}},
 
   // Mice: Mouse with Balloon
   {name:'Mouse & Balloon \u{1F42D}\u{1F388}',theme:'mice',build(w,h){
-    const s=Math.min(w,h)*.14;
-    const body=new Path2D();body.ellipse(w*.35,h*.65,s*1.2,s*1,0,0,Math.PI*2);
-    const ear1=new Path2D();ear1.arc(w*.25,h*.5,s*.5,0,Math.PI*2);
-    const ear2=new Path2D();ear2.arc(w*.45,h*.5,s*.5,0,Math.PI*2);
-    const balloon=new Path2D();balloon.ellipse(w*.65,h*.28,s*1,s*1.3,0,0,Math.PI*2);
-    const tail=new Path2D();tail.moveTo(w*.35+s*1.2,h*.65);
-    tail.bezierCurveTo(w*.35+s*2,h*.55,w*.35+s*2.2,h*.7,w*.35+s*2.5,h*.65);
-    tail.lineTo(w*.35+s*2.5,h*.68);
-    tail.bezierCurveTo(w*.35+s*2.2,h*.73,w*.35+s*2,h*.58,w*.35+s*1.2,h*.68);
+    const cx=w*0.4, cy=h*0.6, bodyW=w*0.22, bodyH=h*0.32;
+    // Standing pear/teardrop body
+    const body=new Path2D();
+    body.moveTo(cx, cy - bodyH*0.5);
+    body.bezierCurveTo(cx + bodyW*0.6, cy - bodyH*0.3, cx + bodyW*0.55, cy + bodyH*0.4, cx, cy + bodyH*0.5);
+    body.bezierCurveTo(cx - bodyW*0.55, cy + bodyH*0.4, cx - bodyW*0.6, cy - bodyH*0.3, cx, cy - bodyH*0.5);
+    body.closePath();
+    // Round ears
+    const leftEar=new Path2D(); leftEar.arc(cx - bodyW*0.35, cy - bodyH*0.48, bodyW*0.26, 0, Math.PI*2);
+    const rightEar=new Path2D(); rightEar.arc(cx + bodyW*0.35, cy - bodyH*0.48, bodyW*0.26, 0, Math.PI*2);
+    // Tail
+    const tail=new Path2D();
+    tail.moveTo(cx - bodyW*0.3, cy + bodyH*0.4);
+    tail.bezierCurveTo(cx - bodyW*0.9, cy + bodyH*0.6, cx - bodyW*1.1, cy + bodyH*0.2, cx - bodyW*0.8, cy + bodyH*0.0);
+    tail.lineTo(cx - bodyW*0.72, cy + bodyH*0.08);
+    tail.bezierCurveTo(cx - bodyW*0.95, cy + bodyH*0.25, cx - bodyW*0.75, cy + bodyH*0.5, cx - bodyW*0.22, cy + bodyH*0.44);
     tail.closePath();
-    return[{n:'bd',path:body},{n:'e1',path:ear1},{n:'e2',path:ear2},{n:'bal',path:balloon},{n:'tl',path:tail}];}},
+    // Round balloon floating above
+    const bx=w*0.68, by=h*0.2, br=Math.min(w,h)*0.15;
+    const balloon=new Path2D(); balloon.arc(bx, by, br, 0, Math.PI*2);
+    return[{n:'body',path:body},{n:'leftEar',path:leftEar},{n:'rightEar',path:rightEar},{n:'tail',path:tail},{n:'balloon',path:balloon}];}},
 ];
 
 const THEME_LIST=[
@@ -807,14 +875,12 @@ function showScreen(n){
   document.getElementById(n+'-screen').classList.add('active');S.screen=n;
   if(n==='draw')requestAnimationFrame(()=>resizeDrawCanvas());
   if(n==='coloring')requestAnimationFrame(()=>{resizeColorCanvas();renderColorPage();});
-  const timerBar = document.getElementById('session-timer-bar');
+  const ring = document.getElementById('timer-ring');
   const isKid = (n === 'home' || n === 'game' || n === 'draw' || n === 'coloring');
-  if (isKid && S.timerRunning) {
-    timerBar.classList.add('visible');
-    document.getElementById('app').classList.add('timer-on');
-  } else if (n === 'parent' || n === 'timesup') {
-    timerBar.classList.remove('visible');
-    document.getElementById('app').classList.remove('timer-on');
+  if (isKid && S.timerRunning && S.timerMin > 0) {
+    ring.style.display = 'block';
+  } else {
+    ring.style.display = 'none';
   }
 }
 
@@ -1213,59 +1279,83 @@ function initColoring(){
   document.getElementById('color-back').addEventListener('pointerdown',e=>{e.preventDefault();showScreen('home');});
 }
 
-// ===== SESSION TIMER =====
+// ===== SESSION TIMER (RING) =====
+function sizeTimerRing(){
+  const svg=document.getElementById('timer-ring');
+  if(!svg)return;
+  const vw=window.innerWidth, vh=window.innerHeight;
+  const cx=vw/2, cy=vh/2;
+  const radius=Math.min(vw,vh)/2 - 20;
+  const circumference=2*Math.PI*radius;
+  const bg=document.getElementById('timer-ring-bg');
+  const fill=document.getElementById('timer-ring-fill');
+  const time=document.getElementById('timer-ring-time');
+  const msg=document.getElementById('timer-ring-msg');
+  [bg,fill].forEach(c=>{
+    c.setAttribute('cx',cx);
+    c.setAttribute('cy',cy);
+    c.setAttribute('r',radius);
+  });
+  fill.setAttribute('stroke-dasharray',circumference);
+  fill.setAttribute('transform','rotate(-90 '+cx+' '+cy+')');
+  fill.dataset.circumference=circumference;
+  time.setAttribute('x',cx);
+  time.setAttribute('y',vh - 105);
+  time.setAttribute('font-size','28');
+  msg.setAttribute('x',cx);
+  msg.setAttribute('y',vh - 85);
+  msg.setAttribute('font-size','14');
+}
+
+function updateTimerRing(){
+  const svg=document.getElementById('timer-ring');
+  if(!svg)return;
+  if(!S.timerRunning||S.timerMin<=0){svg.style.display='none';return;}
+  // Only show on kid screens
+  const isKid=(S.screen==='home'||S.screen==='game'||S.screen==='draw'||S.screen==='coloring');
+  if(!isKid){svg.style.display='none';return;}
+  svg.style.display='block';
+  const rem=Math.max(0,S.timerEnd-Date.now());
+  const total=S.timerMin*60000;
+  const pct=rem/total;
+  const fill=document.getElementById('timer-ring-fill');
+  const circ=parseFloat(fill.dataset.circumference);
+  fill.setAttribute('stroke-dashoffset',circ*(1-pct));
+  let color;
+  if(rem>120000)color='#7EA87E';
+  else if(rem>30000)color='#E8A030';
+  else color='#D4909A';
+  fill.setAttribute('stroke',color);
+  const min=Math.floor(rem/60000);
+  const sec=Math.floor((rem%60000)/1000);
+  document.getElementById('timer-ring-time').textContent=min+':'+String(sec).padStart(2,'0');
+  const msg=document.getElementById('timer-ring-msg');
+  if(rem<=120000&&rem>30000)msg.textContent='Almost done!';
+  else if(rem<=30000)msg.textContent='Wrapping up...';
+  else msg.textContent='';
+  if(rem<=0){clearInterval(S.timerInt);S.timerRunning=false;timesUp();}
+}
+
 function startTimer(){
   if(S.timerInt)clearInterval(S.timerInt);
   S.timerEnd=Date.now()+S.timerMin*60000;
   S.timerRunning=true;
-  const bar=document.getElementById('session-timer-bar');
-  const fill=document.getElementById('timer-progress-fill');
-  const timeText=document.getElementById('timer-time-text');
-  const statusText=document.getElementById('timer-status-text');
-  bar.classList.add('visible');
-  document.getElementById('app').classList.add('timer-on');
-  const totalMs = S.timerMin * 60000;
-
-  S.timerInt=setInterval(()=>{
-    const rem=Math.max(0,S.timerEnd-Date.now());
-    const pct = (rem / totalMs) * 100;
-    const mins = Math.floor(rem/60000);
-    const secs = Math.floor((rem%60000)/1000);
-    timeText.textContent = mins + ':' + String(secs).padStart(2,'0');
-    fill.style.width = pct + '%';
-
-    if (rem > 120000) {
-      fill.style.background = '#7BADC4';
-      statusText.textContent = '';
-    } else if (rem > 30000) {
-      fill.style.background = '#E8955A';
-      statusText.textContent = 'Almost done!';
-    } else if (rem > 0) {
-      fill.style.background = '#E08070';
-      statusText.textContent = 'Wrapping up...';
-    }
-
-    if(rem<=0){clearInterval(S.timerInt);S.timerRunning=false;timesUp();}
-  },1000);
-
-  const rem0 = Math.max(0, S.timerEnd - Date.now());
-  const pct0 = (rem0 / totalMs) * 100;
-  fill.style.width = pct0 + '%';
-  timeText.textContent = Math.floor(rem0/60000) + ':' + String(Math.floor((rem0%60000)/1000)).padStart(2,'0');
+  sizeTimerRing();
+  document.getElementById('timer-ring').style.display='block';
+  updateTimerRing();
+  S.timerInt=setInterval(updateTimerRing,1000);
 }
 
 function stopTimer() {
   if (S.timerInt) clearInterval(S.timerInt);
   S.timerRunning = false;
   S.timerEnd = null;
-  document.getElementById('session-timer-bar').classList.remove('visible');
-  document.getElementById('app').classList.remove('timer-on');
+  document.getElementById('timer-ring').style.display = 'none';
 }
 
 function timesUp(){
   if(S.timerInt)clearInterval(S.timerInt);S.timerRunning=false;
-  document.getElementById('session-timer-bar').classList.remove('visible');
-  document.getElementById('app').classList.remove('timer-on');
+  document.getElementById('timer-ring').style.display='none';
   document.getElementById('final-score').textContent='You earned \u2B50 '+S.score+' stars!';
 
   const overlay = document.getElementById('fade-overlay');
@@ -1305,6 +1395,8 @@ function init(){
   makeFloaters();
   initDraw();
   initColoring();
+  sizeTimerRing();
+  window.addEventListener('resize', sizeTimerRing);
 
   document.getElementById('start-learning-btn').addEventListener('pointerdown', e => {
     e.preventDefault();
