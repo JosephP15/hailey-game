@@ -180,6 +180,64 @@ html,body{width:100%;height:100%;overflow:hidden;font-family:'Comic Sans MS','Se
   font-family:inherit;font-size:13px;font-weight:600;color:#8A8078;cursor:pointer;transition:all 0.15s}
 .mode-btn.active{background:#7EA87E;color:#fff;border-color:#7EA87E}
 .mode-btn:active{transform:scale(0.95)}
+
+/* KID PICKER (parent screen) */
+.kid-picker{display:flex;gap:8px}
+.kid-pick-btn{flex:1;padding:14px 10px;border-radius:14px;border:2.5px solid #E8E4E0;background:#fff;
+  font-family:inherit;cursor:pointer;transition:all 0.15s;
+  display:flex;flex-direction:column;align-items:center;gap:4px}
+.kid-pick-btn:active{transform:scale(0.97)}
+.kid-pick-btn.active{border-width:3.5px}
+.kid-pick-btn .kid-emoji{font-size:32px}
+.kid-pick-btn .kid-name{font-weight:700;font-size:15px;color:#4A3F35}
+
+/* GRACE THEME — pink garden */
+body.theme-grace{background:#FFF5F8}
+body.theme-grace #parent-screen{background:#FFF5F8}
+body.theme-grace .parent-header h1{color:#C2185B}
+body.theme-grace .start-btn{background:#E91E63;box-shadow:0 4px 14px rgba(233,30,99,0.35)}
+body.theme-grace .timer-preset.selected,
+body.theme-grace .diff-preset.selected{background:#E91E63;border-color:#E91E63}
+body.theme-grace .toggle-track.on{background:#E91E63}
+body.theme-grace .kid-pick-btn.active{border-color:#E91E63}
+body.theme-grace #home-screen{background:linear-gradient(135deg,#FFF0F5 0%,#FFE4ED 40%,#F8E1F4 70%,#E8F5D8 100%)}
+body.theme-grace .home-title{color:#C2185B;text-shadow:2px 2px 0 rgba(255,255,255,0.7)}
+body.theme-grace .mode-btn{border-color:#F8BBD0}
+body.theme-grace .big-btn{background:#E91E63;box-shadow:0 4px 12px rgba(233,30,99,0.3)}
+body.theme-grace #celebration-text{color:#C2185B}
+body.theme-grace #timesup-screen{background:linear-gradient(135deg,#FFF0F5 0%,#FFE4ED 50%,#F8E1F4 100%)}
+body.theme-grace #timesup-screen h1{color:#C2185B}
+body.theme-grace #game-screen{background:linear-gradient(135deg,#FFF5F8 0%,#FFE4ED 100%)}
+
+/* HAILEY THEME — explicit (kept neutral; matches existing earthy look) */
+.kid-pick-btn.active{border-color:#7EA87E}
+
+/* GRACE HOME — bigger, centered tiles since she has fewer modules */
+body.theme-grace #home-screen{padding-top:14px;gap:12px}
+body.theme-grace .home-title{font-size:clamp(26px,4.5vw,42px);margin-bottom:2px}
+body.theme-grace .animal-parade{font-size:clamp(22px,3.5vw,32px)}
+body.theme-grace .section-label{font-size:clamp(13px,2vw,16px);color:#9C4570;margin-top:8px}
+body.theme-grace #mode-grid,
+body.theme-grace #creative-grid{
+  grid-template-columns:repeat(auto-fit,minmax(150px,210px));
+  justify-content:center;
+  gap:14px;
+  max-width:680px;
+  padding:0 14px;
+}
+body.theme-grace .mode-btn{
+  padding:18px 12px;
+  border-radius:18px;
+  border-width:3px;
+  border-color:#F48FB1 !important;
+  min-height:120px;
+  background:rgba(255,255,255,0.9);
+  box-shadow:0 4px 14px rgba(233,30,99,0.12);
+  gap:8px;
+}
+body.theme-grace .mode-btn:active{transform:scale(0.95)}
+body.theme-grace .mode-icon{font-size:clamp(36px,5vw,48px)}
+body.theme-grace .mode-btn span:last-child{font-size:clamp(14px,2.2vw,18px);font-weight:700;color:#9C2C5F}
 </style>
 </head>
 <body>
@@ -199,8 +257,13 @@ html,body{width:100%;height:100%;overflow:hidden;font-family:'Comic Sans MS','Se
   <div id="parent-screen" class="screen active">
     <div class="parent-scroll">
       <div class="parent-header">
-        <h1>Hailey's Learning Farm</h1>
+        <h1 id="parent-title">Kids Learning Farm</h1>
         <p>Parent Controls</p>
+      </div>
+
+      <div class="parent-section">
+        <div class="parent-section-title">Who's playing?</div>
+        <div class="kid-picker" id="kid-picker"></div>
       </div>
 
       <div class="parent-section">
@@ -230,8 +293,8 @@ html,body{width:100%;height:100%;overflow:hidden;font-family:'Comic Sans MS','Se
 
   <!-- KID HOME -->
   <div id="home-screen" class="screen kid-screen">
-    <div class="home-title">&#127775; Hailey's Learning Farm &#127775;</div>
-    <div class="animal-parade">&#128045; &#128046; &#128120; &#128000; &#127912; &#128396;&#65039;</div>
+    <div class="home-title" id="home-title">&#127775; Hailey's Learning Farm &#127775;</div>
+    <div class="animal-parade" id="home-parade">&#128045; &#128046; &#128120; &#128000; &#127912; &#128396;&#65039;</div>
     <div class="section-label">Learning Games</div>
     <div class="mode-grid" id="mode-grid"></div>
     <div class="section-label" id="creative-label">Creative</div>
@@ -291,7 +354,7 @@ html,body{width:100%;height:100%;overflow:hidden;font-family:'Comic Sans MS','Se
   <div id="timesup-screen" class="screen">
     <h1>&#127775; All Done! &#127775;</h1>
     <div class="timesup-animals">&#128045; &#128046; &#128055; &#128020; &#128052; &#128017;</div>
-    <p style="font-size:clamp(22px,4vw,34px);color:#4A3F35">Great job today, Hailey!</p>
+    <p id="timesup-greeting" style="font-size:clamp(22px,4vw,34px);color:#4A3F35">Great job today!</p>
     <p id="final-score"></p>
     <button class="big-btn" id="play-again-btn">Play Again!</button>
   </div>
@@ -358,6 +421,14 @@ const COLORS=[
   {name:'Yellow',hex:'#FFD700'},{name:'Orange',hex:'#FF8C00'},{name:'Purple',hex:'#8B00FF'},
   {name:'Pink',hex:'#FF69B4'},{name:'Brown',hex:'#8B4513'},{name:'Black',hex:'#222'},
   {name:'White',hex:'#F0F0F0'},
+];
+const KIDS=[
+  {id:'hailey',name:'Hailey',emoji:'\u{1F33E}',theme:'',defaultTimer:15,
+   homeTitle:'\u{1F31F} Hailey\u2019s Learning Farm \u{1F31F}',
+   homeParade:'\u{1F42D} \u{1F42E} \u{1F478} \u{1F400} \u{1F3A8} \u{1F58C}\uFE0F'},
+  {id:'grace',name:'Grace',emoji:'\u{1F338}',theme:'theme-grace',defaultTimer:0,
+   homeTitle:'\u{1F338} Grace\u2019s Garden \u{1F338}',
+   homeParade:'\u{1F338} \u{1F337} \u{1F33A} \u{1F33B} \u{1F490} \u{1F33C}'},
 ];
 const COUNT_EMOJIS=['\u2B50','\u{1F34E}','\u{1F33A}','\u{1F388}','\u{1F98B}','\u{1F353}','\u{1F41D}','\u{1F31F}'];
 const DAYS=['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
@@ -461,10 +532,12 @@ const GAME_MODES=[
   {id:'days',name:'Days',icon:'\u{1F4C5}',color:'#7EA87E'},
   {id:'months',name:'Months',icon:'\u{1F4C6}',color:'#9070B0'},
   {id:'dad',name:'Dad Mode',icon:'\u{1F43E}',color:'#7BADC4'},
+  {id:'mult',name:'Multiplication',icon:'\u2716\uFE0F',color:'#E91E63',kids:['grace']},
 ];
 const CREATIVE_MODES=[
   {id:'freedraw',name:'Free Draw',icon:'\u{1F58C}\uFE0F',color:'#C4916E'},
   {id:'coloring',name:'Coloring',icon:'\u{1F58D}\uFE0F',color:'#7EA87E'},
+  {id:'characters',name:'Character Maker',icon:'\u{1F469}',color:'#E91E63',kids:['grace']},
 ];
 
 // ===== COLORING PAGES =====
@@ -482,6 +555,22 @@ const CPAGES=[
   {name:'Fun Doodles',file:'c3799f2c-591b-4056-9fdd-603254ec2dba.jpg'},
 ];
 
+// ===== CHARACTER MAKER (Grace) — kid portrait outlines (sliced from Grace's coloring sheet) =====
+const CHARACTERS=[
+  {name:'Frog Headband Girl',file:'gc_frog_headband.png'},
+  {name:'Floral Girl',file:'gc_floral_girl.png'},
+  {name:'Bangs Girl',file:'gc_bangs_girl.png'},
+  {name:'Bow Girl',file:'gc_bow_girl.png'},
+  {name:'Striped Shirt Girl',file:'gc_striped_girl.png'},
+  {name:'Cap Boy',file:'gc_cap_boy.png'},
+  {name:'Curly Hair Boy',file:'gc_curly_boy.png'},
+  {name:'Polo Boy',file:'gc_polo_boy.png'},
+];
+
+function getColoringPages() {
+  return S.coloringPageSet === 'characters' ? CHARACTERS : CPAGES;
+}
+
 // ===== STATE =====
 let S={screen:'parent',mode:null,target:null,choices:[],score:0,streak:0,
   animating:false,lastTarget:null,bgIdx:0,difficulty:'medium',
@@ -491,33 +580,72 @@ let S={screen:'parent',mode:null,target:null,choices:[],score:0,streak:0,
   colorColor:'#FF0000',colorPageIdx:0,colorMode:'fill',
   colorHistory:[],colorDrawing:false};
 
-// Parent preferences
+// Parent preferences (per-kid)
 let parentPrefs = {
-  modules: {},
-  timerMin: 15,
-  difficulty: 'medium'
+  currentKid: 'hailey',
+  kids: {}
 };
 
-function loadParentPrefs() {
-  try {
-    const saved = localStorage.getItem('hailey-parent');
-    if (saved) {
-      const p = JSON.parse(saved);
-      parentPrefs = { ...parentPrefs, ...p };
-      [...GAME_MODES, ...CREATIVE_MODES].forEach(m => {
-        if (parentPrefs.modules[m.id] === undefined) parentPrefs.modules[m.id] = true;
-      });
+function defaultKidPrefs(kid) {
+  const modules = {};
+  // Grace's allow-list: only her spec modules (multiplication, free draw, character maker)
+  const graceAllowed = new Set(['mult', 'freedraw', 'characters']);
+  [...GAME_MODES, ...CREATIVE_MODES].forEach(m => {
+    if (m.kids && !m.kids.includes(kid.id)) {
+      // Module restricted to other kids → off
+      modules[m.id] = false;
+    } else if (kid.id === 'grace') {
+      // Grace: only her allow-list defaults on
+      modules[m.id] = graceAllowed.has(m.id);
     } else {
-      [...GAME_MODES, ...CREATIVE_MODES].forEach(m => { parentPrefs.modules[m.id] = true; });
+      // Hailey + everyone else: on by default
+      modules[m.id] = true;
     }
-  } catch(e) {
-    [...GAME_MODES, ...CREATIVE_MODES].forEach(m => { parentPrefs.modules[m.id] = true; });
-  }
+  });
+  return { modules, timerMin: kid.defaultTimer, difficulty: 'medium' };
+}
+
+function loadParentPrefs() {
+  // Initialize defaults for every kid
+  KIDS.forEach(k => { parentPrefs.kids[k.id] = defaultKidPrefs(k); });
+  try {
+    const newSaved = localStorage.getItem('kids-prefs');
+    if (newSaved) {
+      const p = JSON.parse(newSaved);
+      if (p.currentKid && KIDS.find(k => k.id === p.currentKid)) parentPrefs.currentKid = p.currentKid;
+      if (p.kids) {
+        KIDS.forEach(k => {
+          if (p.kids[k.id]) {
+            parentPrefs.kids[k.id] = { ...parentPrefs.kids[k.id], ...p.kids[k.id] };
+            // ensure all modules have a value
+            [...GAME_MODES, ...CREATIVE_MODES].forEach(m => {
+              if (parentPrefs.kids[k.id].modules[m.id] === undefined) parentPrefs.kids[k.id].modules[m.id] = true;
+            });
+          }
+        });
+      }
+      return;
+    }
+    // Migrate from old single-kid format ('hailey-parent')
+    const oldSaved = localStorage.getItem('hailey-parent');
+    if (oldSaved) {
+      const old = JSON.parse(oldSaved);
+      parentPrefs.kids.hailey = {
+        modules: { ...parentPrefs.kids.hailey.modules, ...(old.modules || {}) },
+        timerMin: old.timerMin !== undefined ? old.timerMin : 15,
+        difficulty: old.difficulty || 'medium'
+      };
+      saveParentPrefs();
+    }
+  } catch(e) {}
 }
 
 function saveParentPrefs() {
-  try { localStorage.setItem('hailey-parent', JSON.stringify(parentPrefs)); } catch(e) {}
+  try { localStorage.setItem('kids-prefs', JSON.stringify(parentPrefs)); } catch(e) {}
 }
+
+function getKidPrefs() { return parentPrefs.kids[parentPrefs.currentKid]; }
+function getCurrentKid() { return KIDS.find(k => k.id === parentPrefs.currentKid); }
 
 function numDist(){return S.difficulty==='easy'?1:S.difficulty==='hard'?8:3;}
 function numChoices(){return numDist()+1;}
@@ -570,14 +698,58 @@ function showScreen(n){
 function celebText(t){const el=document.getElementById('celebration-text');el.textContent=t;
   el.classList.remove('show');void el.offsetWidth;el.classList.add('show');}
 
+// ===== KID PROFILE =====
+function applyTheme() {
+  const kid = getCurrentKid();
+  // Remove every known theme class then add the active one
+  KIDS.forEach(k => { if (k.theme) document.body.classList.remove(k.theme); });
+  if (kid.theme) document.body.classList.add(kid.theme);
+  // Update parent header title
+  const pt = document.getElementById('parent-title');
+  if (pt) pt.textContent = kid.name + "\u2019s Learning Farm";
+  // Update home title + parade
+  const ht = document.getElementById('home-title');
+  if (ht) ht.innerHTML = kid.homeTitle;
+  const hp = document.getElementById('home-parade');
+  if (hp) hp.innerHTML = kid.homeParade;
+  // Update timesup greeting
+  const tg = document.getElementById('timesup-greeting');
+  if (tg) tg.textContent = 'Great job today, ' + kid.name + '!';
+}
+
+function chooseKid(id) {
+  if (!KIDS.find(k => k.id === id)) return;
+  parentPrefs.currentKid = id;
+  saveParentPrefs();
+  applyTheme();
+  renderKidPicker();
+  renderParentDashboard();
+}
+
+function renderKidPicker() {
+  const kp = document.getElementById('kid-picker');
+  if (!kp) return;
+  kp.innerHTML = '';
+  KIDS.forEach(k => {
+    const b = document.createElement('button');
+    b.className = 'kid-pick-btn' + (parentPrefs.currentKid === k.id ? ' active' : '');
+    b.innerHTML = `<span class="kid-emoji">${k.emoji}</span><span class="kid-name">${k.name}</span>`;
+    b.addEventListener('pointerdown', e => { e.preventDefault(); chooseKid(k.id); });
+    kp.appendChild(b);
+  });
+}
+
 // ===== PARENT DASHBOARD =====
 function renderParentDashboard() {
+  const kp = getKidPrefs();
+  const kid = parentPrefs.currentKid;
+
   const gt = document.getElementById('parent-game-toggles');
   gt.innerHTML = '';
-  GAME_MODES.forEach(m => {
+  GAME_MODES.filter(m => isModeAllowedForKid(m, kid)).forEach(m => {
     const card = document.createElement('div');
     card.className = 'module-card';
-    const on = parentPrefs.modules[m.id] !== false;
+    const on = kp.modules[m.id] !== false;
     card.innerHTML = `<div class="module-card-left">
       <span class="module-card-icon">${m.icon}</span>
       <span class="module-card-name">${m.name}</span>
@@ -585,7 +757,7 @@ function renderParentDashboard() {
     <div class="toggle-track ${on ? 'on' : ''}" data-module="${m.id}"><div class="toggle-knob"></div></div>`;
     card.querySelector('.toggle-track').addEventListener('pointerdown', e => {
       e.preventDefault();
-      parentPrefs.modules[m.id] = !parentPrefs.modules[m.id];
+      kp.modules[m.id] = !kp.modules[m.id];
       saveParentPrefs();
       renderParentDashboard();
     });
@@ -594,10 +766,10 @@ function renderParentDashboard() {
 
   const ct = document.getElementById('parent-creative-toggles');
   ct.innerHTML = '';
-  CREATIVE_MODES.forEach(m => {
+  CREATIVE_MODES.filter(m => isModeAllowedForKid(m, kid)).forEach(m => {
     const card = document.createElement('div');
     card.className = 'module-card';
-    const on = parentPrefs.modules[m.id] !== false;
+    const on = kp.modules[m.id] !== false;
     card.innerHTML = `<div class="module-card-left">
       <span class="module-card-icon">${m.icon}</span>
       <span class="module-card-name">${m.name}</span>
@@ -605,7 +777,7 @@ function renderParentDashboard() {
     <div class="toggle-track ${on ? 'on' : ''}" data-module="${m.id}"><div class="toggle-knob"></div></div>`;
     card.querySelector('.toggle-track').addEventListener('pointerdown', e => {
       e.preventDefault();
-      parentPrefs.modules[m.id] = !parentPrefs.modules[m.id];
+      kp.modules[m.id] = !kp.modules[m.id];
       saveParentPrefs();
       renderParentDashboard();
     });
@@ -617,11 +789,11 @@ function renderParentDashboard() {
   const timerOpts = [{min:5,label:'5 min'},{min:10,label:'10 min'},{min:15,label:'15 min'},{min:20,label:'20 min'},{min:30,label:'30 min'},{min:0,label:'No limit'}];
   timerOpts.forEach(opt => {
     const b = document.createElement('button');
-    b.className = 'timer-preset' + (parentPrefs.timerMin === opt.min ? ' selected' : '');
+    b.className = 'timer-preset' + (kp.timerMin === opt.min ? ' selected' : '');
     b.textContent = opt.label;
     b.addEventListener('pointerdown', e => {
       e.preventDefault();
-      parentPrefs.timerMin = opt.min;
+      kp.timerMin = opt.min;
       saveParentPrefs();
       renderParentDashboard();
     });
@@ -633,11 +805,11 @@ function renderParentDashboard() {
   const diffOpts = [{val:'easy',label:'Easy'},{val:'medium',label:'Medium'},{val:'hard',label:'Hard'}];
   diffOpts.forEach(opt => {
     const b = document.createElement('button');
-    b.className = 'diff-preset' + (parentPrefs.difficulty === opt.val ? ' selected' : '');
+    b.className = 'diff-preset' + (kp.difficulty === opt.val ? ' selected' : '');
     b.textContent = opt.label;
     b.addEventListener('pointerdown', e => {
       e.preventDefault();
-      parentPrefs.difficulty = opt.val;
+      kp.difficulty = opt.val;
       saveParentPrefs();
       renderParentDashboard();
     });
@@ -646,8 +818,9 @@ function renderParentDashboard() {
 }
 
 function startLearning() {
-  S.difficulty = parentPrefs.difficulty;
-  S.timerMin = parentPrefs.timerMin;
+  const kp = getKidPrefs();
+  S.difficulty = kp.difficulty;
+  S.timerMin = kp.timerMin;
   S.score = 0;
   S.streak = 0;
   renderHome();
@@ -658,15 +831,21 @@ function startLearning() {
 }
 
 // ===== RENDER HOME =====
+function isModeAllowedForKid(m, kidId) {
+  return !m.kids || m.kids.includes(kidId);
+}
+
 function renderHome(){
+  const kp = getKidPrefs();
+  const kid = parentPrefs.currentKid;
   const g=document.getElementById('mode-grid');g.innerHTML='';
-  const enabledGames = GAME_MODES.filter(m => parentPrefs.modules[m.id] !== false);
+  const enabledGames = GAME_MODES.filter(m => kp.modules[m.id] !== false && isModeAllowedForKid(m, kid));
   enabledGames.forEach(m=>{const b=document.createElement('button');b.className='mode-btn';b.style.borderColor=m.color;
     b.innerHTML=`<span class="mode-icon">${m.icon}</span><span>${m.name}</span>`;
     b.addEventListener('pointerdown',e=>{e.preventDefault();startMode(m.id);});g.appendChild(b);});
 
   const cg=document.getElementById('creative-grid');cg.innerHTML='';
-  const enabledCreative = CREATIVE_MODES.filter(m => parentPrefs.modules[m.id] !== false);
+  const enabledCreative = CREATIVE_MODES.filter(m => kp.modules[m.id] !== false && isModeAllowedForKid(m, kid));
   document.getElementById('creative-label').style.display = enabledCreative.length ? '' : 'none';
   cg.style.display = enabledCreative.length ? '' : 'none';
   enabledCreative.forEach(m=>{const b=document.createElement('button');b.className='mode-btn';b.style.borderColor=m.color;
@@ -757,6 +936,11 @@ function renderGame(){
       b.innerHTML=`<span style="font-size:clamp(11px,2vw,16px);font-weight:bold">${abbrs[i]}</span>`;
       b.addEventListener('pointerdown',e=>{e.preventDefault();handleChoice(i);});g2.appendChild(b);});
     S.choices=MONTHS;
+  } else if(M==='mult'){
+    pr.innerHTML=`<span style="font-size:clamp(36px,8vw,72px);font-weight:bold;color:#C2185B">${S.target.a} \u00D7 ${S.target.b}</span>`;
+    di.innerHTML=`<span style="font-size:clamp(40px,9vw,80px);color:#888">= ?</span>`;
+    di.style.fontSize='';
+    mkBtns(S.choices.map(c=>({html:`<span style="font-size:clamp(${c3?'30px,6vw,48px':'40px,8vw,64px'});font-weight:bold;color:#C2185B">${c}</span>`,d:c})),c3);
   } else if(M==='dad'){renderDad();}
 }
 
@@ -784,7 +968,8 @@ function startMode(id){S.mode=id;S.score=0;S.streak=0;S.lastTarget=null;showScre
   if(id==='dad')nextDadAnimal();else nextRound();}
 
 function startCreative(id){if(id==='freedraw')showScreen('draw');
-  else if(id==='coloring'){S.colorPageIdx=0;S.colorHistory=[];showScreen('coloring');}}
+  else if(id==='coloring'){S.coloringPageSet='pages';S.colorPageIdx=0;S.colorHistory=[];showScreen('coloring');}
+  else if(id==='characters'){S.coloringPageSet='characters';S.colorPageIdx=0;S.colorHistory=[];showScreen('coloring');}}
 
 function nextRound(){
   S.animating=false;nextBg();const nd=numDist(),M=S.mode;
@@ -823,6 +1008,31 @@ function nextRound(){
     const all=[];for(let i=1;i<=mx;i++)all.push({value:i,emoji:em});
     S.choices=shuffle([S.target,...all.filter(n=>n.value!==v).slice(0,nd)]);
   }
+  else if(M==='mult'){
+    // Difficulty curve: starts easy (1-5), ramps up with streak
+    let mx;
+    if (S.streak < 3) mx = 5;
+    else if (S.streak < 8) mx = 10;
+    else mx = 12;
+    let a, b, ans;
+    do {
+      a = Math.floor(Math.random() * mx) + 1;
+      b = Math.floor(Math.random() * mx) + 1;
+      ans = a * b;
+    } while (S.lastTarget && S.lastTarget.ans === ans);
+    S.target = {a, b, ans};
+    S.lastTarget = S.target;
+    // Generate 3 plausible wrong answers near the correct one
+    const wrong = new Set();
+    let attempts = 0;
+    while (wrong.size < 3 && attempts < 30) {
+      attempts++;
+      const offset = (Math.floor(Math.random() * 9) + 1) * (Math.random() < 0.5 ? -1 : 1);
+      const w = ans + offset;
+      if (w > 0 && w !== ans) wrong.add(w);
+    }
+    S.choices = shuffle([ans, ...Array.from(wrong).slice(0, 3)]);
+  }
   renderGame();
   setTimeout(()=>{
     if(M==='animals')say('Find the '+S.target.name);
@@ -835,6 +1045,7 @@ function nextRound(){
     else if(M==='days')say('Find '+S.target);
     else if(M==='months')say('Find '+S.target);
     else if(M==='questions')say(S.target.q);
+    else if(M==='mult')say('What is '+S.target.a+' times '+S.target.b+'?');
     // words and sightwords: no audio
   },350);
 }
@@ -844,6 +1055,7 @@ function handleChoice(i){
   let ok;
   if(S.mode==='numbers') ok=ch.value===S.target.value;
   else if(S.mode==='questions') ok=ch===S.target.a;
+  else if(S.mode==='mult') ok=ch===S.target.ans;
   else ok=ch===S.target;
   const btns=document.querySelectorAll('.choice-btn');
   if(ok){S.animating=true;S.score++;S.streak++;btns[i].classList.add('correct');playOk();confetti();
@@ -907,21 +1119,28 @@ function resizeColorCanvas(){
 
 function loadColorPage(){
   if(!cCv)return;
-  if(S.colorPageIdx>=CPAGES.length)S.colorPageIdx=0;
-  const pg=CPAGES[S.colorPageIdx];
+  const pages=getColoringPages();
+  if(S.colorPageIdx>=pages.length)S.colorPageIdx=0;
+  const pg=pages[S.colorPageIdx];
   document.getElementById('color-page-name').textContent=pg.name;
   S.colorHistory=[];
-  // Check cache
-  if(cImgCache[pg.file]){
-    cImg=cImgCache[pg.file];
+  // Cache key: file name OR character name
+  const key = pg.file || ('char:'+pg.name);
+  if(cImgCache[key]){
+    cImg=cImgCache[key];
     drawColorImage();
   } else {
     const img=new Image();
-    img.onload=()=>{cImgCache[pg.file]=img;cImg=img;drawColorImage();};
+    img.onload=()=>{cImgCache[key]=img;cImg=img;drawColorImage();};
     img.onerror=()=>{cCx.fillStyle='#FFF';cCx.fillRect(0,0,cCv.width,cCv.height);
       cCx.fillStyle='#999';cCx.font='16px system-ui';cCx.textAlign='center';
-      cCx.fillText('Image not found: '+pg.file,cCv.width/2,cCv.height/2);};
-    img.src='images/coloring/'+pg.file;
+      cCx.fillText('Image not found: '+(pg.file||pg.name),cCv.width/2,cCv.height/2);};
+    if (pg.svg) {
+      // SVG character outline → data URL
+      img.src = 'data:image/svg+xml;charset=utf-8,'+encodeURIComponent(pg.svg);
+    } else {
+      img.src='images/coloring/'+pg.file;
+    }
   }
   renderColorDots();
 }
@@ -1001,7 +1220,8 @@ function colorUndo(){
 
 function renderColorDots(){
   const dots=document.getElementById('page-dots');dots.innerHTML='';
-  CPAGES.forEach((_,i)=>{const d=document.createElement('div');d.className='page-dot'+(i===S.colorPageIdx?' active':'');
+  const pages=getColoringPages();
+  pages.forEach((_,i)=>{const d=document.createElement('div');d.className='page-dot'+(i===S.colorPageIdx?' active':'');
     d.addEventListener('pointerdown',e=>{e.preventDefault();S.colorPageIdx=i;loadColorPage();});dots.appendChild(d);});
 }
 
@@ -1055,9 +1275,9 @@ function initColoring(){
   document.getElementById('mode-draw').addEventListener('pointerdown',e=>{e.preventDefault();S.colorMode='draw';updateModeToggle();});
   // Nav
   document.getElementById('color-prev').addEventListener('pointerdown',e=>{e.preventDefault();
-    S.colorPageIdx=(S.colorPageIdx-1+CPAGES.length)%CPAGES.length;loadColorPage();});
+    const n=getColoringPages().length;S.colorPageIdx=(S.colorPageIdx-1+n)%n;loadColorPage();});
   document.getElementById('color-next').addEventListener('pointerdown',e=>{e.preventDefault();
-    S.colorPageIdx=(S.colorPageIdx+1)%CPAGES.length;loadColorPage();});
+    const n=getColoringPages().length;S.colorPageIdx=(S.colorPageIdx+1)%n;loadColorPage();});
   // Undo
   document.getElementById('color-undo').addEventListener('pointerdown',e=>{e.preventDefault();colorUndo();});
   // Clear (reload original image)
@@ -1148,7 +1368,7 @@ function timesUp(){
     showScreen('timesup');
     setTimeout(() => { overlay.classList.remove('show'); }, 100);
   }, 800);
-  say('All done! Great job today Hailey!');
+  say('All done! Great job today ' + getCurrentKid().name + '!');
 }
 
 function makeFloaters(){const em=['\u2601\uFE0F','\u2B50','\u{1F4AB}','\u{1F31F}','\u2728'];
@@ -1175,6 +1395,8 @@ function handleGearTap() {
 // ===== INIT =====
 function init(){
   loadParentPrefs();
+  applyTheme();
+  renderKidPicker();
   renderParentDashboard();
   makeFloaters();
   initDraw();
